@@ -291,10 +291,11 @@ public class ParticleSystem
         for (int i = 0; i < numParticles; ++i)
         {
             curParticle = m_Particles[i];
-            a_DST[0] = curParticle.Position.x;
-            a_DST[1] = curParticle.Position.y;
-            a_DST[2] = curParticle.Velocity.x;
-            a_DST[3] = curParticle.Velocity.y;
+            int index = i * 4;
+            a_DST[index + 0] = curParticle.Position.x;
+            a_DST[index + 1] = curParticle.Position.y;
+            a_DST[index + 2] = curParticle.Velocity.x;
+            a_DST[index + 3] = curParticle.Velocity.y;
         }
     }
 
@@ -310,8 +311,9 @@ public class ParticleSystem
         for (int i = 0; i < numParticles; ++i)
         {
             curParticle = m_Particles[i];
-            curParticle.Position = new Vector2(a_DST[0], a_DST[1]);
-            curParticle.Velocity = new Vector2(a_DST[2], a_DST[3]);
+            int index = i * 4;
+            curParticle.Position = new Vector2(a_DST[index], a_DST[index + 1]);
+            curParticle.Velocity = new Vector2(a_DST[index + 2], a_DST[index + 3]);
         }
     }
 
@@ -330,10 +332,11 @@ public class ParticleSystem
         for (int i = 0; i < numParticles; ++i)
         {
             curParticle = m_Particles[i];
-            a_DST[0] = curParticle.Velocity.x;
-            a_DST[1] = curParticle.Velocity.y;
-            a_DST[2] = curParticle.ForceAccumulator.x / curParticle.Mass;
-            a_DST[3] = curParticle.ForceAccumulator.y / curParticle.Mass;
+            int index = i * 4;
+            a_DST[index] = curParticle.Velocity.x;
+            a_DST[index + 1] = curParticle.Velocity.y;
+            a_DST[index + 2] = curParticle.ForceAccumulator.x / curParticle.Mass;
+            a_DST[index + 3] = curParticle.ForceAccumulator.y / curParticle.Mass;
         }
     }
 
