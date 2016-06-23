@@ -39,8 +39,8 @@ public class BlockSparseMatrix : ImplicitMatrix
 	 * |(m,0)  (m,1) ... (m,n)|
 	 * ________________________
 	 * 
-	 * 0<= i <= m
-	 * 0<= j <= n
+	 * 0<= i < m
+	 * 0<= j < n
 	 * 
 	 * */
 
@@ -65,7 +65,7 @@ public class BlockSparseMatrix : ImplicitMatrix
     {
         if (a_Destination.Length != m_m)
         {
-            throw new Exception("Output size wrong!");
+            throw new Exception("Output size wrong! " + m_m + " " + a_Destination.Length);
         }
 
         VerifyValidVectors(a_Source, a_Destination);
