@@ -56,6 +56,8 @@ public class ParticleSystem
     public void AddParticle(Particle a_Particle)
     {
         m_Particles.Add(a_Particle);
+		m_J.SetN(GetParticleDimension()*m_Particles.Count);
+		m_JDot.SetN(GetParticleDimension()*m_Particles.Count);
     }
 
     public void AddForce(Force a_Force)

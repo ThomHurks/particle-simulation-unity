@@ -51,6 +51,11 @@ public class BlockSparseMatrix : ImplicitMatrix
         m_n = 0;//Not maintainable -> not all particles need to be constrained
     }
 
+	public void SetN(int a_n)
+	{
+		m_n = a_n;
+	}
+
     public MatrixBlock CreateMatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
     {
         MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
@@ -67,7 +72,10 @@ public class BlockSparseMatrix : ImplicitMatrix
         {
             throw new Exception("Output size wrong! " + m_m + " " + a_Destination.Length);
         }
-
+		if (a_Source.Length != m_n)
+        {
+            throw new Exception("Input size wrong! " + m_m + " " + a_Destination.Length);
+        }
         VerifyValidVectors(a_Source, a_Destination);
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
