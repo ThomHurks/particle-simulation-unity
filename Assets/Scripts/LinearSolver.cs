@@ -6,7 +6,7 @@ public class LinearSolver
 
 	// Solve Ax = b for a symmetric, positive definite matrix A
 	// A is represented implicitly by the function "matVecMult"
-	// which performs a matrix vector multiple Av and places result in r
+	// which performs a matrix vector multiple Av and places result in x
 	// "n" is the length of the vectors x and b
 	// "epsilon" is the error tolerance
 	// "steps", as passed, is the maximum number of steps, or 0 (implying MAX_STEPS)
@@ -18,19 +18,21 @@ public class LinearSolver
 		int i, iMax;
 		float alpha, beta, rSqrLen, rSqrLenOld, u;
 
-		float[] r = new float[n];
+		float[] r = new float[n];//n is actually m in our case: the number of constraints
 		float[] d = new float[n];
 		float[] t = new float[n];
 		float[] temp = new float[n];
 
-		vecAssign(n, x, b);
+		//TODO check if A is an n*n matrix (i.e. m*m)
 
-		vecAssign(n, r, b);
-		A.MatrixTimesVector(x, temp);
-		vecDiffEqual(n, r, temp);
+		vecAssign(n, x, b);//x:=b
+
+		vecAssign(n, r, b);//r:=b
+		A.MatrixTimesVector(x, temp); // temp := Ax
+		vecDiffEqual(n, r, temp);//r := r-temp
 
 		rSqrLen = vecSqrLen(n, r);
-		vecAssign(n, d, r);
+		vecAssign(n, d, r);//d := r
 
 		i = 0;
 		if (steps > 0 && !float.IsInfinity(steps))

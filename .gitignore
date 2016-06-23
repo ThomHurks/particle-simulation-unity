@@ -5,3 +5,5 @@ obj/*
 ParticleSystems.userprefs
 *.swp
 Temp/*
+Assets/Scripts/Scripts.userprefs
+Assets/Scripts/Scripts/Scripts.mdproj
