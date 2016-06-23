@@ -14,9 +14,9 @@ public class Eq11LHS : ImplicitMatrix
 
 	public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
 	{
-		int vectorSize = a_Destination.Length;
-		float[] temp = new float[vectorSize];
+        float[] temp = new float[m_W.Length];
 		m_J.MatrixTransposeTimesVector(a_Source, temp);
+        int vectorSize = a_Destination.Length;
 		for (int i = 0; i < vectorSize; ++i)
 		{
 			temp[i] = temp[i] * m_W[i];
