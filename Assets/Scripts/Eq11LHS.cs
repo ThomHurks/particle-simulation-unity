@@ -2,11 +2,13 @@
 {
     private BlockSparseMatrix m_J;
     private float[] m_W;
+	private int size;
 
     public Eq11LHS(BlockSparseMatrix a_J, float[] a_W)
     {
         m_J = a_J;
         m_W = a_W;
+		size = a_J.getM();
     }
 
     public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
@@ -26,4 +28,15 @@
         // JWJTranspose is a symmetric matrix.
         MatrixTimesVector(a_Source, a_Destination);
     }
+
+	public int getM()
+	{
+		return size;
+	}
+
+	public int getN()
+	{
+		return size;
+	}
+
 }

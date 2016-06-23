@@ -1,6 +1,10 @@
-﻿public interface ImplicitMatrix
+﻿public abstract class ImplicitMatrix
 {
-    void MatrixTimesVector(float[] a_Source, float[] a_Destination);
+    abstract void MatrixTimesVector(float[] a_Source, float[] a_Destination);
 
-    void MatrixTransposeTimesVector(float[] a_Source, float[] a_Destination);
+    abstract void MatrixTransposeTimesVector(float[] a_Source, float[] a_Destination);
+
+	abstract int getM();
+
+	abstract int getN();
 }
