@@ -146,7 +146,7 @@ public class ParticleSystem
         }
         ValidateVector(WQ);
         // J times WQ.
-        float[] JWQ = new float[n];
+        float[] JWQ = new float[numConstraints];
         m_J.MatrixTimesVector(WQ, JWQ);
         ValidateVector(JWQ);
         // Compute the RHS of equation 11.
