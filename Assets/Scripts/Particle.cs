@@ -17,16 +17,37 @@ public class Particle
 	public Vector2 Position
 	{
 		get { return m_Position; }
-		set { m_Position = value; }
+		set
+        {
+            if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsInfinity(value.x) || float.IsInfinity(value.y))
+            {
+                throw new System.Exception("Position cannot be NaN or Inf");
+            }
+            m_Position = value;
+        }
 	}
 	public Vector2 Velocity
 	{
 		get { return m_Velocity; }
-		set { m_Velocity = value; }
+		set
+        {
+            if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsInfinity(value.x) || float.IsInfinity(value.y))
+            {
+                throw new System.Exception("Velocity cannot be NaN or Inf");
+            }
+            m_Velocity = value;
+        }
 	}
 	public Vector2 ForceAccumulator
 	{
 		get { return m_ForceAccumulator; }
-		set { m_ForceAccumulator = value; }
+		set
+        {
+            if (float.IsNaN(value.x) || float.IsNaN(value.y) || float.IsInfinity(value.x) || float.IsInfinity(value.y))
+            {
+                throw new System.Exception("Accumulated force cannot be NaN or Inf");
+            }
+            m_ForceAccumulator = value;
+        }
 	}
 }

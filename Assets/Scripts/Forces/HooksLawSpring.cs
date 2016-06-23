@@ -24,8 +24,15 @@ public class HooksLawSpring : Force
 		Vector2 l = m_ParticleA.Position - m_ParticleB.Position;
 		Vector2 i = m_ParticleA.Velocity - m_ParticleB.Velocity;
 		float lMagnitude = l.magnitude;
-		Vector2 f_a = -(m_SpringConstant * (lMagnitude - m_RestLength) + m_DampingConstant * (Vector2.Dot(i, l) / lMagnitude)) * l.normalized;
-		m_ParticleA.ForceAccumulator += f_a;
-		m_ParticleB.ForceAccumulator -= f_a;
+        if (lMagnitude != 0f)
+        {
+            Vector2 f_a = -(m_SpringConstant * (lMagnitude - m_RestLength) + m_DampingConstant * (Vector2.Dot(i, l) / lMagnitude)) * l.normalized;
+            if (float.IsNaN(f_a.x) || float.IsNaN(f_a.y) || float.IsInfinity(f_a.x) || float.IsInfinity(f_a.y))
+            {
+                throw new System.Exception("Computed force was NaN or Inf");
+            }
+            m_ParticleA.ForceAccumulator += f_a;
+            m_ParticleB.ForceAccumulator -= f_a;
+        }
 	}
 }
