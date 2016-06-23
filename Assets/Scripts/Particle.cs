@@ -55,8 +55,8 @@ public class Particle
 
     public void Draw()
     {
-        const float h = 0.03f;
-        GL.Color(Color.white);
+        const float h = 0.1f;
+        GL.Color(Color.yellow);
         GL.Begin(GL.QUADS);
         GL.Vertex(new Vector2(m_Position.x - h / 2f, m_Position.y - h / 2f));
         GL.Vertex(new Vector2(m_Position.x + h / 2f, m_Position.y - h / 2f));

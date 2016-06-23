@@ -53,7 +53,7 @@ public class CircularWireConstraint : Constraint
     public void Draw()
     {
         GL.Begin(GL.LINES);
-        GL.Color(Color.green);
+        GL.Color(Color.red);
         Vector2 prev = new Vector2(m_Center.x + m_Radius, m_Center.y);
         for (int i = 18; i <= 360; i += 18)
         {

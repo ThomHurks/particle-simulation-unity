@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public sealed class Main : MonoBehaviour
 {
     private ParticleSystem m_ParticleSystem;
     private Solver m_Solver;
     private static Material m_LineMaterial;
+    private List<Transform> m_DebugGameObjects;
 
     static void CreateLineMaterial()
     {
@@ -30,12 +32,15 @@ public sealed class Main : MonoBehaviour
         m_ParticleSystem = new ParticleSystem();
         m_Solver = new EulerSolver();
         Particle particle1 = new Particle(0.1f);
+        particle1.Position = new Vector2(-2f, 0f);
         m_ParticleSystem.AddParticle(particle1);
         Particle particle2 = new Particle(0.1f);
+        particle2.Position = new Vector2(2f, 0f);
         m_ParticleSystem.AddParticle(particle2);
-        Force springForce1 = new HooksLawSpring(particle1, particle2, 5f, 0.1f, 0.1f);
+        Force springForce1 = new HooksLawSpring(particle1, particle2, 4f, 0.0001f, 0.0001f);
         m_ParticleSystem.AddForce(springForce1);
-        new CircularWireConstraint(particle1, particle1.Position, 5f, m_ParticleSystem);
+        new CircularWireConstraint(particle1, particle1.Position + Vector2.left, 1f, m_ParticleSystem);
+        CreateDebugGameObjects();
     }
 
     void Update()
@@ -50,5 +55,31 @@ public sealed class Main : MonoBehaviour
         m_LineMaterial.SetPass(0);
 
         m_ParticleSystem.Draw();
+    }
+
+    void LateUpdate()
+    {
+        UpdateDebugGameObjects();
+    }
+
+    private void CreateDebugGameObjects()
+    {
+        int numParticles = m_ParticleSystem.Particles.Count;
+        m_DebugGameObjects = new List<Transform>(numParticles);
+        for (int i = 0; i < numParticles; ++i)
+        {
+            GameObject gob = new GameObject("Particle " + i);
+            Transform gobTf = gob.transform;
+            gobTf.position = m_ParticleSystem.Particles[i].Position;
+            m_DebugGameObjects.Add(gobTf);
+        }
+    }
+
+    private void UpdateDebugGameObjects()
+    {
+        for (int i = 0; i < m_ParticleSystem.Particles.Count; ++i)
+        {
+            m_DebugGameObjects[i].position = m_ParticleSystem.Particles[i].Position;
+        }
     }
 }
