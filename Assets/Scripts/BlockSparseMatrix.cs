@@ -26,6 +26,20 @@ public class BlockSparseMatrix : ImplicitMatrix
     //represents an m*n matrix: m rows, n columns
     private int m_m;
 
+	/* Indices: (i,j)
+	 * ________________________
+	 * |(0,0)  (0,1) ... (0,n)|
+	 * |(1,0)  (1,1) ... (1,n)|
+	 * |  .      .            |
+	 * |  .           .       |
+	 * |(m,0)  (m,1) ... (m,n)|
+	 * ________________________
+	 * 
+	 * 0<= i <= m
+	 * 0<= j <= n
+	 * 
+	 * */
+
     public BlockSparseMatrix()// give the ammount of particles
     {
         m_MatrixBlocks = new List<MatrixBlock>();
