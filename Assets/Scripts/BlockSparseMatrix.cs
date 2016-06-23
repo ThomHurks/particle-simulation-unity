@@ -76,17 +76,8 @@ public class BlockSparseMatrix : ImplicitMatrix
 
     //a_Destination = M*a_Source
     //|a_Destination| = m && |a_Source| = n shold hold
-    public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
-    {
-        if (a_Destination.Length != m_m)
-        {
-            throw new Exception("Output size wrong! Should be " + m_m + ",but is " + a_Destination.Length);
-        }
-		if (a_Source.Length != m_n)
-        {
-            throw new Exception("Input size wrong! Should be " + m_n + ",but is " + a_Source.Length);
-        }
-        VerifyValidVectors(a_Source, a_Destination);
+    public void MatrixTimesVector2(float[] a_Source, float[] a_Destination)
+	{
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
@@ -108,17 +99,8 @@ public class BlockSparseMatrix : ImplicitMatrix
     }
 
 
-    public void MatrixTransposeTimesVector(float[] a_Source, float[] a_Destination)
-    {
-		if (a_Destination.Length != m_n)
-        {
-            throw new Exception("Output size wrong! Should be " + m_n + ",but is " + a_Destination.Length);
-        }
-		if (a_Source.Length != m_m)
-        {
-            throw new Exception("Input size wrong! Should be " + m_m + ",but is " + a_Source.Length);
-        }
-        VerifyValidVectors(a_Source, a_Destination);
+    public void MatrixTransposeTimesVector2(float[] a_Source, float[] a_Destination)
+	{
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
@@ -139,21 +121,4 @@ public class BlockSparseMatrix : ImplicitMatrix
         }
     }
 
-    private void VerifyValidVectors(float[] a_Source, float[] a_Destination)
-    {
-        for (int i = 0; i < a_Source.Length; ++i)
-        {
-            if (float.IsNaN(a_Source[i]) || float.IsInfinity(a_Source[i]))
-            {
-                throw new System.Exception("Source vector did not validate: NaN or Inf found.");
-            }
-        }
-        for (int i = 0; i < a_Destination.Length; ++i)
-        {
-            if (a_Destination[i] != 0)
-            {
-                throw new System.Exception("Destination vector was not zero");
-            }
-        }
-    }
 }
