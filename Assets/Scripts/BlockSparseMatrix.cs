@@ -36,6 +36,7 @@ public class BlockSparseMatrix : ImplicitMatrix
 
 	public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
 	{
+        VerifyValidVectors(a_Source, a_Destination);
 		int blockCount = m_MatrixBlocks.Count;
 		MatrixBlock curBlock;
 		for (int index = 0; index < blockCount; ++index)
@@ -46,6 +47,10 @@ public class BlockSparseMatrix : ImplicitMatrix
 				for (int i = curBlock.i; i < curBlock.iLength; ++i)
 				{
 					a_Destination[i] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[j];
+					if (float.IsNaN(a_Destination[i]) || float.IsNaN(a_Destination[i]))
+					{
+						throw new System.Exception("NaN or Inf in BSM.");
+					}
 				}
 			}
 
@@ -54,6 +59,7 @@ public class BlockSparseMatrix : ImplicitMatrix
 
 	public void MatrixTransposeTimesVector(float[] a_Source, float[] a_Destination)
 	{
+        VerifyValidVectors(a_Source, a_Destination);
 		int blockCount = m_MatrixBlocks.Count;
 		MatrixBlock curBlock;
 		for (int index = 0; index < blockCount; ++index)
@@ -64,9 +70,31 @@ public class BlockSparseMatrix : ImplicitMatrix
 				for (int i = curBlock.i; i < curBlock.iLength; ++i)
 				{
 					a_Destination[j] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[i];
+					if (float.IsNaN(a_Destination[i]) || float.IsNaN(a_Destination[i]))
+					{
+						throw new System.Exception("NaN or Inf in BSM.");
+					}
 				}
 			}
 
 		}
+	}
+
+	private void VerifyValidVectors(float[] a_Source, float[] a_Destination)
+	{
+		for (int i = 0; i < a_Source.Length; ++i)
+		{
+            if (float.IsNaN(a_Source[i]) || float.IsInfinity(a_Source[i]))
+            {
+                throw new System.Exception("Source vector did not validate: NaN or Inf found.");
+            }
+		}
+        for (int i = 0; i < a_Destination.Length; ++i)
+        {
+            if (a_Destination[i] != 0)
+            {
+                throw new System.Exception("Destination vector was not zero");
+            }
+        }
 	}
 }

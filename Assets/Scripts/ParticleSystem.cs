@@ -113,6 +113,7 @@ public class ParticleSystem
 		float[] W = ParticlesInverseMassMatrix();
 		float[] Q = ParticlesGetForces();
 		float[] C = ConstraintsGetValues();
+		int numConstraints = C.Length;
 		float[] CDot = ConstraintsGetDerivativeValues();
 		int n = GetParticleDimension() * m_Particles.Count;
 		// JDot times qdot.
@@ -129,22 +130,31 @@ public class ParticleSystem
 		m_J.MatrixTimesVector(WQ, JWQ);
 		// Compute the RHS of equation 11.
 		float[] RHS = new float[n];
-		for (int i = 0; i < n; ++i)
+		for (int i = 0; i < numConstraints; ++i)
 		{
 			RHS[i] = -JDotqdot[i] - JWQ[i] - a_Ks * C[i] - a_Kd * CDot[i];
+			if (float.IsNaN(RHS[i]) || float.IsNaN(RHS[i]))
+			{
+				throw new System.Exception("NaN or Inf in RHS of eq 11");
+			}
 		}
 		// Set up implicit matrix of LHS and solve.
 		Eq11LHS LHS = new Eq11LHS(m_J, W);
 		LinearSolver solver = new LinearSolver();
-		float[] lambda = new float[n];
+		float[] lambda = new float[numConstraints];
 		int stepsPerformed = 0;
-		solver.ConjGrad(n, LHS, lambda, RHS, 0.01f, -1, out stepsPerformed);
+		solver.ConjGrad(numConstraints, LHS, lambda, RHS, 0.01f, -1, out stepsPerformed);
 		Debug.Log(stepsPerformed);
 		float[] QHat = new float[n];
 		m_J.MatrixTransposeTimesVector(lambda, QHat);
 		for (int i = 0; i < m_Particles.Count; ++i)
 		{
-			m_Particles[i].ForceAccumulator += new Vector2(lambda[i * 2], lambda[(i * 2) + 1]);
+			m_Particles[i].ForceAccumulator += new Vector2(QHat[i * 2], QHat[(i * 2) + 1]);
+			Vector2 newForce = m_Particles[i].ForceAccumulator;
+			if (float.IsNaN(newForce.x) || float.IsNaN(newForce.y) || float.IsInfinity(newForce.x) || float.IsInfinity(newForce.y))
+			{
+				throw new System.Exception("NaN or Inf in accumulated force after eq 11");
+			}
 		}
 	}
 
