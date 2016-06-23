@@ -78,29 +78,17 @@ public class BlockSparseMatrix : ImplicitMatrix
     //|a_Destination| = m && |a_Source| = n shold hold
     protected override void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination)
     {
-        int blockCount = m_MatrixBlocks.Count;
-        MatrixBlock curBlock;
-        for (int index = 0; index < blockCount; ++index)
-        {
-            curBlock = m_MatrixBlocks[index];
-            for (int j = curBlock.j; j < curBlock.jLength; ++j)
-            {
-                for (int i = curBlock.i; i < curBlock.iLength; ++i)
-                {
-                    a_Destination[i] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[j];
-                    if (float.IsNaN(a_Destination[i]) || float.IsNaN(a_Destination[i]))
-                    {
-                        throw new System.Exception("NaN or Inf in BSM.");
-                    }
-                }
-            }
-
-        }
+        GenericMatrixTimesVector(a_Source, a_Destination, false);//Do a normal multiplication
     }
 
     protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
     {
-        int blockCount = m_MatrixBlocks.Count;
+		GenericMatrixTimesVector(a_Source, a_Destination, true);//Do a transpose multiplication
+    }
+
+	private void GenericMatrixTimesVector(float[] a_Source, float[] a_Destination, bool transpose)
+	{
+		int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
         {
@@ -109,7 +97,9 @@ public class BlockSparseMatrix : ImplicitMatrix
             {
                 for (int i = curBlock.i; i < curBlock.iLength; ++i)
                 {
-                    a_Destination[j] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[i];
+					int k1 = transpose?j:i;
+					int k2 = transpose?i:j;
+                    a_Destination[k1] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[k2];
                     if (float.IsNaN(a_Destination[i]) || float.IsNaN(a_Destination[i]))
                     {
                         throw new System.Exception("NaN or Inf in BSM.");
@@ -118,6 +108,6 @@ public class BlockSparseMatrix : ImplicitMatrix
             }
 
         }
-    }
+	}
 
 }
