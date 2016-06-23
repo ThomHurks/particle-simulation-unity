@@ -21,21 +21,33 @@ public class BlockSparseMatrix : ImplicitMatrix
 	}
 
 	private List<MatrixBlock> m_MatrixBlocks;
+	private int m_n;//represents an m*n matrix: m rows, n columns
+	private int m_m;
 
-	public BlockSparseMatrix()
+	public BlockSparseMatrix()// give the ammount of particles
 	{
 		m_MatrixBlocks = new List<MatrixBlock>();
+		m_m = 0;
+		m_n = 0;
 	}
 
 	public MatrixBlock CreateMatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
 	{
 		MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
 		m_MatrixBlocks.Add(block);
+		m_m = Math.max(m_m,a_j+a_jLength);
 		return block;
 	}
 
+	//a_Destination = M*a_Source
+	//|a_Destination| = m && |a_Source| = n shold hold
 	public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
 	{
+		if(a_Destination.Length!=m_m)
+		{
+			throw new Exception("Output size wrong!");
+		}
+
         VerifyValidVectors(a_Source, a_Destination);
 		int blockCount = m_MatrixBlocks.Count;
 		MatrixBlock curBlock;
@@ -56,6 +68,7 @@ public class BlockSparseMatrix : ImplicitMatrix
 
 		}
 	}
+
 
 	public void MatrixTransposeTimesVector(float[] a_Source, float[] a_Destination)
 	{
