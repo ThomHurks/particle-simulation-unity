@@ -2,19 +2,19 @@
 
 public class GravityForce : Force
 {
-	private Vector2 m_Gravity;
+    private Vector2 m_Gravity;
 
-	public GravityForce()
-	{
-		m_Gravity = Vector2.down * 9.80665f;
-	}
+    public GravityForce()
+    {
+        m_Gravity = Vector2.down * 9.80665f;
+    }
 
-	public void ApplyForce(ParticleSystem a_ParticleSystem)
-	{
-		int numParticles = a_ParticleSystem.Count;
-		for (int i = 0; i < numParticles; ++i)
-		{
-			a_ParticleSystem.Particles[i].ForceAccumulator += m_Gravity;
-		}
-	}
+    public void ApplyForce(ParticleSystem a_ParticleSystem)
+    {
+        int numParticles = a_ParticleSystem.Count;
+        for (int i = 0; i < numParticles; ++i)
+        {
+            a_ParticleSystem.Particles[i].ForceAccumulator += m_Gravity;
+        }
+    }
 }

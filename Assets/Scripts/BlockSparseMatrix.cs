@@ -5,10 +5,14 @@ public class BlockSparseMatrix : ImplicitMatrix
 {
     public class MatrixBlock
     {
-		public int i;//constraint index (top left)
-		public int j;//particle index (top left)
-        public int iLength;// 2
-        public int jLength;//constraint length
+        public int i;
+        //constraint index (top left)
+        public int j;
+        //particle index (top left)
+        public int iLength;
+        // 2
+        public int jLength;
+        //constraint length
         public float[] data;
 
         public MatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
@@ -26,7 +30,7 @@ public class BlockSparseMatrix : ImplicitMatrix
     //represents an m*n matrix: m rows, n columns
     private int m_m;
 
-	/* Indices: (i,j)
+    /* Indices: (i,j)
 	 * ________________________
 	 * |(0,0)  (0,1) ... (0,n)|
 	 * |(1,0)  (1,1) ... (1,n)|
