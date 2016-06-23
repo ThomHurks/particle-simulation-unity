@@ -133,7 +133,7 @@ public class ParticleSystem
         ValidateVector(CDot);
         int n = GetParticleDimension() * m_Particles.Count;
         // JDot times qdot.
-        float[] JDotqdot = new float[n];
+        float[] JDotqdot = new float[numConstraints];
         m_JDot.MatrixTimesVector(qdot, JDotqdot);
         ValidateVector(JDotqdot);
         // W times Q.
