@@ -166,7 +166,7 @@ public class ParticleSystem
         int stepsPerformed = 0;
         solver.ConjGrad(numConstraints, LHS, lambda, RHS, 0.01f, -1, out stepsPerformed);
         ValidateVector(lambda);
-        Debug.Log(stepsPerformed);
+        //Debug.Log(stepsPerformed);
         float[] QHat = new float[n];
         m_J.MatrixTransposeTimesVector(lambda, QHat);
         ValidateVector(QHat);
