@@ -1,10 +1,12 @@
 ﻿public class Eq11LHS : ImplicitMatrix
 {
     private BlockSparseMatrix m_J;
-	private float[] m_W; // = global n (2*particles)
-	private int size; // This is a symetric matrix: m=n (= global m)
+    private float[] m_W;
+    // = global n (2*particles)
+    private readonly int m_Size;
+    // This is a symetric matrix: m=n (= global m)
 
-	/*
+    /*
 	 * J = m*n
 	 * W = n*n
 	 * JT = n*m
@@ -16,10 +18,10 @@
     {
         m_J = a_J;
         m_W = a_W;
-		size = a_J.getM();
+        m_Size = a_J.getM();
     }
 
-    public void MatrixTimesVector2(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination)
     {
         float[] temp = new float[m_W.Length];
         m_J.MatrixTransposeTimesVector(a_Source, temp); //temp = JTa
@@ -31,20 +33,20 @@
         m_J.MatrixTimesVector(temp, a_Destination); // a_Destination = JWJTa
     }
 
-    public void MatrixTransposeTimesVector2(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
     {
         // JWJTranspose is a symmetric matrix.
         MatrixTimesVector(a_Source, a_Destination);
     }
 
-	public int getM()
-	{
-		return size;
-	}
+    public override int getM()
+    {
+        return m_Size;
+    }
 
-	public int getN()
-	{
-		return size;
-	}
+    public override int getN()
+    {
+        return m_Size;
+    }
 
 }

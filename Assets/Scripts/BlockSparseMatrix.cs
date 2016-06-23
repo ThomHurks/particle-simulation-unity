@@ -51,20 +51,20 @@ public class BlockSparseMatrix : ImplicitMatrix
         m_n = 0;//Not maintainable -> not all particles need to be constrained
     }
 
-	public void SetN(int a_n)
-	{
-		m_n = a_n;
-	}
+    public void SetN(int a_n)
+    {
+        m_n = a_n;
+    }
 
-	public int getN()
-	{
-		return m_n;
-	}
+    public override int getN()
+    {
+        return m_n;
+    }
 
-	public int getM()
-	{
-		return m_m;
-	}
+    public override int getM()
+    {
+        return m_m;
+    }
 
     public MatrixBlock CreateMatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
     {
@@ -76,8 +76,8 @@ public class BlockSparseMatrix : ImplicitMatrix
 
     //a_Destination = M*a_Source
     //|a_Destination| = m && |a_Source| = n shold hold
-    public void MatrixTimesVector2(float[] a_Source, float[] a_Destination)
-	{
+    protected override void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    {
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
@@ -98,9 +98,8 @@ public class BlockSparseMatrix : ImplicitMatrix
         }
     }
 
-
-    public void MatrixTransposeTimesVector2(float[] a_Source, float[] a_Destination)
-	{
+    protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    {
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
