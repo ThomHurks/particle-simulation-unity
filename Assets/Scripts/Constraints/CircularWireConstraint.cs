@@ -14,10 +14,10 @@ public class CircularWireConstraint : Constraint
 		m_Particle = a_Particle;
 		m_Center = a_Center;
 		m_RadiusSquared = a_Radius * a_Radius;
-		int i = a_System.GetParticleIndex(a_Particle) * a_System.GetParticleDimension();
-		int j = a_System.AddConstraint(this);
-		int iLength = a_System.GetParticleDimension();
-		int jLength = GetConstraintDimension();
+		int j = a_System.GetParticleIndex(a_Particle) * a_System.GetParticleDimension();
+		int i = a_System.AddConstraint(this);
+		int iLength = GetConstraintDimension();
+		int jLength = a_System.GetParticleDimension();
 		m_MatrixBlockJ = a_System.MatrixJ.CreateMatrixBlock(i, j, iLength, jLength);
 		m_MatrixBlockJDot = a_System.MatrixJDot.CreateMatrixBlock(i, j, iLength, jLength);
 	}

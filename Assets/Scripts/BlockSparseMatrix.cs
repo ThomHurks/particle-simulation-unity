@@ -5,8 +5,8 @@ public class BlockSparseMatrix : ImplicitMatrix
 {
     public class MatrixBlock
     {
-		public int i;//particle index (top left)
-		public int j;//constraint index (top left)
+		public int i;//constraint index (top left)
+		public int j;//particle index (top left)
         public int iLength;// 2
         public int jLength;//constraint length
         public float[] data;
@@ -37,7 +37,7 @@ public class BlockSparseMatrix : ImplicitMatrix
     {
         MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
         m_MatrixBlocks.Add(block);
-        m_m = Math.Max(m_m, a_j + a_jLength);
+        m_m = Math.Max(m_m, a_i + a_iLength);
         return block;
     }
 
