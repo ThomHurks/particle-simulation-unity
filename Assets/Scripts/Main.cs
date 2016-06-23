@@ -4,6 +4,26 @@ public sealed class Main : MonoBehaviour
 {
     private ParticleSystem m_ParticleSystem;
     private Solver m_Solver;
+    private static Material m_LineMaterial;
+
+    static void CreateLineMaterial()
+    {
+        if (!m_LineMaterial)
+        {
+            // Unity has a built-in shader that is useful for drawing
+            // simple colored things.
+            Shader shader = Shader.Find("Hidden/Internal-Colored");
+            m_LineMaterial = new Material(shader);
+            m_LineMaterial.hideFlags = HideFlags.HideAndDontSave;
+            // Turn on alpha blending
+            m_LineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            m_LineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            // Turn backface culling off
+            m_LineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            // Turn off depth writes
+            m_LineMaterial.SetInt("_ZWrite", 0);
+        }
+    }
 
     void Awake()
     {
@@ -25,6 +45,10 @@ public sealed class Main : MonoBehaviour
 
     void OnRenderObject()
     {
+        CreateLineMaterial();
+        // Apply the line material
+        m_LineMaterial.SetPass(0);
+
         m_ParticleSystem.Draw();
     }
 }
