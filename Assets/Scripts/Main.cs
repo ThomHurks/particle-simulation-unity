@@ -22,4 +22,9 @@ public sealed class Main : MonoBehaviour
     {
         m_Solver.Step(m_ParticleSystem, Time.deltaTime);
     }
+
+    void OnRenderObject()
+    {
+        m_ParticleSystem.Draw();
+    }
 }

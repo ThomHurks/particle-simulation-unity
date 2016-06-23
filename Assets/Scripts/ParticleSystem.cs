@@ -56,8 +56,8 @@ public class ParticleSystem
     public void AddParticle(Particle a_Particle)
     {
         m_Particles.Add(a_Particle);
-		m_J.SetN(GetParticleDimension()*m_Particles.Count);
-		m_JDot.SetN(GetParticleDimension()*m_Particles.Count);
+        m_J.SetN(GetParticleDimension() * m_Particles.Count);
+        m_JDot.SetN(GetParticleDimension() * m_Particles.Count);
     }
 
     public void AddForce(Force a_Force)
@@ -345,4 +345,21 @@ public class ParticleSystem
             m_Particles[i].ForceAccumulator = Vector2.zero;
         }
     }
+
+    public void Draw()
+    {
+        for (int i = 0; i < m_Particles.Count; ++i)
+        {
+            m_Particles[i].Draw();
+        }
+        for (int i = 0; i < m_Forces.Count; ++i)
+        {
+            m_Forces[i].Draw();
+        }
+        for (int i = 0; i < m_Constraints.Count; ++i)
+        {
+            m_Constraints[i].Draw();
+        }
+    }
+
 }

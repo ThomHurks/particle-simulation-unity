@@ -1,4 +1,6 @@
 ﻿public interface Force
 {
-	void ApplyForce(ParticleSystem a_ParticleSystem);
+    void ApplyForce(ParticleSystem a_ParticleSystem);
+
+    void Draw();
 }

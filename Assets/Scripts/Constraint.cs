@@ -7,4 +7,6 @@
     float GetDerivativeValue(ParticleSystem a_ParticleSystem);
 
     int GetConstraintDimension();
+
+    void Draw();
 }

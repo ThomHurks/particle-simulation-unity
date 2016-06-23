@@ -17,4 +17,9 @@
             curParticle.ForceAccumulator += -m_CoefficientOfDrag * curParticle.Velocity;
         }
     }
+
+    public void Draw()
+    {
+        return;
+    }
 }

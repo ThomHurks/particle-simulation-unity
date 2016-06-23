@@ -17,4 +17,9 @@ public class GravityForce : Force
             a_ParticleSystem.Particles[i].ForceAccumulator += m_Gravity;
         }
     }
+
+    public void Draw()
+    {
+        return;
+    }
 }

@@ -35,4 +35,13 @@ public class HooksLawSpring : Force
             m_ParticleB.ForceAccumulator -= f_a;
         }
     }
+
+    public void Draw()
+    {
+        GL.Begin(GL.LINES);
+        GL.Color(new Color(0.6f, 0.7f, 0.8f));
+        GL.Vertex(m_ParticleA.Position);
+        GL.Vertex(m_ParticleB.Position);
+        GL.End();
+    }
 }

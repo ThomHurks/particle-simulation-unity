@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Particle
 {
@@ -52,5 +51,17 @@ public class Particle
             }
             m_ForceAccumulator = value;
         }
+    }
+
+    public void Draw()
+    {
+        const float h = 0.03f;
+        GL.Color(Color.white);
+        GL.Begin(GL.QUADS);
+        GL.Vertex(new Vector2(m_Position.x - h / 2f, m_Position.y - h / 2f));
+        GL.Vertex(new Vector2(m_Position.x + h / 2f, m_Position.y - h / 2f));
+        GL.Vertex(new Vector2(m_Position.x + h / 2f, m_Position.y + h / 2f));
+        GL.Vertex(new Vector2(m_Position.x - h / 2f, m_Position.y + h / 2f));
+        GL.End();
     }
 }
