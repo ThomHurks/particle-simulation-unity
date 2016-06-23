@@ -5,10 +5,10 @@ public class BlockSparseMatrix : ImplicitMatrix
 {
     public class MatrixBlock
     {
-        public int i;
-        public int j;
-        public int iLength;
-        public int jLength;
+		public int i;//particle index (top left)
+		public int j;//constraint index (top left)
+        public int iLength;// 2
+        public int jLength;//constraint length
         public float[] data;
 
         public MatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
@@ -30,7 +30,7 @@ public class BlockSparseMatrix : ImplicitMatrix
     {
         m_MatrixBlocks = new List<MatrixBlock>();
         m_m = 0;
-        m_n = 0;
+        m_n = 0;//Not maintainable -> not all particles need to be constrained
     }
 
     public MatrixBlock CreateMatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
