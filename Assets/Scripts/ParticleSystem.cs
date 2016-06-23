@@ -107,27 +107,46 @@ public class ParticleSystem
 		SolveEquation11(m_ConstraintKS, m_ConstraintKD);
 	}
 
+    private void ValidateVector(float[] a_Vector)
+    {
+        for (int i = 0; i < a_Vector.Length; ++i)
+        {
+            if (float.IsNaN(a_Vector[i]) || float.IsInfinity(a_Vector[i]))
+            {
+                throw new System.Exception("Vector did not validate: NaN or Inf found.");
+            }
+        }
+    }
+
 	private void SolveEquation11(float a_Ks, float a_Kd)
 	{
 		float[] qdot = ParticlesGetVelocities();
+        ValidateVector(qdot);
 		float[] W = ParticlesInverseMassMatrix();
+        ValidateVector(W);
 		float[] Q = ParticlesGetForces();
+        ValidateVector(Q);
 		float[] C = ConstraintsGetValues();
+        ValidateVector(C);
 		int numConstraints = C.Length;
 		float[] CDot = ConstraintsGetDerivativeValues();
+        ValidateVector(CDot);
 		int n = GetParticleDimension() * m_Particles.Count;
 		// JDot times qdot.
 		float[] JDotqdot = new float[n];
 		m_JDot.MatrixTimesVector(qdot, JDotqdot);
+        ValidateVector(JDotqdot);
 		// W times Q.
 		float[] WQ = new float[n];
 		for (int i = 0; i < n; ++i)
 		{
 			WQ[i] = W[i] * Q[i];
 		}
+        ValidateVector(WQ);
 		// J times WQ.
 		float[] JWQ = new float[n];
 		m_J.MatrixTimesVector(WQ, JWQ);
+        ValidateVector(JWQ);
 		// Compute the RHS of equation 11.
 		float[] RHS = new float[n];
 		for (int i = 0; i < numConstraints; ++i)
@@ -144,9 +163,11 @@ public class ParticleSystem
 		float[] lambda = new float[numConstraints];
 		int stepsPerformed = 0;
 		solver.ConjGrad(numConstraints, LHS, lambda, RHS, 0.01f, -1, out stepsPerformed);
+        ValidateVector(lambda);
 		Debug.Log(stepsPerformed);
 		float[] QHat = new float[n];
 		m_J.MatrixTransposeTimesVector(lambda, QHat);
+        ValidateVector(QHat);
 		for (int i = 0; i < m_Particles.Count; ++i)
 		{
 			m_Particles[i].ForceAccumulator += new Vector2(QHat[i * 2], QHat[(i * 2) + 1]);
