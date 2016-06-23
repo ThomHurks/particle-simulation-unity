@@ -1,0 +1,6 @@
+Library/*
+*.csproj
+obj/*
+*.sln
+ParticleSystems.userprefs
+*.swp
