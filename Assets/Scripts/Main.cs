@@ -36,8 +36,8 @@ public sealed class Main : MonoBehaviour
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
 
-        //CreateTestSimulation();
-        CreateClothSimulation();
+        CreateTestSimulation();
+        //CreateClothSimulation();
 
         CreateDebugGameObjects();
     }
@@ -63,23 +63,23 @@ public sealed class Main : MonoBehaviour
 
     private void CreateTestSimulation()
     {
-        Particle particle1 = new Particle(1f);
-        particle1.Position = new Vector2(-2f, 0f);
-        m_ParticleSystem.AddParticle(particle1);
-        Particle particle2 = new Particle(1f);
-        particle2.Position = new Vector2(2f, 0f);
-        m_ParticleSystem.AddParticle(particle2);
-        Force springForce1 = new HooksLawSpring(particle1, particle2, 2f, 0.1f, 0.1f);
-        m_ParticleSystem.AddForce(springForce1);
-        Force gravityForce = new GravityForce(0.1f);
-        m_ParticleSystem.AddForce(gravityForce);
-        new CircularWireConstraint(particle1, particle1.Position + Vector2.left, 1f, m_ParticleSystem);
-
-        Particle particle3 = new Particle(1f);
-        particle3.Position = new Vector2(3f, 3f);
-        Force mouseForce = new MouseSpringForce(particle3, 3f, 10f, 0.1f);
-        m_ParticleSystem.AddForce(mouseForce);
-        m_ParticleSystem.AddParticle(particle3);
+		
+		Particle particle1 = new Particle(1f);
+		particle1.Position = new Vector2(-2f, 0f);
+		m_ParticleSystem.AddParticle(particle1);
+		Particle particle2 = new Particle(1f);
+		particle2.Position = new Vector2(0f, 0f);
+		m_ParticleSystem.AddParticle(particle2);
+		Particle particle3 = new Particle(100f);
+		particle3.Position = new Vector2(4f, 4f);
+		m_ParticleSystem.AddParticle(particle3);
+		Force springForce1 = new HooksLawSpring(particle2, particle3, 0f, 1f, 1f);
+		m_ParticleSystem.AddForce(springForce1);
+		Force gravityForce = new GravityForce(.01f);
+		//m_ParticleSystem.AddForce(gravityForce);
+		//new CircularWireConstraint(particle1, particle1.Position + Vector2.left, 1f, m_ParticleSystem);
+		//new CircularWireConstraint(particle2, particle2.Position + Vector2.right, 1f, m_ParticleSystem);
+		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
     }
 
     private void CreateClothSimulation(bool withCrossFibers = false)

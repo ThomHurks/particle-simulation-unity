@@ -84,7 +84,7 @@ public class RodConstraint : Constraint
 		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
 		Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
 		return Vector2.Dot(deltaVelocity, deltaPosition);
-	}/*
+	}*/
 
     public int GetConstraintDimension()
     {
