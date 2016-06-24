@@ -2,9 +2,9 @@
 
 public class AngularSpringForce : Force
 {
-    private Particle m_MassPoint;
-    private Particle m_ParticleA;
-    private Particle m_ParticleB;
+    private readonly Particle m_MassPoint;
+    private readonly Particle m_ParticleA;
+    private readonly Particle m_ParticleB;
     // Cosine of rest angle
     private float m_Angle;
     // Spring constants
