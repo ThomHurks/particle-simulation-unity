@@ -7,6 +7,7 @@ public sealed class Main : MonoBehaviour
     private Solver m_Solver;
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
+    private UnityEngine.UI.Dropdown m_SolverDropdown;
 
     static void CreateLineMaterial()
     {
@@ -42,8 +43,15 @@ public sealed class Main : MonoBehaviour
         CreateDebugGameObjects();
     }
 
+    void Start()
+    {
+        m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+    }
+
     void Update()
     {
+
+
         m_Solver.Step(m_ParticleSystem, Time.deltaTime);
     }
 
@@ -59,6 +67,25 @@ public sealed class Main : MonoBehaviour
     void LateUpdate()
     {
         UpdateDebugGameObjects();
+    }
+
+    public void OnSolverTypeChanged()
+    {
+        switch (m_SolverDropdown.value)
+        {
+            case 0:
+                m_Solver = new EulerSolver();
+                Debug.Log("Switched to Euler");
+                break;
+            case 1:
+                m_Solver = new MidpointSolver();
+                Debug.Log("Switched to Midpoint");
+                break;
+            case 2:
+                m_Solver = new RungeKutta4Solver();
+                Debug.Log("Switched to Runge Kutta 4th");
+                break;
+        }
     }
 
     private void CreateTestSimulation()

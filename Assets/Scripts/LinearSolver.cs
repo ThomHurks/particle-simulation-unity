@@ -54,7 +54,7 @@ public class LinearSolver
 
                 if (u == 0f)
                 {
-                    Debug.Log("(SolveConjGrad) d'Ad = 0\n");
+                    //Debug.Log("(SolveConjGrad) d'Ad = 0\n");
                     break;
                 }
 
