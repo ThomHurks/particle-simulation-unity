@@ -43,7 +43,7 @@ public class FixedPointConstraint : Constraint
 
     public int GetConstraintDimension()
     {
-        return 2;
+        return 1;
     }
 
     public void Draw()
