@@ -32,13 +32,13 @@ public class FixedPointConstraint : Constraint
     public float GetValue(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-        return relative.sqrMagnitude / 2;
+        return relative.magnitude;
     }
 
     public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-        return Vector2.Dot(m_Particle.Velocity, relative);
+		return Vector2.Dot(m_Particle.Velocity, relative)/relative.magnitude;
     }
 
     public int GetConstraintDimension()

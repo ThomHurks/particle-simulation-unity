@@ -2,6 +2,8 @@
 
 public class CircularWireConstraint : Constraint
 {
+	private readonly static bool OLD = false;
+
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
     private Particle m_Particle;
@@ -24,7 +26,26 @@ public class CircularWireConstraint : Constraint
         m_MatrixBlockJDot = a_System.MatrixJDot.CreateMatrixBlock(i, j, iLength, jLength);
     }
 
-    public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+	public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+	{
+		if (OLD) {
+			UpdateJacobiansOld (a_ParticleSystem);
+		} else {
+			UpdateJacobiansNew (a_ParticleSystem);
+		}
+	}
+
+	public float GetValue(ParticleSystem a_ParticleSystem)
+	{
+		return OLD ? GetValueNew (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
+	}
+
+	public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+	{
+		return OLD ? GetDerivativeValueOld (a_ParticleSystem) : GetDerivativeValueNew (a_ParticleSystem);
+	}
+
+    public void UpdateJacobiansNew(ParticleSystem a_ParticleSystem)
     {
 		Vector2 l = m_Particle.Position - m_Center; 
 		Vector2 ldot = m_Particle.Velocity;
@@ -38,23 +59,23 @@ public class CircularWireConstraint : Constraint
 		m_MatrixBlockJ.data[0] = dCdl.x;
 		m_MatrixBlockJ.data[1] = dCdl.y;
 		m_MatrixBlockJDot.data[0] = dCdotdl.x;
-		m_MatrixBlockJDot.data[1] = dCdotdl.y; // TODO: VERIFY THIS
+		m_MatrixBlockJDot.data[1] = dCdotdl.y; 
     }
 
-    public float GetValue(ParticleSystem a_ParticleSystem)
+    public float GetValueNew(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
         return (relative.magnitude - m_Radius);
     }
 
-    public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+    public float GetDerivativeValueNew(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
 		return Vector2.Dot(m_Particle.Velocity, relative)/relative.magnitude;
     }
 
-	/*
-	 public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+
+	 public void UpdateJacobiansOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
         m_MatrixBlockJ.data[0] = relative.x;
@@ -63,18 +84,18 @@ public class CircularWireConstraint : Constraint
         m_MatrixBlockJDot.data[1] = m_Particle.Velocity.y; // TODO: VERIFY THIS
     }
 
-    public float GetValue(ParticleSystem a_ParticleSystem)
+    public float GetValueOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
         return (relative.sqrMagnitude - m_RadiusSquared) / 2;
     }
 
-    public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+    public float GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
         return Vector2.Dot(m_Particle.Velocity, relative);
     }
-	 */ 
+	  
 
     public int GetConstraintDimension()
     {
