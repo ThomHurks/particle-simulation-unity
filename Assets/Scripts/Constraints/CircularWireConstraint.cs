@@ -44,6 +44,29 @@ public class CircularWireConstraint : Constraint
         return Vector2.Dot(m_Particle.Velocity, relative);
     }
 
+	/*
+	 public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+    {
+        Vector2 relative = m_Particle.Position - m_Center;
+        m_MatrixBlockJ.data[0] = relative.x;
+        m_MatrixBlockJ.data[1] = relative.y;
+        m_MatrixBlockJDot.data[0] = m_Particle.Velocity.x;
+        m_MatrixBlockJDot.data[1] = m_Particle.Velocity.y; // TODO: VERIFY THIS
+    }
+
+    public float GetValue(ParticleSystem a_ParticleSystem)
+    {
+        Vector2 relative = m_Particle.Position - m_Center;
+        return (relative.sqrMagnitude - m_RadiusSquared) / 2;
+    }
+
+    public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+    {
+        Vector2 relative = m_Particle.Position - m_Center;
+        return Vector2.Dot(m_Particle.Velocity, relative);
+    }
+	 */ 
+
     public int GetConstraintDimension()
     {
         return 1;
