@@ -102,8 +102,8 @@ public class BlockSparseMatrix : ImplicitMatrix
                 {
                     int k1 = !transpose ? i : j;
                     int k2 = !transpose ? j : i;
-
-                    a_Destination[k1] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[k2];
+					int cellindex = ((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j); // cell (i,j) in matrix
+					a_Destination[k1] += curBlock.data[cellindex] * a_Source[k2];
                     if (float.IsNaN(a_Destination[k1]) || float.IsInfinity(a_Destination[k1]))
                     {
                         throw new System.Exception("NaN or Inf in BSM.");
