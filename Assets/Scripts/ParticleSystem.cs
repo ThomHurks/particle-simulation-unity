@@ -10,8 +10,8 @@ public class ParticleSystem
     private BlockSparseMatrix m_J;
     private BlockSparseMatrix m_JDot;
     private float m_Time;
-    private const float m_ConstraintKS = 0.5f;
-    private const float m_ConstraintKD = 0.5f;
+    private float m_ConstraintSpringConstant;
+    private float m_ConstraintDampingConstant;
 
     public int Count
     {
@@ -39,13 +39,15 @@ public class ParticleSystem
         get { return m_JDot; }
     }
 
-    public ParticleSystem()
+    public ParticleSystem(float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
     {
         m_Particles = new List<Particle>();
         m_Forces = new List<Force>();
         m_Constraints = new List<Constraint>();
         m_J = new BlockSparseMatrix();
         m_JDot = new BlockSparseMatrix();
+        m_ConstraintSpringConstant = a_ConstraintSpringConstant;
+        m_ConstraintDampingConstant = a_ConstraintDampingConstant;
     }
 
     public int GetParticleDimension()
@@ -106,7 +108,7 @@ public class ParticleSystem
         {
             m_Constraints[i].UpdateJacobians(this);
         }
-        SolveEquation11(m_ConstraintKS, m_ConstraintKD);
+        SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant);
     }
 
     private static void ValidateVector(float[] a_Vector)

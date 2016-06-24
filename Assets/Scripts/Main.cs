@@ -29,16 +29,20 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
-        m_ParticleSystem = new ParticleSystem();
-        m_Solver = new EulerSolver();
+        const float constraintSpringConstant = 10f;
+        const float constraintDampingConstant = 0.1f;
+        m_ParticleSystem = new ParticleSystem(constraintSpringConstant, constraintDampingConstant);
+        m_Solver = new RungeKutta4Solver();
         Particle particle1 = new Particle(0.1f);
         particle1.Position = new Vector2(-2f, 0f);
         m_ParticleSystem.AddParticle(particle1);
         Particle particle2 = new Particle(0.1f);
         particle2.Position = new Vector2(2f, 0f);
         m_ParticleSystem.AddParticle(particle2);
-        Force springForce1 = new HooksLawSpring(particle1, particle2, 4f, 0.1f, 0.1f);
+        Force springForce1 = new HooksLawSpring(particle1, particle2, 2f, 0.1f, 0.1f);
         m_ParticleSystem.AddForce(springForce1);
+        Force gravityForce = new GravityForce();
+        m_ParticleSystem.AddForce(gravityForce);
         new CircularWireConstraint(particle1, particle1.Position + Vector2.left, 1f, m_ParticleSystem);
         CreateDebugGameObjects();
     }

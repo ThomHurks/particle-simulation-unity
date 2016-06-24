@@ -4,15 +4,15 @@ public class MouseSpringForce : Force
 {
     private readonly Particle m_Particle;
     private float m_RestLength;
-    private float m_Ks;
-    private float m_Kd;
+    private float m_SpringConstant;
+    private float m_DampingConstant;
 
-    public MouseSpringForce(Particle a_Particle, float a_RestLength, float a_Ks, float a_Kd)
+    public MouseSpringForce(Particle a_Particle, float a_RestLength, float a_SpringConstant, float a_DampingConstant)
     {
         m_Particle = a_Particle;
         m_RestLength = a_RestLength;
-        m_Ks = a_Ks;
-        m_Kd = a_Kd;
+        m_SpringConstant = a_SpringConstant;
+        m_DampingConstant = a_DampingConstant;
     }
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
@@ -28,7 +28,7 @@ public class MouseSpringForce : Force
 
         if (magnitude != 0f)
         {
-            Vector2 f = (m_Ks * (magnitude - m_RestLength) + m_Kd * (Vector2.Dot(velocity, relative) / magnitude)) * direction;
+            Vector2 f = (m_SpringConstant * (magnitude - m_RestLength) + m_DampingConstant * (Vector2.Dot(velocity, relative) / magnitude)) * direction;
             m_Particle.ForceAccumulator += f;
             if (float.IsNaN(f.x) || float.IsNaN(f.y) || float.IsInfinity(f.x) || float.IsInfinity(f.y))
             {
