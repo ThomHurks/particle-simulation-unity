@@ -36,7 +36,6 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-
         CreateTestSimulation();
         //CreateClothSimulation();
 
@@ -48,10 +47,48 @@ public sealed class Main : MonoBehaviour
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
     }
 
+    private float m_ParticleSelectThreshold = 0.2f;
+    private float m_MouseSelectRestLength = 1f;
+    private float m_MouseSelectSpringConstant = 10f;
+    private float m_MouseSelectDampingConstant = 0.1f;
+    private bool m_HasMouseSelection = false;
+    private MouseSpringForce m_CurrentMouseForce;
+
     void Update()
     {
+        if (!m_HasMouseSelection && Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
 
-
+            int numParticles = m_ParticleSystem.Particles.Count;
+            Particle closestParticle = null;
+            float particleDistanceSqr = float.MaxValue;
+            Particle curParticle = null;
+            for (int i = 0; i < numParticles; ++i)
+            {
+                curParticle = m_ParticleSystem.Particles[i];
+                float curDistanceSqr = (mousePos - curParticle.Position).sqrMagnitude;
+                if (curDistanceSqr < particleDistanceSqr)
+                {
+                    closestParticle = curParticle;
+                    particleDistanceSqr = curDistanceSqr;
+                }
+            }
+            if (closestParticle != null && particleDistanceSqr < (m_ParticleSelectThreshold * m_ParticleSelectThreshold))
+            {
+                m_CurrentMouseForce = new MouseSpringForce(closestParticle, m_MouseSelectRestLength,
+                    m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
+                m_ParticleSystem.AddForce(m_CurrentMouseForce);
+                m_HasMouseSelection = true;
+            }
+        }
+        else if (m_HasMouseSelection && Input.GetMouseButtonDown(1))
+        {
+            m_ParticleSystem.RemoveForce(m_CurrentMouseForce);
+            m_CurrentMouseForce = null;
+            m_HasMouseSelection = false;
+        }
         m_Solver.Step(m_ParticleSystem, Time.deltaTime);
     }
 
@@ -90,7 +127,7 @@ public sealed class Main : MonoBehaviour
 
     private void CreateTestSimulation()
     {
-		/*
+        /*
 		Particle particle1 = new Particle(1f);
 		particle1.Position = new Vector2(-2f, 0f);
 		m_ParticleSystem.AddParticle(particle1);
@@ -109,48 +146,48 @@ public sealed class Main : MonoBehaviour
 /**/	
 
 
-		Particle particle4 = new Particle(1f);
-		particle4.Position = new Vector2(-4f, 4f);
-		Particle particle5 = new Particle(1f);
-		particle5.Position = new Vector2(-4f, 2f);
-		m_ParticleSystem.AddParticle(particle5);
-		m_ParticleSystem.AddParticle(particle4);
+        Particle particle4 = new Particle(1f);
+        particle4.Position = new Vector2(-4f, 4f);
+        Particle particle5 = new Particle(1f);
+        particle5.Position = new Vector2(-4f, 2f);
+        m_ParticleSystem.AddParticle(particle5);
+        m_ParticleSystem.AddParticle(particle4);
 
-		Force springForce2 = new HooksLawSpring(particle4, particle5, 0f, 1f, 1f);
-		m_ParticleSystem.AddForce(springForce2);
-		//Particle particle6 = new Particle(1f);
-		//particle6.Position = new Vector2(-4f, 4f);
-		//m_ParticleSystem.AddParticle(particle6);
-		new CircularWireConstraint(particle4, particle4.Position + Vector2.left, 1f, m_ParticleSystem);/**/
-
-
-		Particle particle6 = new Particle(1f);
-		particle6.Position = new Vector2(0f, 4f);
-		Particle particle7 = new Particle(1f);
-		particle7.Position = new Vector2(0f, 2f);
-		m_ParticleSystem.AddParticle(particle6);
-		m_ParticleSystem.AddParticle(particle7);
-
-		Force springForce3 = new HooksLawSpring(particle6, particle7, 0f, 1f, 1f);
-		m_ParticleSystem.AddForce(springForce3);
-		//Particle particle6 = new Particle(1f);
-		//particle6.Position = new Vector2(-4f, 4f);
-		//m_ParticleSystem.AddParticle(particle6);
-		new CircularWireConstraint(particle6, particle6.Position + Vector2.left, 1f, m_ParticleSystem);/**/
-
-		Force springForce4 = new HooksLawSpring(particle5, particle7, 8f, 0.1f, 1f);
-		m_ParticleSystem.AddForce(springForce4);
-
-		Force gravityForce = new GravityForce(.1f);
-		m_ParticleSystem.AddForce(gravityForce);
+        Force springForce2 = new HooksLawSpring(particle4, particle5, 0f, 1f, 1f);
+        m_ParticleSystem.AddForce(springForce2);
+        //Particle particle6 = new Particle(1f);
+        //particle6.Position = new Vector2(-4f, 4f);
+        //m_ParticleSystem.AddParticle(particle6);
+        new CircularWireConstraint(particle4, particle4.Position + Vector2.left, 1f, m_ParticleSystem);/**/
 
 
-		Particle particle8 = new Particle(5f);
-		particle8.Position = new Vector2(0f, 0f);
-		m_ParticleSystem.AddParticle(particle8);
+        Particle particle6 = new Particle(1f);
+        particle6.Position = new Vector2(0f, 4f);
+        Particle particle7 = new Particle(1f);
+        particle7.Position = new Vector2(0f, 2f);
+        m_ParticleSystem.AddParticle(particle6);
+        m_ParticleSystem.AddParticle(particle7);
 
-		Force springForce5 = new HooksLawSpring(particle5, particle8, 3f, 1f, 1f);
-		m_ParticleSystem.AddForce(springForce5);
+        Force springForce3 = new HooksLawSpring(particle6, particle7, 0f, 1f, 1f);
+        m_ParticleSystem.AddForce(springForce3);
+        //Particle particle6 = new Particle(1f);
+        //particle6.Position = new Vector2(-4f, 4f);
+        //m_ParticleSystem.AddParticle(particle6);
+        new CircularWireConstraint(particle6, particle6.Position + Vector2.left, 1f, m_ParticleSystem);/**/
+
+        Force springForce4 = new HooksLawSpring(particle5, particle7, 8f, 0.1f, 1f);
+        m_ParticleSystem.AddForce(springForce4);
+
+        Force gravityForce = new GravityForce(.1f);
+        m_ParticleSystem.AddForce(gravityForce);
+
+
+        Particle particle8 = new Particle(5f);
+        particle8.Position = new Vector2(0f, 0f);
+        m_ParticleSystem.AddParticle(particle8);
+
+        Force springForce5 = new HooksLawSpring(particle5, particle8, 3f, 1f, 1f);
+        m_ParticleSystem.AddForce(springForce5);
 
     }
 

@@ -71,6 +71,11 @@ public class ParticleSystem
         m_Forces.Add(a_Force);
     }
 
+    public void RemoveForce(Force a_Force)
+    {
+        m_Forces.Remove(a_Force);
+    }
+
     public int AddConstraint(Constraint a_Constraint)
     {
         int numConstraints = m_Constraints.Count;
