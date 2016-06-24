@@ -91,7 +91,7 @@ public sealed class Main : MonoBehaviour
     private void CreateTestSimulation()
     {
 		
-		/*Particle particle1 = new Particle(1f);
+		Particle particle1 = new Particle(1f);
 		particle1.Position = new Vector2(-2f, 0f);
 		m_ParticleSystem.AddParticle(particle1);
 		Particle particle2 = new Particle(1f);
@@ -106,7 +106,7 @@ public sealed class Main : MonoBehaviour
 		Force gravityForce = new GravityForce(.01f);
 		//m_ParticleSystem.AddForce(gravityForce);
 		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
-*/
+/**/	/*
 
 
 		Particle particle4 = new Particle(1f);
@@ -121,7 +121,7 @@ public sealed class Main : MonoBehaviour
 		//Particle particle6 = new Particle(1f);
 		//particle6.Position = new Vector2(-4f, 4f);
 		//m_ParticleSystem.AddParticle(particle6);
-		new CircularWireConstraint(particle4, particle4.Position + Vector2.left, 1f, m_ParticleSystem);
+		new CircularWireConstraint(particle4, particle4.Position + Vector2.left, 1f, m_ParticleSystem);/**/
 
 
     }

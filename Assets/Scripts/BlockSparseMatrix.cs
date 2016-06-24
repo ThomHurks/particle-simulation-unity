@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BlockSparseMatrix : ImplicitMatrix
 {
@@ -12,7 +13,7 @@ public class BlockSparseMatrix : ImplicitMatrix
         public int iLength;
         // 2
         public int jLength;
-        //constraint length
+		//constraint length, Usually 1 (i.e. scalar constraints)
         public float[] data;
 
         public MatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
@@ -71,6 +72,8 @@ public class BlockSparseMatrix : ImplicitMatrix
         MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
         m_MatrixBlocks.Add(block);
         m_m = Math.Max(m_m, a_i + a_iLength);
+		printX ();
+		Debug.Log (m_MatrixBlocks.Count);
         return block;
     }
 
@@ -93,12 +96,12 @@ public class BlockSparseMatrix : ImplicitMatrix
         for (int index = 0; index < blockCount; ++index)
         {
             curBlock = m_MatrixBlocks[index];
-            for (int j = curBlock.j; j < curBlock.jLength; ++j)
+			for (int j = curBlock.j; j < curBlock.j+curBlock.jLength; ++j)
             {
-                for (int i = curBlock.i; i < curBlock.iLength; ++i)
+				for (int i = curBlock.i; i < curBlock.i+curBlock.iLength; ++i)
                 {
-                    int k1 = transpose ? j : i;
-                    int k2 = transpose ? i : j;
+                    int k1 = !transpose ? i : j;
+                    int k2 = !transpose ? j : i;
 
                     a_Destination[k1] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[k2];
                     if (float.IsNaN(a_Destination[k1]) || float.IsInfinity(a_Destination[k1]))
@@ -110,5 +113,33 @@ public class BlockSparseMatrix : ImplicitMatrix
 
         }
     }
+
+	public void printX()
+	{
+		String[,] xs = new String[m_m,m_n];
+		for (int i = 0; i < m_m; i++) {
+			for (int j = 0; j < m_n; j++) {
+				xs [i,j] = "O";
+			}
+		}
+		for (int index = 0; index < m_MatrixBlocks.Count; index++) {
+			MatrixBlock b = m_MatrixBlocks [index];
+			for (int i = b.i; i < b.i + b.iLength; i++) {
+				for (int j = b.j; j < b.j + b.jLength; j++) {
+					xs [i,j] = "X";
+				}
+			}
+		}
+		String x = "";
+		for (int i = 0; i < m_m; i++) {
+			String line = "";
+			for (int j = 0; j < m_n; j++) {
+				line = line + xs [i,j];
+			}
+			x = x+line+"\n";
+		}
+		Debug.Log(x);
+	}
+
 
 }
