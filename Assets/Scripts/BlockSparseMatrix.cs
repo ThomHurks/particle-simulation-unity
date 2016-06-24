@@ -25,7 +25,7 @@ public class BlockSparseMatrix : ImplicitMatrix
         }
     }
 
-    private List<MatrixBlock> m_MatrixBlocks;
+    private readonly List<MatrixBlock> m_MatrixBlocks;
     private int m_n;
     //represents an m*n matrix: m rows, n columns
     private int m_m;

@@ -3,8 +3,8 @@ using System.Collections;
 
 public class HooksLawSpring : Force
 {
-    private Particle m_ParticleA;
-    private Particle m_ParticleB;
+    private readonly Particle m_ParticleA;
+    private readonly Particle m_ParticleB;
     private float m_RestLength;
     private float m_SpringConstant;
     private float m_DampingConstant;
