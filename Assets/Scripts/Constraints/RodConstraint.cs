@@ -12,15 +12,16 @@ public class RodConstraint : Constraint
 
     public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, float a_Distance, ParticleSystem a_System)
     {
+		int i = a_System.AddConstraint(this);
+        m_DistanceSquared = a_Distance * a_Distance;
         m_ParticleA = a_ParticleA;
         m_ParticleB = a_ParticleB;
-        m_DistanceSquared = a_Distance * a_Distance;
+        int iLength = GetConstraintDimension();
+        int jLength = a_System.GetParticleDimension();
         // We can probably de-duplicate this code:
         int j_A = a_System.GetParticleIndex(a_ParticleA) * a_System.GetParticleDimension();
         int j_B = a_System.GetParticleIndex(a_ParticleB) * a_System.GetParticleDimension();
-        int i = a_System.AddConstraint(this);
-        int iLength = GetConstraintDimension();
-        int jLength = a_System.GetParticleDimension();
+        
         m_MatrixBlockJ_A = a_System.MatrixJ.CreateMatrixBlock(i, j_A, iLength, jLength);
         m_MatrixBlockJ_B = a_System.MatrixJ.CreateMatrixBlock(i, j_B, iLength, jLength);
         m_MatrixBlockJDot_A = a_System.MatrixJDot.CreateMatrixBlock(i, j_A, iLength, jLength);
@@ -58,7 +59,7 @@ public class RodConstraint : Constraint
 
     public int GetConstraintDimension()
     {
-        return 2;
+        return 1;
     }
 
     public void Draw()
