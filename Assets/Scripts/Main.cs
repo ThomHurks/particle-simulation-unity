@@ -35,10 +35,10 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-        Particle particle1 = new Particle(0.1f);
+        Particle particle1 = new Particle(1f);
         particle1.Position = new Vector2(-2f, 0f);
         m_ParticleSystem.AddParticle(particle1);
-        Particle particle2 = new Particle(0.1f);
+        Particle particle2 = new Particle(1f);
         particle2.Position = new Vector2(2f, 0f);
         m_ParticleSystem.AddParticle(particle2);
         Force springForce1 = new HooksLawSpring(particle1, particle2, 2f, 0.1f, 0.1f);
