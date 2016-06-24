@@ -30,7 +30,7 @@ public class AngularSpringForce : Force
         float S1_mag = S1.magnitude;
         float S2_mag = S2.magnitude;
 
-        if (S1_mag * S2_mag != 0f)
+        if (S1_mag * S2_mag > float.Epsilon)
         {
             float currentAngle = Mathf.Acos(Vector2.Dot(S1, S2) / (S1_mag * S2_mag));
             float angleDelta = (m_Angle - currentAngle) / 2;
@@ -44,22 +44,25 @@ public class AngularSpringForce : Force
             float d1_mag = d1.magnitude;
             float d2_mag = d2.magnitude;
 
-            Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
-            Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
-
-            Vector2 F1 = -((m_SpringConstant * d1_mag) + m_DampingConstant * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
-            Vector2 F2 = -((m_SpringConstant * d2_mag) + m_DampingConstant * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
-
-            if (float.IsNaN(F1.x) || float.IsInfinity(F1.x) || float.IsNaN(F1.y) || float.IsInfinity(F1.y) ||
-                float.IsNaN(F2.x) || float.IsInfinity(F2.x) || float.IsNaN(F2.y) || float.IsInfinity(F2.y))
+            if (d1_mag > float.Epsilon && d2_mag > float.Epsilon)
             {
-                throw new System.Exception("NaN or Inf in AngularSpring");
-            }
-            m_ParticleA.ForceAccumulator += F1;
-            m_MassPoint.ForceAccumulator -= F1;
+                Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
+                Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
 
-            m_ParticleB.ForceAccumulator += F2;
-            m_MassPoint.ForceAccumulator -= F2;
+                Vector2 F1 = -((m_SpringConstant * d1_mag) + m_DampingConstant * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
+                Vector2 F2 = -((m_SpringConstant * d2_mag) + m_DampingConstant * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
+
+                if (float.IsNaN(F1.x) || float.IsInfinity(F1.x) || float.IsNaN(F1.y) || float.IsInfinity(F1.y) ||
+                    float.IsNaN(F2.x) || float.IsInfinity(F2.x) || float.IsNaN(F2.y) || float.IsInfinity(F2.y))
+                {
+                    throw new System.Exception("NaN or Inf in AngularSpring");
+                }
+                m_ParticleA.ForceAccumulator += F1;
+                m_MassPoint.ForceAccumulator -= F1;
+
+                m_ParticleB.ForceAccumulator += F2;
+                m_MassPoint.ForceAccumulator -= F2;
+            }
         }
     }
 

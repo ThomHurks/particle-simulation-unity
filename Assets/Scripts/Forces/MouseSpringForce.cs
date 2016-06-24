@@ -26,7 +26,7 @@ public class MouseSpringForce : Force
         Vector2 velocity = m_Particle.Velocity;
         Vector2 direction = relative.normalized;
 
-        if (magnitude != 0f)
+        if (magnitude > float.Epsilon)
         {
             Vector2 f = (m_SpringConstant * (magnitude - m_RestLength) + m_DampingConstant * (Vector2.Dot(velocity, relative) / magnitude)) * direction;
             m_Particle.ForceAccumulator += f;

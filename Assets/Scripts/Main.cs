@@ -36,7 +36,6 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-
         CreateTestSimulation();
         //CreateClothSimulation();
 
@@ -48,10 +47,48 @@ public sealed class Main : MonoBehaviour
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
     }
 
+    private float m_ParticleSelectThreshold = 0.2f;
+    private float m_MouseSelectRestLength = 1f;
+    private float m_MouseSelectSpringConstant = 10f;
+    private float m_MouseSelectDampingConstant = 0.1f;
+    private bool m_HasMouseSelection = false;
+    private MouseSpringForce m_CurrentMouseForce;
+
     void Update()
     {
+        if (!m_HasMouseSelection && Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
 
-
+            int numParticles = m_ParticleSystem.Particles.Count;
+            Particle closestParticle = null;
+            float particleDistanceSqr = float.MaxValue;
+            Particle curParticle = null;
+            for (int i = 0; i < numParticles; ++i)
+            {
+                curParticle = m_ParticleSystem.Particles[i];
+                float curDistanceSqr = (mousePos - curParticle.Position).sqrMagnitude;
+                if (curDistanceSqr < particleDistanceSqr)
+                {
+                    closestParticle = curParticle;
+                    particleDistanceSqr = curDistanceSqr;
+                }
+            }
+            if (closestParticle != null && particleDistanceSqr < (m_ParticleSelectThreshold * m_ParticleSelectThreshold))
+            {
+                m_CurrentMouseForce = new MouseSpringForce(closestParticle, m_MouseSelectRestLength,
+                    m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
+                m_ParticleSystem.AddForce(m_CurrentMouseForce);
+                m_HasMouseSelection = true;
+            }
+        }
+        else if (m_HasMouseSelection && Input.GetMouseButtonDown(1))
+        {
+            m_ParticleSystem.RemoveForce(m_CurrentMouseForce);
+            m_CurrentMouseForce = null;
+            m_HasMouseSelection = false;
+        }
         m_Solver.Step(m_ParticleSystem, Time.deltaTime);
     }
 
@@ -90,7 +127,6 @@ public sealed class Main : MonoBehaviour
 
     private void CreateTestSimulation()
     {
-		
 		Particle particle1 = new Particle(1f);
 		particle1.Position = new Vector2(-2f, 0f);
 		m_ParticleSystem.AddParticle(particle1);
@@ -103,11 +139,11 @@ public sealed class Main : MonoBehaviour
 
 		Force springForce1 = new HooksLawSpring(particle2, particle3, 0f, 1f, 1f);
 		m_ParticleSystem.AddForce(springForce1);
+
 		Force gravityForce = new GravityForce(.05f);
 		m_ParticleSystem.AddForce(gravityForce);
 		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
 		new CircularWireConstraint (particle3, particle3.Position + Vector2.right, 1f, m_ParticleSystem);
-
     }
 
     private void CreateClothSimulation(bool withCrossFibers = false)
