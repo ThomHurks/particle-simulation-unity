@@ -8,18 +8,18 @@ public class AngularSpringForce : Force
     // Cosine of rest angle
     private float m_Angle;
     // Spring constants
-    private float m_Ks;
-    private float m_Kd;
+    private float m_SpringConstant;
+    private float m_DampingConstant;
 
     public AngularSpringForce(Particle a_MassPoint, Particle a_ParticleA, Particle a_ParticleB,
-                              float a_Angle, float a_Ks, float a_Kd)
+                              float a_Angle, float a_SpringConstant, float a_DampingConstant)
     {
         m_MassPoint = a_MassPoint;
         m_ParticleA = a_ParticleA;
         m_ParticleB = a_ParticleB;
         m_Angle = a_Angle;
-        m_Ks = a_Ks;
-        m_Kd = a_Kd;
+        m_SpringConstant = a_SpringConstant;
+        m_DampingConstant = a_DampingConstant;
     }
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
@@ -47,8 +47,8 @@ public class AngularSpringForce : Force
             Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
             Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
 
-            Vector2 F1 = -((m_Ks * d1_mag) + m_Kd * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
-            Vector2 F2 = -((m_Ks * d2_mag) + m_Kd * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
+            Vector2 F1 = -((m_SpringConstant * d1_mag) + m_DampingConstant * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
+            Vector2 F2 = -((m_SpringConstant * d2_mag) + m_DampingConstant * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
 
             if (float.IsNaN(F1.x) || float.IsInfinity(F1.x) || float.IsNaN(F1.y) || float.IsInfinity(F1.y) ||
                 float.IsNaN(F2.x) || float.IsInfinity(F2.x) || float.IsNaN(F2.y) || float.IsInfinity(F2.y))
