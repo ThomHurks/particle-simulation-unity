@@ -2,7 +2,12 @@
 
 public class GravityForce : Force
 {
-    private Vector2 m_Gravity = Vector2.down * 9.80665f / 10f;
+    private Vector2 m_Gravity = Vector2.down * 9.80665f;
+
+    public GravityForce(float a_Multiplier)
+    {
+        m_Gravity *= a_Multiplier;
+    }
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
     {
