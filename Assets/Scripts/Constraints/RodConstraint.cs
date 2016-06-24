@@ -7,13 +7,15 @@ public class RodConstraint : Constraint
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot_A;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot_B;
     private readonly Particle m_ParticleA;
-    private readonly Particle m_ParticleB;
-    private float m_DistanceSquared;
+	private readonly Particle m_ParticleB;
+	private readonly float m_DistanceSquared;
+	private readonly float m_Distance;
 
     public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, float a_Distance, ParticleSystem a_System)
     {
 		int i = a_System.AddConstraint(this);
-        m_DistanceSquared = a_Distance * a_Distance;
+		m_DistanceSquared = a_Distance * a_Distance;
+		m_Distance = a_Distance;
         m_ParticleA = a_ParticleA;
         m_ParticleB = a_ParticleB;
         int iLength = GetConstraintDimension();
@@ -30,8 +32,8 @@ public class RodConstraint : Constraint
 
     public void UpdateJacobians(ParticleSystem a_ParticleSystem)
     {
-        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
-        Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
+        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position; //l
+        Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;//ldot
 
         m_MatrixBlockJ_A.data[0] = deltaPosition.x;
         m_MatrixBlockJ_A.data[1] = deltaPosition.y;
@@ -47,14 +49,14 @@ public class RodConstraint : Constraint
     public float GetValue(ParticleSystem a_ParticleSystem)
     {
         Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
-        return (deltaPosition.sqrMagnitude - m_DistanceSquared) / 2f;
+		return deltaPosition.magnitude - m_Distance;
     }
 
     public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
     {
         Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
         Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
-        return Vector2.Dot(deltaVelocity, deltaPosition);
+        return Vector2.Dot(deltaVelocity, deltaPosition)/deltaPosition.magnitude;
     }
 
 	/*public void UpdateJacobians(ParticleSystem a_ParticleSystem)
