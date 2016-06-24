@@ -8,3 +8,8 @@ Temp/*
 Assets/Scripts/Scripts.userprefs
 Assets/Scripts/Scripts/Scripts.mdproj
 *.app
+Assets/Scripts/Scripts.sln.meta
+ProjectSettings/ProjectVersion.txt
+ProjectSettings/ProjectSettings.asset
+Assets/Scripts/Scripts.userprefs.meta
+ProjectSettings/ProjectVersion.txt

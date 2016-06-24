@@ -57,6 +57,35 @@ public class RodConstraint : Constraint
         return Vector2.Dot(deltaVelocity, deltaPosition);
     }
 
+	/*public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+	{
+		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+		Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
+
+		m_MatrixBlockJ_A.data[0] = deltaPosition.x;
+		m_MatrixBlockJ_A.data[1] = deltaPosition.y;
+		m_MatrixBlockJDot_A.data[0] = deltaVelocity.x;
+		m_MatrixBlockJDot_A.data[1] = deltaVelocity.y;
+
+		m_MatrixBlockJ_B.data[0] = -deltaPosition.x;
+		m_MatrixBlockJ_B.data[1] = -deltaPosition.y;
+		m_MatrixBlockJDot_B.data[0] = -deltaVelocity.x;
+		m_MatrixBlockJDot_B.data[1] = -deltaVelocity.y;
+	}
+
+	public float GetValue(ParticleSystem a_ParticleSystem)
+	{
+		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+		return (deltaPosition.sqrMagnitude - m_DistanceSquared) / 2f;
+	}
+
+	public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+	{
+		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+		Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
+		return Vector2.Dot(deltaVelocity, deltaPosition);
+	}/*
+
     public int GetConstraintDimension()
     {
         return 1;
