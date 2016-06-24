@@ -17,7 +17,7 @@ public class RodConstraint : Constraint
     public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, float a_Distance, ParticleSystem a_System)
     {
         int i = a_System.AddConstraint(this);
-        Debug.Log("Creating rod constraint with index" + i);
+        Debug.Log("Creating rod constraint with index " + i);
         m_DistanceSquared = a_Distance * a_Distance;
         m_Distance = a_Distance;
         m_ParticleA = a_ParticleA;

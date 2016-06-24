@@ -129,7 +129,7 @@ public class BlockSparseMatrix : ImplicitMatrix
 			MatrixBlock b = m_MatrixBlocks [index];
 			for (int i = b.i; i < b.i + b.iLength; i++) {
 				for (int j = b.j; j < b.j + b.jLength; j++) {
-					xs [i,j] = ""+ (b.data[(i-b.i)*b.jLength+j-b.j]);
+					xs [i,j] = "X";
 				}
 			}
 		}

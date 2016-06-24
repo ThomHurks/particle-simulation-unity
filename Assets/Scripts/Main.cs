@@ -140,10 +140,16 @@ public sealed class Main : MonoBehaviour
 		Force springForce1 = new HooksLawSpring(particle2, particle3, 0f, 1f, 1f);
 		m_ParticleSystem.AddForce(springForce1);
 
-		Force gravityForce = new GravityForce(.05f);
+		Force gravityForce = new GravityForce(.1f);
 		m_ParticleSystem.AddForce(gravityForce);
 		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
 		new CircularWireConstraint (particle3, particle3.Position + Vector2.right, 1f, m_ParticleSystem);
+
+
+		Particle particle4 = new Particle(1f);
+		particle4.Position = new Vector2(-4f, 4f);
+		m_ParticleSystem.AddParticle(particle4);
+		//new FixedPointConstraint (particle4, m_ParticleSystem);
     }
 
     private void CreateClothSimulation(bool withCrossFibers = false)
@@ -214,8 +220,8 @@ public sealed class Main : MonoBehaviour
             }
         }
         m_ParticleSystem.AddForce(new GravityForce(Mathf.Pow(10, -4.5f)));
-        new FixedPointConstraint(m_ParticleSystem.Particles[dim], topLeft, m_ParticleSystem);
-        new FixedPointConstraint(m_ParticleSystem.Particles[(dim + 1) * (dim + 1) - 1], topRight, m_ParticleSystem);
+        new FixedPointConstraint(m_ParticleSystem.Particles[dim], m_ParticleSystem);
+        new FixedPointConstraint(m_ParticleSystem.Particles[(dim + 1) * (dim + 1) - 1], m_ParticleSystem);
     }
 
     private void CreateDebugGameObjects()

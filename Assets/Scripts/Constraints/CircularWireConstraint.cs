@@ -14,7 +14,7 @@ public class CircularWireConstraint : Constraint
     public CircularWireConstraint(Particle a_Particle, Vector2 a_Center, float a_Radius, ParticleSystem a_System)
 	{
 		int i = a_System.AddConstraint(this);
-		Debug.Log ("Creating circular wire constraint with index" + i);
+		Debug.Log ("Creating circular wire constraint with index " + i);
         m_Particle = a_Particle;
         m_Center = a_Center;
         m_Radius = a_Radius;
@@ -37,7 +37,7 @@ public class CircularWireConstraint : Constraint
 
 	public float GetValue(ParticleSystem a_ParticleSystem)
 	{
-		return OLD ? GetValueNew (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
+		return OLD ? GetValueOld (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
 	}
 
 	public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
