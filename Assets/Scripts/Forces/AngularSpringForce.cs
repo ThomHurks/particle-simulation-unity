@@ -24,37 +24,54 @@ public class AngularSpringForce : Force
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
     {
-        /*Vec2f S1 = m_p1->m_Position - m_MassPoint->m_Position;
-        Vec2f S2 = m_p2->m_Position - m_MassPoint->m_Position;
+        Vector2 S1 = m_ParticleA.Position - m_MassPoint.Position;
+        Vector2 S2 = m_ParticleB.Position - m_MassPoint.Position;
 
-        float S1_mag = magnitude(S1);
-        float S2_mag = magnitude(S2);
+        float S1_mag = S1.magnitude;
+        float S2_mag = S2.magnitude;
 
-        double currentAngle = acos(Dot(S1, S2) / (S1_mag * S2_mag));
-        double angleDelta = (m_angle - currentAngle) / 2;
+        if (S1_mag * S2_mag != 0f)
+        {
+            float currentAngle = Mathf.Acos(Vector2.Dot(S1, S2) / (S1_mag * S2_mag));
+            float angleDelta = (m_Angle - currentAngle) / 2;
 
-        Vec2f t1 = RotateAroundPoint(m_MassPoint->m_Position, m_p1->m_Position, -angleDelta);
-        Vec2f t2 = RotateAroundPoint(m_MassPoint->m_Position, m_p2->m_Position, angleDelta);
+            Vector2 t1 = RotateAroundPoint(m_MassPoint.Position, m_ParticleA.Position, -angleDelta);
+            Vector2 t2 = RotateAroundPoint(m_MassPoint.Position, m_ParticleB.Position, angleDelta);
 
-        Vec2f d1 = t1 - m_p1->m_Position;
-        Vec2f d2 = t2 - m_p2->m_Position;
+            Vector2 d1 = t1 - m_ParticleA.Position;
+            Vector2 d2 = t2 - m_ParticleB.Position;
 
-        float d1_mag = magnitude(d1);
-        float d2_mag = magnitude(d2);
+            float d1_mag = d1.magnitude;
+            float d2_mag = d2.magnitude;
 
-        Vec2f I1_Dot = m_p1->m_Velocity - m_MassPoint->m_Velocity;
-        Vec2f I2_Dot = m_p2->m_Velocity - m_MassPoint->m_Velocity;
+            Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
+            Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
 
-        Vec2f F1 = -((m_ks * d1_mag) + m_kd * (Dot(I1_Dot, d1) / d1_mag)) * normalized(d1);
-        Vec2f F2 = -((m_ks * d2_mag) + m_kd * (Dot(I2_Dot, d2) / d2_mag)) * normalized(d2);
+            Vector2 F1 = -((m_Ks * d1_mag) + m_Kd * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
+            Vector2 F2 = -((m_Ks * d2_mag) + m_Kd * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
 
-        assert(!isnan(F1) && isfinite(F1));
-        m_p1->m_AccumulatedForce += F1;
-        m_MassPoint->m_AccumulatedForce -= F1;
+            if (float.IsNaN(F1.x) || float.IsInfinity(F1.x) || float.IsNaN(F1.y) || float.IsInfinity(F1.y) ||
+                float.IsNaN(F2.x) || float.IsInfinity(F2.x) || float.IsNaN(F2.y) || float.IsInfinity(F2.y))
+            {
+                throw new System.Exception("NaN or Inf in AngularSpring");
+            }
+            m_ParticleA.ForceAccumulator += F1;
+            m_MassPoint.ForceAccumulator -= F1;
 
-        assert(!isnan(F2) && isfinite(F2));
-        m_p2->m_AccumulatedForce += F2;
-        m_MassPoint->m_AccumulatedForce -= F2;*/
+            m_ParticleB.ForceAccumulator += F2;
+            m_MassPoint.ForceAccumulator -= F2;
+        }
+    }
+
+
+    private Vector2 RotateAroundPoint(Vector2 a_Pivot, Vector2 a_Point, float a_Angle)
+    {
+        float s = Mathf.Sin(a_Angle);
+        float c = Mathf.Cos(a_Angle);
+        Vector2 delta = a_Point - a_Pivot;
+        float xNew = (delta.x * c) - (delta.y * s);
+        float yNew = (delta.x * s) + (delta.y * c);
+        return new Vector2(xNew + a_Pivot.x, yNew + a_Pivot.y);
     }
 
     public void Draw()
