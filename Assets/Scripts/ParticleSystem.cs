@@ -12,6 +12,8 @@ public class ParticleSystem
     private float m_Time;
     private float m_ConstraintSpringConstant;
     private float m_ConstraintDampingConstant;
+    private float m_SolverEpsilon;
+    private int m_SolverSteps;
 
     public int Count
     {
@@ -39,13 +41,15 @@ public class ParticleSystem
         get { return m_JDot; }
     }
 
-    public ParticleSystem(float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
+    public ParticleSystem(float a_SolverEpsilon, int a_SolverSteps, float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
     {
         m_Particles = new List<Particle>();
         m_Forces = new List<Force>();
         m_Constraints = new List<Constraint>();
         m_J = new BlockSparseMatrix();
         m_JDot = new BlockSparseMatrix();
+        m_SolverEpsilon = a_SolverEpsilon;
+        m_SolverSteps = a_SolverSteps;
         m_ConstraintSpringConstant = a_ConstraintSpringConstant;
         m_ConstraintDampingConstant = a_ConstraintDampingConstant;
     }
@@ -108,7 +112,7 @@ public class ParticleSystem
         {
             m_Constraints[i].UpdateJacobians(this);
         }
-        SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant);
+        SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant, m_SolverEpsilon, m_SolverSteps);
     }
 
     private static void ValidateVector(float[] a_Vector)
@@ -122,7 +126,7 @@ public class ParticleSystem
         }
     }
 
-    private void SolveEquation11(float a_Ks, float a_Kd)
+    private void SolveEquation11(float a_SpringConstant, float a_DampingConstant, float a_SolverEpsilon, int a_SolverSteps)
     {
         float[] qdot = ParticlesGetVelocities();
         ValidateVector(qdot);
@@ -155,7 +159,7 @@ public class ParticleSystem
         float[] RHS = new float[n];
         for (int i = 0; i < numConstraints; ++i)
         {
-            RHS[i] = -JDotqdot[i] - JWQ[i] - a_Ks * C[i] - a_Kd * CDot[i];
+            RHS[i] = -JDotqdot[i] - JWQ[i] - a_SpringConstant * C[i] - a_DampingConstant * CDot[i];
             if (float.IsNaN(RHS[i]) || float.IsNaN(RHS[i]))
             {
                 throw new System.Exception("NaN or Inf in RHS of eq 11");
@@ -166,7 +170,7 @@ public class ParticleSystem
         LinearSolver solver = new LinearSolver();
         float[] lambda = new float[numConstraints];
         int stepsPerformed = 0;
-        solver.ConjGrad(numConstraints, LHS, lambda, RHS, 0.01f, 10, out stepsPerformed);
+        solver.ConjGrad(numConstraints, LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
         ValidateVector(lambda);
         Debug.Log("Nr of iterations in conjgrad solver: " + stepsPerformed);
         float[] QHat = new float[n];

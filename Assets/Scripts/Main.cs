@@ -31,7 +31,9 @@ public sealed class Main : MonoBehaviour
     {
         const float constraintSpringConstant = 10f;
         const float constraintDampingConstant = 0.1f;
-        m_ParticleSystem = new ParticleSystem(constraintSpringConstant, constraintDampingConstant);
+        const float solverEpsilon = 0.1f;
+        const int solverSteps = 100;
+        m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
         Particle particle1 = new Particle(0.1f);
         particle1.Position = new Vector2(-2f, 0f);
