@@ -30,7 +30,7 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
-        const float constraintSpringConstant = 10f;
+        const float constraintSpringConstant = 100f;
         const float constraintDampingConstant = 0.1f;
         const float solverEpsilon = 0.1f;
         const int solverSteps = 100;

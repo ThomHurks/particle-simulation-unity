@@ -32,18 +32,25 @@ public class RodConstraint : Constraint
 
     public void UpdateJacobians(ParticleSystem a_ParticleSystem)
     {
-        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position; //l
-        Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;//ldot
+        Vector2 l = m_ParticleA.Position - m_ParticleB.Position; 
+        Vector2 ldot = m_ParticleA.Velocity - m_ParticleB.Velocity;
+		float lmag = l.magnitude;
+		Vector2 dCdl = l.normalized;
+		Vector2 t1 = lmag * ldot ;
+		Vector2 t2 = (Vector2.Dot (l, ldot) / lmag) * l;
+		Vector2 dCdotdl = (t1 - t2);
+		dCdotdl = (1f/(lmag*lmag)) * dCdotdl;
 
-        m_MatrixBlockJ_A.data[0] = deltaPosition.x;
-        m_MatrixBlockJ_A.data[1] = deltaPosition.y;
-        m_MatrixBlockJDot_A.data[0] = deltaVelocity.x;
-        m_MatrixBlockJDot_A.data[1] = deltaVelocity.y;
 
-        m_MatrixBlockJ_B.data[0] = -deltaPosition.x;
-        m_MatrixBlockJ_B.data[1] = -deltaPosition.y;
-        m_MatrixBlockJDot_B.data[0] = -deltaVelocity.x;
-        m_MatrixBlockJDot_B.data[1] = -deltaVelocity.y;
+		m_MatrixBlockJ_A.data[0] = dCdl.x;
+		m_MatrixBlockJ_A.data[1] = dCdl.y;
+		m_MatrixBlockJDot_A.data[0] = dCdotdl.x;
+		m_MatrixBlockJDot_A.data[1] = dCdotdl.y;
+
+		m_MatrixBlockJ_B.data[0] = -dCdl.x;
+		m_MatrixBlockJ_B.data[1] = -dCdl.y;
+		m_MatrixBlockJDot_B.data[0] = -dCdotdl.x;
+		m_MatrixBlockJDot_B.data[1] = -dCdotdl.y;
     }
 
     public float GetValue(ParticleSystem a_ParticleSystem)
