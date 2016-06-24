@@ -90,7 +90,7 @@ public sealed class Main : MonoBehaviour
 
     private void CreateTestSimulation()
     {
-		
+		/*
 		Particle particle1 = new Particle(1f);
 		particle1.Position = new Vector2(-2f, 0f);
 		m_ParticleSystem.AddParticle(particle1);
@@ -106,15 +106,15 @@ public sealed class Main : MonoBehaviour
 		Force gravityForce = new GravityForce(.01f);
 		//m_ParticleSystem.AddForce(gravityForce);
 		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
-/**/	/*
+/**/	
 
 
 		Particle particle4 = new Particle(1f);
 		particle4.Position = new Vector2(-4f, 4f);
-		m_ParticleSystem.AddParticle(particle4);
 		Particle particle5 = new Particle(1f);
 		particle5.Position = new Vector2(-4f, 2f);
 		m_ParticleSystem.AddParticle(particle5);
+		m_ParticleSystem.AddParticle(particle4);
 
 		Force springForce2 = new HooksLawSpring(particle4, particle5, 0f, 1f, 1f);
 		m_ParticleSystem.AddForce(springForce2);
@@ -123,6 +123,34 @@ public sealed class Main : MonoBehaviour
 		//m_ParticleSystem.AddParticle(particle6);
 		new CircularWireConstraint(particle4, particle4.Position + Vector2.left, 1f, m_ParticleSystem);/**/
 
+
+		Particle particle6 = new Particle(1f);
+		particle6.Position = new Vector2(0f, 4f);
+		Particle particle7 = new Particle(1f);
+		particle7.Position = new Vector2(0f, 2f);
+		m_ParticleSystem.AddParticle(particle6);
+		m_ParticleSystem.AddParticle(particle7);
+
+		Force springForce3 = new HooksLawSpring(particle6, particle7, 0f, 1f, 1f);
+		m_ParticleSystem.AddForce(springForce3);
+		//Particle particle6 = new Particle(1f);
+		//particle6.Position = new Vector2(-4f, 4f);
+		//m_ParticleSystem.AddParticle(particle6);
+		new CircularWireConstraint(particle6, particle6.Position + Vector2.left, 1f, m_ParticleSystem);/**/
+
+		Force springForce4 = new HooksLawSpring(particle5, particle7, 8f, 0.1f, 1f);
+		m_ParticleSystem.AddForce(springForce4);
+
+		Force gravityForce = new GravityForce(.1f);
+		m_ParticleSystem.AddForce(gravityForce);
+
+
+		Particle particle8 = new Particle(5f);
+		particle8.Position = new Vector2(0f, 0f);
+		m_ParticleSystem.AddParticle(particle8);
+
+		Force springForce5 = new HooksLawSpring(particle5, particle8, 3f, 1f, 1f);
+		m_ParticleSystem.AddForce(springForce5);
 
     }
 

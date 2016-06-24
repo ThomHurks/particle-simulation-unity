@@ -96,13 +96,16 @@ public class BlockSparseMatrix : ImplicitMatrix
         for (int index = 0; index < blockCount; ++index)
         {
             curBlock = m_MatrixBlocks[index];
-			for (int j = curBlock.j; j < curBlock.j+curBlock.jLength; ++j)
+			for (int j = 0; j < curBlock.jLength; ++j)
             {
-				for (int i = curBlock.i; i < curBlock.i+curBlock.iLength; ++i)
+				int globj = j + curBlock.j;
+				for (int i = 0; i < curBlock.iLength; ++i)
                 {
-                    int k1 = !transpose ? i : j;
-                    int k2 = !transpose ? j : i;
-					int cellindex = ((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j); // cell (i,j) in matrix
+					int globi = i + curBlock.i;
+					int k1 = !transpose ? globi : globj;//dest
+                    int k2 = !transpose ? globj : globi;//source
+					int cellindex = i * curBlock.jLength + j; // cell (i,j) in matrix
+
 					a_Destination[k1] += curBlock.data[cellindex] * a_Source[k2];
                     if (float.IsNaN(a_Destination[k1]) || float.IsInfinity(a_Destination[k1]))
                     {
@@ -126,7 +129,7 @@ public class BlockSparseMatrix : ImplicitMatrix
 			MatrixBlock b = m_MatrixBlocks [index];
 			for (int i = b.i; i < b.i + b.iLength; i++) {
 				for (int j = b.j; j < b.j + b.jLength; j++) {
-					xs [i,j] = "X";
+					xs [i,j] = ""+ (b.data[(i-b.i)*b.jLength+j-b.j]);
 				}
 			}
 		}
