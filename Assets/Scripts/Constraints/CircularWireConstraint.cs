@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CircularWireConstraint : Constraint
 {
@@ -7,7 +6,7 @@ public class CircularWireConstraint : Constraint
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
     private Particle m_Particle;
     private Vector2 m_Center;
-    private float m_Radius;
+    private readonly float m_Radius;
     private float m_RadiusSquared;
 
     public CircularWireConstraint(Particle a_Particle, Vector2 a_Center, float a_Radius, ParticleSystem a_System)

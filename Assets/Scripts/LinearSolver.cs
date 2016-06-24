@@ -52,7 +52,7 @@ public class LinearSolver
                 A.MatrixTimesVector(d, t);
                 u = vecDot(n, d, t);
 
-                if (u == 0)
+                if (u == 0f)
                 {
                     Debug.Log("(SolveConjGrad) d'Ad = 0\n");
                     break;
@@ -99,7 +99,7 @@ public class LinearSolver
         return rSqrLen;
     }
 
-    private void vecAddEqual(int n, float[] r, float[] v)
+    private static void vecAddEqual(int n, float[] r, float[] v)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -107,7 +107,7 @@ public class LinearSolver
         }
     }
 
-    private void vecDiffEqual(int n, float[] r, float[] v)
+    private static void vecDiffEqual(int n, float[] r, float[] v)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -115,7 +115,7 @@ public class LinearSolver
         }
     }
 
-    private void vecAssign(int n, float[] v1, float[] v2)
+    private static void vecAssign(int n, float[] v1, float[] v2)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -123,7 +123,7 @@ public class LinearSolver
         }
     }
 
-    private void vecTimesScalar(int n, float[] v, float s)
+    private static void vecTimesScalar(int n, float[] v, float s)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -131,7 +131,7 @@ public class LinearSolver
         }
     }
 
-    private float vecDot(int n, float[] v1, float[] v2)
+    private static float vecDot(int n, float[] v1, float[] v2)
     {
         float dot = 0;
         for (int i = 0; i < n; i++)
@@ -141,7 +141,7 @@ public class LinearSolver
         return dot;
     }
 
-    private float vecSqrLen(int n, float[] v)
+    private static float vecSqrLen(int n, float[] v)
     {
         return vecDot(n, v, v);
     }

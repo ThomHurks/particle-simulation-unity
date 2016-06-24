@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class ParticleSystem
 {
-    private List<Particle> m_Particles;
-    private List<Force> m_Forces;
-    private List<Constraint> m_Constraints;
+    private readonly List<Particle> m_Particles;
+    private readonly List<Force> m_Forces;
+    private readonly List<Constraint> m_Constraints;
     private BlockSparseMatrix m_J;
     private BlockSparseMatrix m_JDot;
     private float m_Time;
-    private float m_ConstraintKS = 0.5f;
-    private float m_ConstraintKD = 0.5f;
+    private const float m_ConstraintKS = 0.5f;
+    private const float m_ConstraintKD = 0.5f;
 
     public int Count
     {
