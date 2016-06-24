@@ -109,7 +109,7 @@ public class ParticleSystem
         SolveEquation11(m_ConstraintKS, m_ConstraintKD);
     }
 
-    private void ValidateVector(float[] a_Vector)
+    private static void ValidateVector(float[] a_Vector)
     {
         for (int i = 0; i < a_Vector.Length; ++i)
         {
@@ -181,7 +181,7 @@ public class ParticleSystem
         }
     }
 
-    float[] ConstraintsGetValues()
+    private float[] ConstraintsGetValues()
     {
         // Gather constraint values into vector C.
         int numConstraints = m_Constraints.Count;
@@ -193,7 +193,7 @@ public class ParticleSystem
         return C;
     }
 
-    float[] ConstraintsGetDerivativeValues()
+    private float[] ConstraintsGetDerivativeValues()
     {
         // Gather constraint values into vector CDot.
         int numConstraints = m_Constraints.Count;
@@ -205,7 +205,7 @@ public class ParticleSystem
         return CDot;
     }
 
-    float[] ParticlesGetPositions()
+    private float[] ParticlesGetPositions()
     {
         // Gather positions into state vector q.
         int numParticles = m_Particles.Count;
@@ -222,7 +222,7 @@ public class ParticleSystem
         return q;
     }
 
-    float[] ParticlesGetVelocities()
+    private float[] ParticlesGetVelocities()
     {
         // Gather velocities into state vector qdot.
         int numParticles = m_Particles.Count;
@@ -239,7 +239,7 @@ public class ParticleSystem
         return qdot;
     }
 
-    float[] ParticlesInverseMassMatrix()
+    private float[] ParticlesInverseMassMatrix()
     {
         // Construct inverse, W, of diagonal of mass matrix M as a vector.
         int numParticles = m_Particles.Count;
@@ -257,7 +257,7 @@ public class ParticleSystem
         return W;
     }
 
-    float[] ParticlesGetForces()
+    private float[] ParticlesGetForces()
     {
         // Gather forces into global force vector Q.
         int numParticles = m_Particles.Count;
