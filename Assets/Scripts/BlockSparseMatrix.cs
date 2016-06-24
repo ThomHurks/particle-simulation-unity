@@ -83,12 +83,12 @@ public class BlockSparseMatrix : ImplicitMatrix
 
     protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
     {
-		GenericMatrixTimesVector(a_Source, a_Destination, true);//Do a transpose multiplication
+        GenericMatrixTimesVector(a_Source, a_Destination, true);//Do a transpose multiplication
     }
 
-	private void GenericMatrixTimesVector(float[] a_Source, float[] a_Destination, bool transpose)
-	{
-		int blockCount = m_MatrixBlocks.Count;
+    private void GenericMatrixTimesVector(float[] a_Source, float[] a_Destination, bool transpose)
+    {
+        int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
         for (int index = 0; index < blockCount; ++index)
         {
@@ -97,10 +97,11 @@ public class BlockSparseMatrix : ImplicitMatrix
             {
                 for (int i = curBlock.i; i < curBlock.iLength; ++i)
                 {
-					int k1 = transpose?j:i;
-					int k2 = transpose?i:j;
+                    int k1 = transpose ? j : i;
+                    int k2 = transpose ? i : j;
+
                     a_Destination[k1] += curBlock.data[((i - curBlock.i) * curBlock.jLength) + (j - curBlock.j)] * a_Source[k2];
-                    if (float.IsNaN(a_Destination[i]) || float.IsNaN(a_Destination[i]))
+                    if (float.IsNaN(a_Destination[k1]) || float.IsInfinity(a_Destination[k1]))
                     {
                         throw new System.Exception("NaN or Inf in BSM.");
                     }
@@ -108,6 +109,6 @@ public class BlockSparseMatrix : ImplicitMatrix
             }
 
         }
-	}
+    }
 
 }
