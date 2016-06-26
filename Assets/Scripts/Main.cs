@@ -5,9 +5,16 @@ public sealed class Main : MonoBehaviour
 {
     private ParticleSystem m_ParticleSystem;
     private Solver m_Solver;
+    private Scenario m_Scenario;
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
     private UnityEngine.UI.Dropdown m_SolverDropdown;
+    private const float m_ParticleSelectThreshold = 0.2f;
+    private const float m_MouseSelectRestLength = 1f;
+    private const float m_MouseSelectSpringConstant = 10f;
+    private const float m_MouseSelectDampingConstant = 0.1f;
+    private bool m_HasMouseSelection = false;
+    private MouseSpringForce m_CurrentMouseForce;
 
     static void CreateLineMaterial()
     {
@@ -36,26 +43,68 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-        CreateTestSimulation();
-        //CreateClothSimulation();
-        //CreateHairSimulation();
-
-        CreateDebugGameObjects();
+        m_Scenario = new TestScenario();
+        m_Scenario.CreateScenario(m_ParticleSystem);
+        SetupDebugGameObjects();
     }
 
     void Start()
     {
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (m_Solver is EulerSolver)
+        {
+            m_SolverDropdown.value = 0;
+        }
+        else if (m_Solver is MidpointSolver)
+        {
+            m_SolverDropdown.value = 1;
+        }
+        else if (m_Solver is RungeKutta4Solver)
+        {
+            m_SolverDropdown.value = 2;
+        }
+        m_SolverDropdown.RefreshShownValue();
     }
 
-    private float m_ParticleSelectThreshold = 0.2f;
-    private float m_MouseSelectRestLength = 1f;
-    private float m_MouseSelectSpringConstant = 10f;
-    private float m_MouseSelectDampingConstant = 0.1f;
-    private bool m_HasMouseSelection = false;
-    private MouseSpringForce m_CurrentMouseForce;
 
     void Update()
+    {
+        HandleMouseInteraction();
+        try
+        {
+            m_Solver.Step(m_ParticleSystem, Time.deltaTime);
+        }
+        catch
+        {
+            Reset();
+        }
+    }
+
+    void OnRenderObject()
+    {
+        CreateLineMaterial();
+        // Apply the line material
+        m_LineMaterial.SetPass(0);
+
+        m_ParticleSystem.Draw();
+    }
+
+    void LateUpdate()
+    {
+        UpdateDebugGameObjects();
+    }
+
+    private void Reset()
+    {
+        m_HasMouseSelection = false;
+        m_CurrentMouseForce = null;
+        m_ParticleSystem.Clear();
+        m_Scenario.CreateScenario(m_ParticleSystem);
+        SetupDebugGameObjects();
+        Debug.LogError("We encountered an error, so we reset the scenario.");
+    }
+
+    private void HandleMouseInteraction()
     {
         if (!m_HasMouseSelection && Input.GetMouseButtonDown(0))
         {
@@ -90,21 +139,6 @@ public sealed class Main : MonoBehaviour
             m_CurrentMouseForce = null;
             m_HasMouseSelection = false;
         }
-        m_Solver.Step(m_ParticleSystem, Time.deltaTime);
-    }
-
-    void OnRenderObject()
-    {
-        CreateLineMaterial();
-        // Apply the line material
-        m_LineMaterial.SetPass(0);
-
-        m_ParticleSystem.Draw();
-    }
-
-    void LateUpdate()
-    {
-        UpdateDebugGameObjects();
     }
 
     public void OnSolverTypeChanged()
@@ -126,157 +160,44 @@ public sealed class Main : MonoBehaviour
         }
     }
 
-    private void CreateTestSimulation()
-    {
-		Particle particle1 = new Particle(1f);
-		particle1.Position = new Vector2(-2f, 0f);
-		m_ParticleSystem.AddParticle(particle1);
-		Particle particle2 = new Particle(1f);
-		particle2.Position = new Vector2(0f, 0f);
-		m_ParticleSystem.AddParticle(particle2);
-		Particle particle3 = new Particle(1f);
-		particle3.Position = new Vector2(4f, 4f);
-		m_ParticleSystem.AddParticle(particle3);
-
-		Force springForce1 = new HooksLawSpring(particle2, particle3, 0f, 1f, 1f);
-		m_ParticleSystem.AddForce(springForce1);
-
-		Force gravityForce = new GravityForce(.1f);
-		m_ParticleSystem.AddForce(gravityForce);
-		new RodConstraint(particle1,particle2,2,m_ParticleSystem);
-		new CircularWireConstraint (particle3, particle3.Position + Vector2.right, 1f, m_ParticleSystem);
-
-
-		Particle particle4 = new Particle(1f);
-		particle4.Position = new Vector2(-4f, 4f);
-		m_ParticleSystem.AddParticle(particle4);
-		//new FixedPointConstraint (particle4, m_ParticleSystem);
-    }
-
-    private void CreateClothSimulation(bool withCrossFibers = false)
-    {
-        //Note; Without cross fibers appears to function better
-        const int dim = 14;
-        Vector2 bottomLeft = new Vector2(-5f, -5f);
-        Vector2 topLeft = new Vector2(-5f, 5f);
-        Vector2 bottomRight = new Vector2(5f, -5f);
-        Vector2 offsetX = (bottomRight - bottomLeft) / dim;
-        Vector2 offsetY = (topLeft - bottomLeft) / dim;
-        float dist = offsetX.x;
-        Vector2 topRight = bottomLeft + (offsetX + offsetY) * dim;
-
-        for (int i = 0; i <= dim; i++)
-        {
-            for (int j = 0; j <= dim; j++)
-            {
-                Particle p = new Particle(1f);
-                p.Position = bottomLeft + offsetX * i + offsetY * j;
-                m_ParticleSystem.AddParticle(p);
-            }
-        }
-        const float ks = 1f;
-        const float kd = 0.01f;
-        float rest = dist / 1.05f;
-        for (int i = 0; i < dim; i++)
-        {
-            for (int j = 0; j < dim; j++)
-            {
-                int cur = j * (dim + 1) + i;
-                int right = cur + dim + 1;
-                int below = cur + 1;
-                m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur], m_ParticleSystem.Particles[right], rest, ks, kd));
-                m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur], m_ParticleSystem.Particles[below], rest, ks, kd));
-            }
-        }
-        for (int i = 0; i < dim; i++)
-        {
-            int cur1 = (i + 1) * (dim + 1) - 1;
-            int right = cur1 + dim + 1;
-            m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur1], m_ParticleSystem.Particles[right], rest, ks, kd));
-
-            int cur2 = i + dim * (dim + 1);
-            int below = cur2 + 1;
-            m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur2], m_ParticleSystem.Particles[below], rest, ks, kd));
-        }
-        if (withCrossFibers)
-        {
-            float drest = rest * Mathf.Sqrt(2f);
-            for (int i = 0; i < dim; i++)
-            {
-                for (int j = 0; j < dim; j++)
-                {
-                    int cur = j * (dim + 1) + i;
-                    int rightbelow = cur + dim + 2;
-                    m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur], m_ParticleSystem.Particles[rightbelow], drest, ks, kd));
-                }
-            }
-            for (int i = 1; i <= dim; i++)
-            {
-                for (int j = 0; j < dim; j++)
-                {
-                    int cur = j * (dim + 1) + i;
-                    int rightabove = cur + dim;
-                    m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[cur], m_ParticleSystem.Particles[rightabove], drest, ks, kd));
-                }
-            }
-        }
-        m_ParticleSystem.AddForce(new GravityForce(Mathf.Pow(10, -4.5f)));
-        new FixedPointConstraint(m_ParticleSystem.Particles[dim], m_ParticleSystem);
-        new FixedPointConstraint(m_ParticleSystem.Particles[(dim + 1) * (dim + 1) - 1], m_ParticleSystem);
-    }
-
-    private void CreateHairSimulation()
-    {
-        const int internalParticles = 65; //amount of particles in hair is this + 2
-        Vector2 start = new Vector2(-4f, 0f);
-        Vector2 end = new Vector2(4f, 0f);
-
-        Vector2 step = (end - start) / (internalParticles + 1);
-        for (int i = 0; i <= internalParticles + 1; i++)
-        {
-            Particle p = new Particle(1f);
-            p.Position = start + step * i;
-            m_ParticleSystem.AddParticle(p);
-        }
-
-        //m_ParticleSystem.AddForce(new GravityForce(0.1f));
-        float rest = step.magnitude;
-        float ks = 0.05f;
-        float kd = 0.01f;
-        for (int i = 0; i <= internalParticles; i++)
-        {
-            m_ParticleSystem.AddForce(new HooksLawSpring(m_ParticleSystem.Particles[i], m_ParticleSystem.Particles[i + 1], rest, ks, kd));
-        }
-        ks = 0.01f;
-        kd = 0.1f;
-        const float totalInternalAngle = 180f * (internalParticles);
-        const float angleDegrees = (totalInternalAngle / (internalParticles + 2));
-        const float angleRadians = Mathf.PI * angleDegrees / 180f;
-        for (int i = 1; i <= internalParticles; i++)
-        {
-            m_ParticleSystem.AddForce(new AngularSpringForce(m_ParticleSystem.Particles[i], m_ParticleSystem.Particles[i - 1], 
-                    m_ParticleSystem.Particles[i + 1], angleRadians, ks, kd));
-        }
-    }
-
-    private void CreateDebugGameObjects()
+    private void SetupDebugGameObjects()
     {
         int numParticles = m_ParticleSystem.Particles.Count;
-        m_DebugGameObjects = new List<Transform>(numParticles);
-        for (int i = 0; i < numParticles; ++i)
+        if (m_DebugGameObjects == null)
         {
-            GameObject gob = new GameObject("Particle " + i);
-            Transform gobTf = gob.transform;
-            gobTf.position = m_ParticleSystem.Particles[i].Position;
-            m_DebugGameObjects.Add(gobTf);
+            m_DebugGameObjects = new List<Transform>(numParticles);
         }
+        int objectsToAdd = numParticles - m_DebugGameObjects.Count;
+        int objectsToRemove = m_DebugGameObjects.Count - numParticles;
+        if (objectsToAdd > 0)
+        {
+            for (int i = 0; i < objectsToAdd; ++i)
+            {
+                GameObject gob = new GameObject("Particle " + m_DebugGameObjects.Count + i);
+                m_DebugGameObjects.Add(gob.transform);
+            }
+        }
+        else if (objectsToRemove > 0)
+        {
+            for (int i = 0; i < objectsToRemove; ++i)
+            {
+                Transform tf = m_DebugGameObjects[m_DebugGameObjects.Count - 1];
+                GameObject.Destroy(tf.gameObject);
+                m_DebugGameObjects.RemoveAt(m_DebugGameObjects.Count - 1);
+            }
+        }
+        m_DebugGameObjects.Capacity = numParticles;
+
+        UpdateDebugGameObjects();
     }
 
     private void UpdateDebugGameObjects()
     {
-        for (int i = 0; i < m_ParticleSystem.Particles.Count; ++i)
+        int numParticles = m_ParticleSystem.Particles.Count;
+        for (int i = 0; i < numParticles; ++i)
         {
             m_DebugGameObjects[i].position = m_ParticleSystem.Particles[i].Position;
         }
+
     }
 }

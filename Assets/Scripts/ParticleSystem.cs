@@ -376,4 +376,14 @@ public class ParticleSystem
         }
     }
 
+    public void Clear()
+    {
+        m_Particles.Clear();
+        m_Forces.Clear();
+        m_Constraints.Clear();
+        m_J.Clear();
+        m_JDot.Clear();
+        m_Time = 0f;
+    }
+
 }
