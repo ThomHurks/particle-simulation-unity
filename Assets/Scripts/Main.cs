@@ -9,6 +9,7 @@ public sealed class Main : MonoBehaviour
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
     private UnityEngine.UI.Dropdown m_SolverDropdown;
+    private UnityEngine.UI.Dropdown m_ScenarioDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 1f;
     private const float m_MouseSelectSpringConstant = 10f;
@@ -64,8 +65,22 @@ public sealed class Main : MonoBehaviour
             m_SolverDropdown.value = 2;
         }
         m_SolverDropdown.RefreshShownValue();
-    }
 
+        m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (m_Scenario is TestScenario)
+        {
+            m_ScenarioDropdown.value = 0;
+        }
+        else if (m_Scenario is HairScenario)
+        {
+            m_ScenarioDropdown.value = 1;
+        }
+        else if (m_Scenario is ClothScenario)
+        {
+            m_ScenarioDropdown.value = 2;
+        }
+        m_ScenarioDropdown.RefreshShownValue();
+    }
 
     void Update()
     {
@@ -76,6 +91,7 @@ public sealed class Main : MonoBehaviour
         }
         catch
         {
+            Debug.LogError("We encountered an error, so we will reset the scenario.");
             Reset();
         }
     }
@@ -101,7 +117,6 @@ public sealed class Main : MonoBehaviour
         m_ParticleSystem.Clear();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
-        Debug.LogError("We encountered an error, so we reset the scenario.");
     }
 
     private void HandleMouseInteraction()
@@ -160,6 +175,26 @@ public sealed class Main : MonoBehaviour
         }
     }
 
+    public void OnScenarioTypeChanged()
+    {
+        switch (m_ScenarioDropdown.value)
+        {
+            case 0:
+                m_Scenario = new TestScenario();
+                Debug.Log("Switched to test scenario");
+                break;
+            case 1:
+                m_Scenario = new HairScenario();
+                Debug.Log("Switched to hair scenario");
+                break;
+            case 2:
+                m_Scenario = new ClothScenario(false);
+                Debug.Log("Switched to cloth scenario");
+                break;
+        }
+        Reset();
+    }
+
     private void SetupDebugGameObjects()
     {
         int numParticles = m_ParticleSystem.Particles.Count;
@@ -167,13 +202,14 @@ public sealed class Main : MonoBehaviour
         {
             m_DebugGameObjects = new List<Transform>(numParticles);
         }
-        int objectsToAdd = numParticles - m_DebugGameObjects.Count;
-        int objectsToRemove = m_DebugGameObjects.Count - numParticles;
+        int numObjects = m_DebugGameObjects.Count;
+        int objectsToAdd = numParticles - numObjects;
+        int objectsToRemove = numObjects - numParticles;
         if (objectsToAdd > 0)
         {
             for (int i = 0; i < objectsToAdd; ++i)
             {
-                GameObject gob = new GameObject("Particle " + m_DebugGameObjects.Count + i);
+                GameObject gob = new GameObject("Particle " + (numObjects + i));
                 m_DebugGameObjects.Add(gob.transform);
             }
         }
@@ -181,9 +217,10 @@ public sealed class Main : MonoBehaviour
         {
             for (int i = 0; i < objectsToRemove; ++i)
             {
-                Transform tf = m_DebugGameObjects[m_DebugGameObjects.Count - 1];
+                int last = m_DebugGameObjects.Count - 1;
+                Transform tf = m_DebugGameObjects[last];
                 GameObject.Destroy(tf.gameObject);
-                m_DebugGameObjects.RemoveAt(m_DebugGameObjects.Count - 1);
+                m_DebugGameObjects.RemoveAt(last);
             }
         }
         m_DebugGameObjects.Capacity = numParticles;
