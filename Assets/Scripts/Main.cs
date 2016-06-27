@@ -85,9 +85,13 @@ public sealed class Main : MonoBehaviour
     void Update()
     {
         HandleMouseInteraction();
+    }
+
+    void FixedUpdate()
+    {
         try
         {
-            m_Solver.Step(m_ParticleSystem, Time.deltaTime);
+            m_Solver.Step(m_ParticleSystem, Time.fixedDeltaTime);
         }
         catch
         {
