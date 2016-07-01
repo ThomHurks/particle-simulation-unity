@@ -4,7 +4,7 @@ public class TestScenario : Scenario
 {
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        Particle particle1 = new Particle(1f);
+        Particle particle1 = new Particle(1000f);
         particle1.Position = new Vector2(-2f, 0f);
         a_ParticleSystem.AddParticle(particle1);
         Particle particle2 = new Particle(1f);
@@ -14,21 +14,18 @@ public class TestScenario : Scenario
         particle3.Position = new Vector2(4f, 4f);
         a_ParticleSystem.AddParticle(particle3);
 
-        Force springForce1 = new HooksLawSpring(particle2, particle3, 2f, 10f, 0.1f);
-        a_ParticleSystem.AddForce(springForce1);
-
+		Force angleforce = new AngularSpringForce (particle2, particle1, particle3, 2f, 1f, 0.1f);
+		a_ParticleSystem.AddForce(angleforce);
+		Force spring1 = new HooksLawSpring (particle1, particle2, 2, 1, .1f);
+		Force spring2 = new HooksLawSpring (particle3, particle2, 2, 1, .1f);
+		a_ParticleSystem.AddForce(spring1);
+		a_ParticleSystem.AddForce(spring2);
         Force gravityForce = new GravityForce(1f);
-        a_ParticleSystem.AddForce(gravityForce);
+        //a_ParticleSystem.AddForce(gravityForce);
 
         Force dragForce = new ViscousDragForce(2f);
         a_ParticleSystem.AddForce(dragForce);
 
-        new RodConstraint(particle1, particle2, 2f, a_ParticleSystem);
-        new CircularWireConstraint(particle3, particle3.Position + Vector2.right, 1f, a_ParticleSystem);
-
-        Particle particle4 = new Particle(1f);
-        particle4.Position = new Vector2(-4f, 4f);
-        a_ParticleSystem.AddParticle(particle4);
-        //new FixedPointConstraint (particle4, m_ParticleSystem);
+      
     }
 }

@@ -11,6 +11,12 @@ public class AngularSpringForce : Force
     private float m_SpringConstant;
     private float m_DampingConstant;
 
+	private Vector2 m_WantA;
+	private Vector2 m_WantB;
+	private Vector2 m_ForceA;
+	private Vector2 m_ForceB;
+	private Vector2 m_ForceM;
+
     public AngularSpringForce(Particle a_MassPoint, Particle a_ParticleA, Particle a_ParticleB,
                               float a_Angle, float a_SpringConstant, float a_DampingConstant)
     {
@@ -20,6 +26,11 @@ public class AngularSpringForce : Force
         m_Angle = a_Angle;
         m_SpringConstant = a_SpringConstant;
         m_DampingConstant = a_DampingConstant;
+		m_WantA = m_ParticleA.Position;
+		m_WantB = m_ParticleB.Position;
+		m_ForceA = new Vector2 (0, 0);
+		m_ForceB = new Vector2 (0, 0);
+		m_ForceM = new Vector2 (0, 0);
     }
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
@@ -37,17 +48,21 @@ public class AngularSpringForce : Force
 
             Vector2 t1 = RotateAroundPoint(m_MassPoint.Position, m_ParticleA.Position, -angleDelta);
             Vector2 t2 = RotateAroundPoint(m_MassPoint.Position, m_ParticleB.Position, angleDelta);
+			m_WantA = t1;
+			m_WantB = t2;
 
-            Vector2 d1 = t1 - m_ParticleA.Position;
-            Vector2 d2 = t2 - m_ParticleB.Position;
+			Vector2 d1 =  m_ParticleA.Position - t1;
+			Vector2 d2 =  m_ParticleB.Position - t2;
 
             float d1_mag = d1.magnitude;
             float d2_mag = d2.magnitude;
 
             if (d1_mag > float.Epsilon && d2_mag > float.Epsilon)
-            {
-                Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
-                Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
+			{
+				// Vector2 I1_Dot = m_ParticleA.Velocity - m_MassPoint.Velocity;
+				// Vector2 I2_Dot = m_ParticleB.Velocity - m_MassPoint.Velocity;
+				Vector2 I1_Dot = m_ParticleA.Velocity;
+				Vector2 I2_Dot = m_ParticleB.Velocity;
 
                 Vector2 F1 = -((m_SpringConstant * d1_mag) + m_DampingConstant * (Vector2.Dot(I1_Dot, d1) / d1_mag)) * d1.normalized;
                 Vector2 F2 = -((m_SpringConstant * d2_mag) + m_DampingConstant * (Vector2.Dot(I2_Dot, d2) / d2_mag)) * d2.normalized;
@@ -62,6 +77,10 @@ public class AngularSpringForce : Force
 
                 m_ParticleB.ForceAccumulator += F2;
                 m_MassPoint.ForceAccumulator -= F2;
+
+				m_ForceA = F1;
+				m_ForceB = F2;
+				m_ForceM = -1*(F1+F2);
             }
         }
     }
@@ -90,5 +109,35 @@ public class AngularSpringForce : Force
         GL.Vertex(m_MassPoint.Position);
         GL.Vertex(m_ParticleB.Position);
         GL.End();
+
+		GL.Begin(GL.LINES);
+		GL.Color(new Color(0.8f, 0.3f, .1f));
+		GL.Vertex(m_WantA);
+		GL.Vertex(m_ParticleA.Position);
+		GL.End();
+
+		GL.Begin(GL.LINES);
+		GL.Color(new Color(0.8f, 0.3f, .1f));
+		GL.Vertex(m_WantB);
+		GL.Vertex(m_ParticleB.Position);
+		GL.End();
+
+		GL.Begin(GL.LINES);
+		GL.Color(new Color(0.8f, 0.8f, .1f));
+		GL.Vertex(m_MassPoint.Position + m_ForceM);
+		GL.Vertex(m_MassPoint.Position);
+		GL.End();
+
+		GL.Begin(GL.LINES);
+		GL.Color(new Color(0.8f, 0.8f, .1f));
+		GL.Vertex(m_ParticleA.Position + m_ForceA);
+		GL.Vertex(m_ParticleA.Position);
+		GL.End();
+
+		GL.Begin(GL.LINES);
+		GL.Color(new Color(0.8f, 0.8f, .1f));
+		GL.Vertex(m_ParticleB.Position + m_ForceB);
+		GL.Vertex(m_ParticleB.Position);
+		GL.End();
     }
 }

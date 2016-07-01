@@ -2,7 +2,7 @@
 
 public class FixedPointConstraint : Constraint
 {
-	private readonly static bool OLD = true;
+	private readonly static bool OLD = false;
 
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
@@ -57,7 +57,7 @@ public class FixedPointConstraint : Constraint
     public float GetValueOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-		return relative.sqrMagnitude;
+		return relative.sqrMagnitude/2;
     }
 
 	public float GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
