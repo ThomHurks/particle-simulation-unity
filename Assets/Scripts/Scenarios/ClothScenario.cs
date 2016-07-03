@@ -75,8 +75,9 @@ public class ClothScenario : Scenario
                 }
             }
         }
-        a_ParticleSystem.AddForce(new GravityForce(Mathf.Pow(10, -4.5f)));
-        new FixedPointConstraint(a_ParticleSystem.Particles[dim], a_ParticleSystem);
-        new FixedPointConstraint(a_ParticleSystem.Particles[(dim + 1) * (dim + 1) - 1], a_ParticleSystem);
+        a_ParticleSystem.AddForce(new GravityForce(Mathf.Pow(10, -2.5f)));
+		for (int i = 0; i <= dim; i++) {
+			new HLineConstraint (a_ParticleSystem.Particles[i*(dim+1)+dim],a_ParticleSystem);
+		}
     }
 }

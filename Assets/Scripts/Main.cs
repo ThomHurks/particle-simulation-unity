@@ -39,8 +39,8 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
-        const float constraintSpringConstant = 100f;
-        const float constraintDampingConstant = 0.20f;
+        const float constraintSpringConstant = 10f;
+        const float constraintDampingConstant = 0f;
         const float solverEpsilon = 0.1f;
         const int solverSteps = 50;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
@@ -194,7 +194,7 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to hair scenario");
                 break;
             case 2:
-                m_Scenario = new ClothScenario(false);
+                m_Scenario = new ClothScenario(true);
                 Debug.Log("Switched to cloth scenario");
                 break;
         }

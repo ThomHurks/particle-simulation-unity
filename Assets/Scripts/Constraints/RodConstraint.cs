@@ -45,7 +45,7 @@ public class RodConstraint : Constraint
 
 	public float[] GetValue(ParticleSystem a_ParticleSystem)
 	{
-		return OLD ? GetValueNew (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
+		return OLD ? GetValueOld (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
 	}
 
 	public float[] GetDerivativeValue(ParticleSystem a_ParticleSystem)
@@ -101,6 +101,9 @@ public class RodConstraint : Constraint
 		v [0] = Vector2.Dot(l, ldot) / mag;
 		return v;
     }
+
+
+
 
     public void UpdateJacobiansOld(ParticleSystem a_ParticleSystem)
 	{

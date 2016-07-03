@@ -24,11 +24,6 @@ public class TestScenario : Scenario
         a_ParticleSystem.AddForce(gravityForce);
 
 
-		Particle p4 = new Particle (1);
-		p4.Position = new Vector2 (-2, -2);
-		a_ParticleSystem.AddParticle (p4);
-		Constraint c = new FixedPointConstraint (p4, a_ParticleSystem);
-		//a_ParticleSystem.AddConstraint (c);
 
 		Particle p5 = new Particle (1);
 		p5.Position = new Vector2 (2, 2);
