@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public sealed class Main : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_SolverDropdown;
     private UnityEngine.UI.Dropdown m_ScenarioDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
-    private const float m_MouseSelectRestLength = 1f;
+    private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 10f;
-    private const float m_MouseSelectDampingConstant = 0.1f;
+    private const float m_MouseSelectDampingConstant = 1f;
     private bool m_HasMouseSelection = false;
     private MouseSpringForce m_CurrentMouseForce;
 
@@ -39,9 +40,9 @@ public sealed class Main : MonoBehaviour
     void Awake()
     {
         const float constraintSpringConstant = 100f;
-        const float constraintDampingConstant = 0.1f;
+        const float constraintDampingConstant = 0.20f;
         const float solverEpsilon = 0.1f;
-        const int solverSteps = 100;
+        const int solverSteps = 50;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
         m_Scenario = new TestScenario();
@@ -93,9 +94,10 @@ public sealed class Main : MonoBehaviour
         {
             m_Solver.Step(m_ParticleSystem, Time.fixedDeltaTime);
         }
-        catch
+		catch(Exception e)
         {
             Debug.LogError("We encountered an error, so we will reset the scenario.");
+			Debug.LogError (e.Message +"\n" + e.StackTrace);
             Reset();
         }
     }

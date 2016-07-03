@@ -195,24 +195,34 @@ public class ParticleSystem
     private float[] ConstraintsGetValues()
     {
         // Gather constraint values into vector C.
-        int numConstraints = m_Constraints.Count;
+        int numConstraints = 0;
+		for (int i = 0; i < m_Constraints.Count; i++) {
+			numConstraints += m_Constraints [i].GetConstraintDimension();
+		}
         float[] C = new float[numConstraints];
-        for (int i = 0; i < numConstraints; ++i)
-        {
-            C[i] = m_Constraints[i].GetValue(this);
+		int k = 0;
+		for (int i = 0; i < m_Constraints.Count; ++i) {
+			for (int j = 0; j < m_Constraints [i].GetConstraintDimension (); j++){
+				C [k++] = m_Constraints [i].GetValue (this) [j];
+			}
         }
         return C;
     }
 
     private float[] ConstraintsGetDerivativeValues()
     {
-        // Gather constraint values into vector CDot.
-        int numConstraints = m_Constraints.Count;
+		// Gather constraint values into vector CDot.
+		int numConstraints = 0;
+		for (int i = 0; i < m_Constraints.Count; i++) {
+			numConstraints += m_Constraints [i].GetConstraintDimension();
+		}
         float[] CDot = new float[numConstraints];
-        for (int i = 0; i < numConstraints; ++i)
-        {
-            CDot[i] = m_Constraints[i].GetDerivativeValue(this);
-        }
+		int k = 0;
+		for (int i = 0; i < m_Constraints.Count; ++i) {
+			for (int j = 0; j < m_Constraints [i].GetConstraintDimension (); j++){
+				CDot [k++] = m_Constraints [i].GetDerivativeValue (this) [j];
+			}
+		}
         return CDot;
     }
 
@@ -261,7 +271,7 @@ public class ParticleSystem
         {
             curParticle = m_Particles[i];
             int curIndex = 2 * i;
-            float massInverse = 1 / curParticle.Mass;
+            float massInverse = 1f / curParticle.Mass;
             W[curIndex] = massInverse;
             W[curIndex + 1] = massInverse;
         }

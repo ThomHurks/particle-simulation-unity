@@ -28,7 +28,7 @@ public class MouseSpringForce : Force
 
         if (magnitude > float.Epsilon)
         {
-            Vector2 f = (m_SpringConstant * (magnitude - m_RestLength) + m_DampingConstant * (Vector2.Dot(velocity, relative) / magnitude)) * direction;
+            Vector2 f = (m_SpringConstant * (magnitude - m_RestLength) - m_DampingConstant * (Vector2.Dot(velocity, relative) / magnitude)) * direction;
             m_Particle.ForceAccumulator += f;
             if (float.IsNaN(f.x) || float.IsNaN(f.y) || float.IsInfinity(f.x) || float.IsInfinity(f.y))
             {

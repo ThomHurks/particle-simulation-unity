@@ -35,12 +35,12 @@ public class CircularWireConstraint : Constraint
 		}
 	}
 
-	public float GetValue(ParticleSystem a_ParticleSystem)
+	public float[] GetValue(ParticleSystem a_ParticleSystem)
 	{
 		return OLD ? GetValueOld (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
 	}
 
-	public float GetDerivativeValue(ParticleSystem a_ParticleSystem)
+	public float[] GetDerivativeValue(ParticleSystem a_ParticleSystem)
 	{
 		return OLD ? GetDerivativeValueOld (a_ParticleSystem) : GetDerivativeValueNew (a_ParticleSystem);
 	}
@@ -62,16 +62,20 @@ public class CircularWireConstraint : Constraint
 		m_MatrixBlockJDot.data[1] = dCdotdl.y; 
     }
 
-    public float GetValueNew(ParticleSystem a_ParticleSystem)
+    public float[] GetValueNew(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-        return (relative.magnitude - m_Radius);
+		float[] v = new float[GetConstraintDimension ()];
+		v [0] = relative.magnitude - m_Radius;
+        return v;
     }
 
-    public float GetDerivativeValueNew(ParticleSystem a_ParticleSystem)
+    public float[] GetDerivativeValueNew(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-		return Vector2.Dot(m_Particle.Velocity, relative)/relative.magnitude;
+		float[] v = new float[GetConstraintDimension ()];
+		v [0] = Vector2.Dot (m_Particle.Velocity, relative) / relative.magnitude;
+		return v;
     }
 
 
@@ -81,19 +85,23 @@ public class CircularWireConstraint : Constraint
         m_MatrixBlockJ.data[0] = relative.x;
         m_MatrixBlockJ.data[1] = relative.y;
         m_MatrixBlockJDot.data[0] = m_Particle.Velocity.x;
-        m_MatrixBlockJDot.data[1] = m_Particle.Velocity.y; // TODO: VERIFY THIS
+        m_MatrixBlockJDot.data[1] = m_Particle.Velocity.y; 
     }
 
-    public float GetValueOld(ParticleSystem a_ParticleSystem)
+    public float[] GetValueOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-        return (relative.sqrMagnitude - m_RadiusSquared) / 2;
+		float[] v = new float[GetConstraintDimension ()];
+		v [0] = (relative.sqrMagnitude - m_RadiusSquared) / 2f;
+		return v;
     }
 
-    public float GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
+    public float[] GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
     {
         Vector2 relative = m_Particle.Position - m_Center;
-        return Vector2.Dot(m_Particle.Velocity, relative);
+		float[] v = new float[GetConstraintDimension ()];
+		v [0] = Vector2.Dot(m_Particle.Velocity, relative);
+		return v;
     }
 	  
 
