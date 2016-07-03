@@ -1404,8 +1404,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -124.7, y: -24.5}
-  m_SizeDelta: {x: 249.3, y: 49.9}
+  m_AnchoredPosition: {x: -137.60004, y: -24.5}
+  m_SizeDelta: {x: 275.1, y: 49.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &884114569
 MonoBehaviour:
@@ -1613,7 +1613,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Linear circles
+  m_Text: Quad Circles
 --- !u!222 &950723688
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1975,8 +1975,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -124.7, y: -74.4}
-  m_SizeDelta: {x: 249.3, y: 49.8}
+  m_AnchoredPosition: {x: -137.60004, y: -74.4}
+  m_SizeDelta: {x: 275.1, y: 49.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1142879457
 MonoBehaviour:
@@ -2259,7 +2259,7 @@ GameObject:
   - 114: {fileID: 1283387452}
   - 114: {fileID: 1283387451}
   m_Layer: 5
-  m_Name: ScenarioDropdown (1)
+  m_Name: CircleDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2283,8 +2283,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -124.70001, y: -124.19998}
-  m_SizeDelta: {x: 249.3, y: 49.8}
+  m_AnchoredPosition: {x: -137.6, y: -124.19998}
+  m_SizeDelta: {x: 275.1, y: 49.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1283387451
 MonoBehaviour:
@@ -2330,15 +2330,15 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Linear circles
-      m_Image: {fileID: 0}
     - m_Text: Quad Circles
+      m_Image: {fileID: 0}
+    - m_Text: Linear Circles
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 946976744}
-        m_MethodName: OnScenarioTypeChanged
+        m_MethodName: OnCircleTypeChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
