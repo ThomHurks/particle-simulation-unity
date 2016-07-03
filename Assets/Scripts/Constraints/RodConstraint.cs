@@ -14,12 +14,12 @@ public class RodConstraint : Constraint
     private readonly float m_DistanceSquared;
     private readonly float m_Distance;
 
-    public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, float a_Distance, ParticleSystem a_System)
+    public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, ParticleSystem a_System)
     {
         int i = a_System.AddConstraint(this);
-        Debug.Log("Creating rod constraint with index " + i);
-        m_DistanceSquared = a_Distance * a_Distance;
-        m_Distance = a_Distance;
+		Debug.Log("Creating " + (OLD?"old":"new") + " rod constraint with index " + i);
+		m_Distance = (a_ParticleA.Position-a_ParticleB.Position).magnitude;
+		m_DistanceSquared = m_Distance * m_Distance;
         m_ParticleA = a_ParticleA;
         m_ParticleB = a_ParticleB;
         int iLength = GetConstraintDimension();

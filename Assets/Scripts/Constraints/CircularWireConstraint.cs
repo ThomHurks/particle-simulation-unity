@@ -11,14 +11,14 @@ public class CircularWireConstraint : Constraint
     private readonly float m_Radius;
     private readonly float m_RadiusSquared;
 
-    public CircularWireConstraint(Particle a_Particle, Vector2 a_Center, float a_Radius, ParticleSystem a_System)
+    public CircularWireConstraint(Particle a_Particle, Vector2 a_Center, ParticleSystem a_System)
 	{
 		int i = a_System.AddConstraint(this);
 		Debug.Log ("Creating "+(OLD?"old":"new")  +  " circular wire constraint with index " + i);
         m_Particle = a_Particle;
         m_Center = a_Center;
-        m_Radius = a_Radius;
-        m_RadiusSquared = a_Radius * a_Radius;
+		m_Radius = (a_Particle.Position-a_Center).magnitude;
+        m_RadiusSquared = m_Radius * m_Radius;
         int j = a_System.GetParticleIndex(a_Particle) * a_System.GetParticleDimension();
         int iLength = GetConstraintDimension();
         int jLength = a_System.GetParticleDimension();
