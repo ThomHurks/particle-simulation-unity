@@ -2,7 +2,7 @@
 
 public class CircularWireConstraint : Constraint
 {
-	private readonly static bool OLD = false;
+	public static bool OLD = false;
 
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
@@ -28,6 +28,7 @@ public class CircularWireConstraint : Constraint
 
 	public void UpdateJacobians(ParticleSystem a_ParticleSystem)
 	{
+		//Debug.Log (OLD);
 		if (OLD) {
 			UpdateJacobiansOld (a_ParticleSystem);
 		} else {
