@@ -23,17 +23,15 @@ public class TestScenario : Scenario
         Force gravityForce = new GravityForce(1f);
         //a_ParticleSystem.AddForce(gravityForce);
 
-        Force dragForce = new ViscousDragForce(2f);
-        a_ParticleSystem.AddForce(dragForce);
 
 		Particle p4 = new Particle (1);
 		p4.Position = new Vector2 (-2, -2);
 		a_ParticleSystem.AddParticle (p4);
 		Constraint c = new FixedPointConstraint (p4, a_ParticleSystem);
 		//a_ParticleSystem.AddConstraint (c);
-
+*/
 		Particle p5 = new Particle (1);
-		p5.Position = new Vector2 (4, -2);
+		p5.Position = new Vector2 (2, 2);
 		a_ParticleSystem.AddParticle (p5);
 		Constraint c2 = new CircularWireConstraint (p5,p5.Position+Vector2.right,1,a_ParticleSystem);
 
@@ -45,7 +43,7 @@ public class TestScenario : Scenario
 		p7.Position = new Vector2 (1, -3);
 		a_ParticleSystem.AddParticle (p7);
 		Constraint c3 = new RodConstraint (p6,p7,1,a_ParticleSystem);
-*/
+
 		Particle p8 = new Particle (1);
 		p8.Position = new Vector2 (-3, -1);
 		a_ParticleSystem.AddParticle (p8);
@@ -61,6 +59,10 @@ public class TestScenario : Scenario
 		p10.Position = new Vector2 (5, -2);
 		a_ParticleSystem.AddParticle (p10);
 		Constraint c6 = new VLineConstraint (p10,a_ParticleSystem);
+
+
+		Force dragForce = new ViscousDragForce(2f);
+		a_ParticleSystem.AddForce(dragForce);
 
 
     }
