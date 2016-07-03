@@ -42,7 +42,7 @@ public class TestScenario : Scenario
 		Particle p7 = new Particle (1);
 		p7.Position = new Vector2 (1, -3);
 		a_ParticleSystem.AddParticle (p7);
-		Constraint c3 = new RodConstraint (p6,p7,1,a_ParticleSystem);
+		Constraint c3 = new RodConstraint (p6,p7,a_ParticleSystem);
 
 		Particle p8 = new Particle (1);
 		p8.Position = new Vector2 (-3, -1);
