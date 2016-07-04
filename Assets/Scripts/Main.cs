@@ -62,25 +62,25 @@ public sealed class Main : MonoBehaviour
         {
             m_SolverDropdown.value = 1;
         }
-        else if (m_Solver is RungeKutta4Solver)
-        {
-            m_SolverDropdown.value = 2;
-        }
+		else if (m_Solver is RungeKutta4Solver)
+		{
+			m_SolverDropdown.value = 2;
+		}else if (m_Solver is VerletSolver)
+		{
+			m_SolverDropdown.value = 3;
+		}
         m_SolverDropdown.RefreshShownValue();
 
         m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-        if (m_Scenario is TestScenario)
-        {
-            m_ScenarioDropdown.value = 0;
-        }
-        else if (m_Scenario is HairScenario)
-        {
-            m_ScenarioDropdown.value = 1;
-        }
-        else if (m_Scenario is ClothScenario)
-        {
-            m_ScenarioDropdown.value = 2;
-        }
+		if (m_Scenario is TestScenario) {
+			m_ScenarioDropdown.value = 0;
+		} else if (m_Scenario is HairScenario) {
+			m_ScenarioDropdown.value = 1;
+		} else if (m_Scenario is ClothScenario) {
+			m_ScenarioDropdown.value = 2;
+		} else if (m_Scenario is CirclesAndSpringsScenario) {
+			m_ScenarioDropdown.value = 3;
+		}
         m_ScenarioDropdown.RefreshShownValue();
 
 		m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
@@ -189,6 +189,10 @@ public sealed class Main : MonoBehaviour
                 m_Solver = new RungeKutta4Solver();
                 Debug.Log("Switched to Runge Kutta 4th");
                 break;
+			case 3:
+				m_Solver = new VerletSolver ();
+				Debug.Log ("Switched to Verlet");
+				break;
         }
     }
 
@@ -208,6 +212,10 @@ public sealed class Main : MonoBehaviour
                 m_Scenario = new ClothScenario(true);
                 Debug.Log("Switched to cloth scenario");
                 break;
+			case 3:
+				m_Scenario = new CirclesAndSpringsScenario();
+				Debug.Log("Switched to circles&springs scenario");
+				break;
         }
         Reset();
     }
