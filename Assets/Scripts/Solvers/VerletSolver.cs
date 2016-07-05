@@ -23,7 +23,7 @@ public class VerletSolver : Solver
 		a_ParticleSystem.ParticleDerivative(temp1); //temp1 = v + .5, a+ .5
 		AddVectorsScale(originals, temp1, temp2,1f,a_DeltaTime); //temp2 = x(t+1),v(t+1)
 		a_ParticleSystem.ParticlesSetState(temp2);
-		//return;
+
 		a_ParticleSystem.ParticleDerivative(temp3); // v+1,a+1
 		int n = particleDimensions/4;
 		for (int i = 0; i < n; i++) {

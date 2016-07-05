@@ -14,7 +14,7 @@ public class TestScenario : Scenario
         particle3.Position = new Vector2(4f, 4f);
         a_ParticleSystem.AddParticle(particle3);
 
-		Force angleforce = new AngularSpringForceN (particle2, particle1, particle3, Mathf.PI, 1f, 0.1f);
+		Force angleforce = new AngularSpringForce (particle2, particle1, particle3, Mathf.PI/2, 1f, 0.1f);
 		a_ParticleSystem.AddForce(angleforce);
 		Force spring1 = new HooksLawSpring (particle1, particle2, 2, 1, .1f);
 		Force spring2 = new HooksLawSpring (particle3, particle2, 2, 1, .1f);
