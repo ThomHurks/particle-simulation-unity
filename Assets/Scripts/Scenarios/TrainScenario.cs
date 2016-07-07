@@ -29,5 +29,10 @@ public class TrainScenario : Scenario
         a_ParticleSystem.AddForce(s2);
 
         new RodConstraint(p3, p4, a_ParticleSystem);
+
+        Particle p5 = new Particle(particleMass);
+        p5.Position = new Vector2(1, 0);
+        a_ParticleSystem.AddParticle(p5);
+        new UnitCircularWireConstraint(p5, a_ParticleSystem);
     }
 }
