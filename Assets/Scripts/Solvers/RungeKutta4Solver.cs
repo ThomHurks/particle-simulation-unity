@@ -1,18 +1,16 @@
-﻿using UnityEngine;
-
-public class RungeKutta4Solver : Solver
+﻿public class RungeKutta4Solver : Solver
 {
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {
         int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        float[] originals = new float[particleDimensions];
-        float[] k1 = new float[particleDimensions];
-        float[] k2 = new float[particleDimensions];
-        float[] k3 = new float[particleDimensions];
-        float[] k4 = new float[particleDimensions];
-        float[] temp = new float[particleDimensions];
+        double[] originals = new double[particleDimensions];
+        double[] k1 = new double[particleDimensions];
+        double[] k2 = new double[particleDimensions];
+        double[] k3 = new double[particleDimensions];
+        double[] k4 = new double[particleDimensions];
+        double[] temp = new double[particleDimensions];
         a_ParticleSystem.ParticlesGetState(originals); //backup original locations and speeds
-        float h = a_DeltaTime;//To keep consistent with slide notation
+        double h = a_DeltaTime;//To keep consistent with slide notation
 
         //solve k1
         a_ParticleSystem.ParticleDerivative(k1); 
@@ -44,19 +42,5 @@ public class RungeKutta4Solver : Solver
 
         a_ParticleSystem.ParticlesSetState(temp);
         a_ParticleSystem.Time += a_DeltaTime;
-    }
-
-    //a_VectorOut = a_ScaleA*a_VectorA + a_ScaleB*a_VectorB
-    private void AddVectorsScale(float[] a_VectorA, float[] a_VectorB, float[] a_VectorOut, float a_ScaleA, float a_ScaleB)
-    {
-        if (!(a_VectorA.Length == a_VectorB.Length && a_VectorB.Length == a_VectorOut.Length))
-        {
-            throw new System.Exception("Input vectors do not have equal length!");
-        }
-        int vecLength = a_VectorA.Length;
-        for (int i = 0; i < vecLength; ++i)
-        {
-            a_VectorOut[i] = a_VectorA[i] * a_ScaleA + a_VectorB[i] * a_ScaleB;
-        }
     }
 }

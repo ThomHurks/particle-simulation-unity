@@ -120,11 +120,11 @@ public class ParticleSystem
         SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant, m_SolverEpsilon, m_SolverSteps);
     }
 
-    private static void ValidateVector(float[] a_Vector)
+    private static void ValidateVector(double[] a_Vector)
     {
         for (int i = 0; i < a_Vector.Length; ++i)
         {
-            if (float.IsNaN(a_Vector[i]) || float.IsInfinity(a_Vector[i]))
+            if (double.IsNaN(a_Vector[i]) || double.IsInfinity(a_Vector[i]))
             {
                 throw new System.Exception("Vector did not validate: NaN or Inf found.");
             }
@@ -133,40 +133,40 @@ public class ParticleSystem
 
     private void SolveEquation11(float a_SpringConstant, float a_DampingConstant, float a_SolverEpsilon, int a_SolverSteps)
     {
-        float[] qdot = ParticlesGetVelocities();
+        double[] qdot = ParticlesGetVelocities();
         ValidateVector(qdot);
-        float[] W = ParticlesInverseMassMatrix();
+        double[] W = ParticlesInverseMassMatrix();
         ValidateVector(W);
-        float[] Q = ParticlesGetForces();
+        double[] Q = ParticlesGetForces();
         ValidateVector(Q);
-        float[] C = ConstraintsGetValues();
+        double[] C = ConstraintsGetValues();
         ValidateVector(C);
         int numConstraints = C.Length; // = number of SCALAR! constraints, so fixedpoint contributes 2 to this!
-        float[] CDot = ConstraintsGetDerivativeValues();
+        double[] CDot = ConstraintsGetDerivativeValues();
         ValidateVector(CDot);
         int n = GetParticleDimension() * m_Particles.Count;
         // JDot times qdot.
-        float[] JDotqdot = new float[numConstraints];
+        double[] JDotqdot = new double[numConstraints];
         m_JDot.MatrixTimesVector(qdot, JDotqdot);
         ValidateVector(JDotqdot);
         // W times Q.
-        float[] WQ = new float[n];
+        double[] WQ = new double[n];
         for (int i = 0; i < n; ++i)
         {
             WQ[i] = W[i] * Q[i];
         }
         ValidateVector(WQ);
         // J times WQ.
-        float[] JWQ = new float[numConstraints];
+        double[] JWQ = new double[numConstraints];
         m_J.MatrixTimesVector(WQ, JWQ);
         ValidateVector(JWQ);
         // Compute the RHS of equation 11.
-        float[] RHS = new float[numConstraints];
+        double[] RHS = new double[numConstraints];
         for (int i = 0; i < numConstraints; ++i)
         {
             RHS[i] = -JDotqdot[i] - JWQ[i] - a_SpringConstant * C[i] - a_DampingConstant * CDot[i];
-			//Debug.Log("RHS["+i+"] = " + (-JDotqdot[i] ) + " + " + (-JWQ[i]) + " + " + (- a_SpringConstant) + "*" + C[i] + " + " + (- a_DampingConstant) + "*" + CDot[i] + " = " + RHS[i]);
-            if (float.IsNaN(RHS[i]) || float.IsNaN(RHS[i]))
+            //Debug.Log("RHS["+i+"] = " + (-JDotqdot[i] ) + " + " + (-JWQ[i]) + " + " + (- a_SpringConstant) + "*" + C[i] + " + " + (- a_DampingConstant) + "*" + CDot[i] + " = " + RHS[i]);
+            if (double.IsNaN(RHS[i]) || double.IsNaN(RHS[i]))
             {
                 throw new System.Exception("NaN or Inf in RHS of eq 11");
             }
@@ -174,65 +174,71 @@ public class ParticleSystem
         // Set up implicit matrix of LHS and solve.
         Eq11LHS LHS = new Eq11LHS(m_J, W);// J W JT = m*m if all goes well
         LinearSolver solver = new LinearSolver();
-        float[] lambda = new float[numConstraints];
+        double[] lambda = new double[numConstraints];
         int stepsPerformed = 0;
         solver.ConjGrad(numConstraints, LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
         ValidateVector(lambda);
         //Debug.Log("Nr of iterations in conjgrad solver: " + stepsPerformed);
-        float[] QHat = new float[n];
+        double[] QHat = new double[n];
         m_J.MatrixTransposeTimesVector(lambda, QHat);
         ValidateVector(QHat);
         for (int i = 0; i < m_Particles.Count; ++i)
         {
-            m_Particles[i].ForceAccumulator += new Vector2(QHat[i * 2], QHat[(i * 2) + 1]);
+            m_Particles[i].ForceAccumulator += new Vector2((float)QHat[i * 2], (float)QHat[(i * 2) + 1]);
             Vector2 newForce = m_Particles[i].ForceAccumulator;
-            if (float.IsNaN(newForce.x) || float.IsNaN(newForce.y) || float.IsInfinity(newForce.x) || float.IsInfinity(newForce.y))
+            if (double.IsNaN(newForce.x) || double.IsNaN(newForce.y) || double.IsInfinity(newForce.x) || double.IsInfinity(newForce.y))
             {
                 throw new System.Exception("NaN or Inf in accumulated force after eq 11");
             }
         }
     }
 
-    private float[] ConstraintsGetValues()
+    private double[] ConstraintsGetValues()
     {
         // Gather constraint values into vector C.
         int numConstraints = 0;
-		for (int i = 0; i < m_Constraints.Count; i++) {
-			numConstraints += m_Constraints [i].GetConstraintDimension();
-		}
-        float[] C = new float[numConstraints];
-		int k = 0;
-		for (int i = 0; i < m_Constraints.Count; ++i) {
-			for (int j = 0; j < m_Constraints [i].GetConstraintDimension (); j++){
-				C [k++] = m_Constraints [i].GetValue (this) [j];
-			}
+        for (int i = 0; i < m_Constraints.Count; i++)
+        {
+            numConstraints += m_Constraints[i].GetConstraintDimension();
+        }
+        double[] C = new double[numConstraints];
+        int k = 0;
+        for (int i = 0; i < m_Constraints.Count; ++i)
+        {
+            for (int j = 0; j < m_Constraints[i].GetConstraintDimension(); j++)
+            {
+                C[k++] = m_Constraints[i].GetValue(this)[j];
+            }
         }
         return C;
     }
 
-    private float[] ConstraintsGetDerivativeValues()
+    private double[] ConstraintsGetDerivativeValues()
     {
-		// Gather constraint values into vector CDot.
-		int numConstraints = 0;
-		for (int i = 0; i < m_Constraints.Count; i++) {
-			numConstraints += m_Constraints [i].GetConstraintDimension();
-		}
-        float[] CDot = new float[numConstraints];
-		int k = 0;
-		for (int i = 0; i < m_Constraints.Count; ++i) {
-			for (int j = 0; j < m_Constraints [i].GetConstraintDimension (); j++){
-				CDot [k++] = m_Constraints [i].GetDerivativeValue (this) [j];
-			}
-		}
+        // Gather constraint values into vector CDot.
+        int numConstraints = 0;
+        for (int i = 0; i < m_Constraints.Count; i++)
+        {
+            numConstraints += m_Constraints[i].GetConstraintDimension();
+        }
+        double[] CDot = new double[numConstraints];
+        int k = 0;
+        for (int i = 0; i < m_Constraints.Count; ++i)
+        {
+            for (int j = 0; j < m_Constraints[i].GetConstraintDimension(); j++)
+            {
+                CDot[k++] = m_Constraints[i].GetDerivativeValue(this)[j];
+            }
+        }
         return CDot;
     }
 
-    private float[] ParticlesGetPositions()
+    private double[] ParticlesGetPositions()
     {
         // Gather positions into state vector q.
         int numParticles = m_Particles.Count;
         int particlePosDims = numParticles * 2;
-        float[] q = new float[particlePosDims];
+        double[] q = new double[particlePosDims];
         Particle curParticle = null;
         for (int i = 0; i < numParticles; ++i)
         {
@@ -244,12 +250,12 @@ public class ParticleSystem
         return q;
     }
 
-    private float[] ParticlesGetVelocities()
+    private double[] ParticlesGetVelocities()
     {
         // Gather velocities into state vector qdot.
         int numParticles = m_Particles.Count;
         int particlePosDims = numParticles * 2;
-        float[] qdot = new float[particlePosDims];
+        double[] qdot = new double[particlePosDims];
         Particle curParticle = null;
         for (int i = 0; i < numParticles; ++i)
         {
@@ -261,30 +267,30 @@ public class ParticleSystem
         return qdot;
     }
 
-    private float[] ParticlesInverseMassMatrix()
+    private double[] ParticlesInverseMassMatrix()
     {
         // Construct inverse, W, of diagonal of mass matrix M as a vector.
         int numParticles = m_Particles.Count;
         int particleMassDims = numParticles * 2;
-        float[] W = new float[particleMassDims];
+        double[] W = new double[particleMassDims];
         Particle curParticle = null;
         for (int i = 0; i < numParticles; ++i)
         {
             curParticle = m_Particles[i];
             int curIndex = 2 * i;
-            float massInverse = 1f / curParticle.Mass;
+            double massInverse = 1d / curParticle.Mass;
             W[curIndex] = massInverse;
             W[curIndex + 1] = massInverse;
         }
         return W;
     }
 
-    private float[] ParticlesGetForces()
+    private double[] ParticlesGetForces()
     {
         // Gather forces into global force vector Q.
         int numParticles = m_Particles.Count;
         int particleForceDims = numParticles * 2;
-        float[] Q = new float[particleForceDims];
+        double[] Q = new double[particleForceDims];
         Particle curParticle = null;
         for (int i = 0; i < numParticles; ++i)
         {
@@ -301,7 +307,7 @@ public class ParticleSystem
         get { return 4 * m_Particles.Count; }
     }
 
-    public void ParticlesGetState(float[] a_DST)
+    public void ParticlesGetState(double[] a_DST)
     {
         int numParticles = m_Particles.Count;
         int requiredLength = 4 * numParticles;
@@ -321,7 +327,7 @@ public class ParticleSystem
         }
     }
 
-    public void ParticlesSetState(float[] a_DST)
+    public void ParticlesSetState(double[] a_DST)
     {
         int numParticles = m_Particles.Count;
         int requiredLength = 4 * numParticles;
@@ -334,12 +340,12 @@ public class ParticleSystem
         {
             curParticle = m_Particles[i];
             int index = i * 4;
-            curParticle.Position = new Vector2(a_DST[index], a_DST[index + 1]);
-            curParticle.Velocity = new Vector2(a_DST[index + 2], a_DST[index + 3]);
+            curParticle.Position = new Vector2((float)a_DST[index], (float)a_DST[index + 1]);
+            curParticle.Velocity = new Vector2((float)a_DST[index + 2], (float)a_DST[index + 3]);
         }
     }
 
-    public void ParticleDerivative(float[] a_DST)
+    public void ParticleDerivative(double[] a_DST)
     {
         int numParticles = m_Particles.Count;
         int requiredLength = 4 * numParticles;

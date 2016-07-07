@@ -2,9 +2,9 @@
 {
     void UpdateJacobians(ParticleSystem a_ParticleSystem);
 
-    float[] GetValue(ParticleSystem a_ParticleSystem);
+    double[] GetValue(ParticleSystem a_ParticleSystem);
 
-    float[] GetDerivativeValue(ParticleSystem a_ParticleSystem);
+    double[] GetDerivativeValue(ParticleSystem a_ParticleSystem);
 
     int GetConstraintDimension();
 

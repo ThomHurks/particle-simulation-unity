@@ -20,7 +20,6 @@ public class MouseSpringForce : Force
         Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
 
-
         Vector2 relative = mousePos - m_Particle.Position;
         float magnitude = relative.magnitude;
         Vector2 velocity = m_Particle.Velocity;

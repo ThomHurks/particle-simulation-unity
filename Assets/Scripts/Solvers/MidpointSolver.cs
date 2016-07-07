@@ -1,13 +1,11 @@
-﻿using UnityEngine;
-
-public class MidpointSolver : Solver
+﻿public class MidpointSolver : Solver
 {
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {
         int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        float[] temp1 = new float[particleDimensions];
-        float[] temp2 = new float[particleDimensions];
-        float[] originals = new float[particleDimensions];
+        double[] temp1 = new double[particleDimensions];
+        double[] temp2 = new double[particleDimensions];
+        double[] originals = new double[particleDimensions];
         a_ParticleSystem.ParticlesGetState(originals); //backup original locations and speeds
 
         //perform half an euler step

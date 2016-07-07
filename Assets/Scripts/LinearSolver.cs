@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class LinearSolver
+﻿public sealed class LinearSolver
 {
     private const int MAX_STEPS = 1000000000;
 
@@ -11,18 +9,18 @@ public class LinearSolver
     // "epsilon" is the error tolerance
     // "steps", as passed, is the maximum number of steps, or 0 (implying MAX_STEPS)
     // Upon completion, "steps" contains the number of iterations taken
-    public float ConjGrad(int n, ImplicitMatrix A, float[] x, float[] b,
-                          float epsilon,    // how low should we go?
-                          int steps, out int stepsPerformed)
+    public double ConjGrad(int n, ImplicitMatrix A, double[] x, double[] b,
+                           double epsilon,    // how low should we go?
+                           int steps, out int stepsPerformed)
     {
 		
         int i, iMax;
-        float alpha, beta, rSqrLen, rSqrLenOld, u;
+        double alpha, beta, rSqrLen, rSqrLenOld, u;
 
-        float[] r = new float[n];//n is actually m in our case: the number of constraints
-        float[] d = new float[n];
-        float[] t = new float[n];
-        float[] temp = new float[n];
+        double[] r = new double[n];//n is actually m in our case: the number of constraints
+        double[] d = new double[n];
+        double[] t = new double[n];
+        double[] temp = new double[n];
 
         if (x.Length != b.Length)
         {
@@ -67,14 +65,12 @@ public class LinearSolver
                 i++;
                 A.MatrixTimesVector(d, t);
                 u = vecDot(n, d, t);
-                if (float.IsInfinity(u))
+                if (double.IsInfinity(u))
                 {
                     throw new System.Exception("u = infinity");
                 }
-                    
 
-
-                if (u == 0f)
+                if (System.Math.Abs(u) <= double.Epsilon)
                 {
                     //Debug.Log("(SolveConjGrad) d'Ad = 0\n");
                     break;
@@ -91,7 +87,7 @@ public class LinearSolver
                 //Debug.Log (u);
                 //Debug.Log (toString(d));
                 //Debug.Log (toString(t));
-                if ((i & 0x3F) == 0x3F)
+                if ((i & 0x3F) != 0)
                 {
                     vecAssign(n, temp, t);
                     vecTimesScalar(n, temp, alpha);
@@ -99,6 +95,7 @@ public class LinearSolver
                 }
                 else
                 {
+                    // For stability, correct r every 64th iteration
                     vecAssign(n, r, b);
                     A.MatrixTimesVector(x, temp);
                     vecDiffEqual(n, r, temp);
@@ -123,7 +120,7 @@ public class LinearSolver
         return rSqrLen;
     }
 
-    private static void vecAddEqual(int n, float[] r, float[] v)
+    private static void vecAddEqual(int n, double[] r, double[] v)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -131,7 +128,7 @@ public class LinearSolver
         }
     }
 
-    private static void vecDiffEqual(int n, float[] r, float[] v)
+    private static void vecDiffEqual(int n, double[] r, double[] v)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -139,7 +136,7 @@ public class LinearSolver
         }
     }
 
-    private static void vecAssign(int n, float[] v1, float[] v2)
+    private static void vecAssign(int n, double[] v1, double[] v2)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -147,7 +144,7 @@ public class LinearSolver
         }
     }
 
-    private static void vecTimesScalar(int n, float[] v, float s)
+    private static void vecTimesScalar(int n, double[] v, double s)
     {
         for (int i = 0; i < n; ++i)
         {
@@ -155,9 +152,9 @@ public class LinearSolver
         }
     }
 
-    private static float vecDot(int n, float[] v1, float[] v2)
+    private static double vecDot(int n, double[] v1, double[] v2)
     {
-        float dot = 0;
+        double dot = 0;
         for (int i = 0; i < n; i++)
         {
             dot += v1[i] * v2[i];
@@ -165,18 +162,22 @@ public class LinearSolver
         return dot;
     }
 
-    private static float vecSqrLen(int n, float[] v)
+    private static double vecSqrLen(int n, double[] v)
     {
         return vecDot(n, v, v);
     }
 
-    private string toString(float[] a)
+    private string toString(double[] a)
     {
-        string s = "";
-        for (int i = 0; i < a.Length; i++)
+        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder((a.Length * 2) - 1);
+        int length = a.Length - 1;
+        const string sep = ", ";
+        for (int i = 0; i < length; i++)
         {
-            s = s + a[i] + ", ";		
+            stringBuilder.Append(a[i]);
+            stringBuilder.Append(sep);	
         }
-        return s;
+        stringBuilder.Append(a[length]);
+        return stringBuilder.ToString();
     }
 }

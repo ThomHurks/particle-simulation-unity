@@ -14,7 +14,7 @@ public class BlockSparseMatrix : ImplicitMatrix
         // 2
         public int jLength;
         //constraint length, Usually 1 (i.e. scalar constraints)
-        public float[] data;
+        public double[] data;
 
         public MatrixBlock(int a_i, int a_j, int a_iLength, int a_jLength)
         {
@@ -22,7 +22,7 @@ public class BlockSparseMatrix : ImplicitMatrix
             j = a_j;
             iLength = a_iLength;
             jLength = a_jLength;
-            data = new float[a_iLength * a_jLength];
+            data = new double[a_iLength * a_jLength];
         }
     }
 
@@ -79,30 +79,31 @@ public class BlockSparseMatrix : ImplicitMatrix
 
     //a_Destination = M*a_Source
     //|a_Destination| = m && |a_Source| = n shold hold
-    protected override void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTimesVectorImpl(double[] a_Source, double[] a_Destination)
     {
         GenericMatrixTimesVector(a_Source, a_Destination, false);//Do a normal multiplication
     }
 
-    protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTransposeTimesVectorImpl(double[] a_Source, double[] a_Destination)
     {
         GenericMatrixTimesVector(a_Source, a_Destination, true);//Do a transpose multiplication
     }
 
-	public override float getValue(int i, int j)
+    public override double getValue(int i, int j)
+    {
+        for (int k = 0; k < m_MatrixBlocks.Count; k++)
+        {
+            MatrixBlock b = m_MatrixBlocks[k];
+            if (b.i <= i && i < b.i + b.iLength && b.j <= j && j < b.j + b.jLength)
+            {
+                return b.data[(i - b.i) * b.jLength + j - b.j];
+            }
+        }
+        return 0;
+    }
 
-	{
-		for (int k = 0; k < m_MatrixBlocks.Count; k++) {
-			MatrixBlock b = m_MatrixBlocks [k];
-			if (b.i <= i && i < b.i + b.iLength && b.j <= j && j < b.j + b.jLength) {
-				return b.data[(i-b.i)*b.jLength+j-b.j];
-			}
-		}
-		return 0;
-	}
 
-
-    private void GenericMatrixTimesVector(float[] a_Source, float[] a_Destination, bool transpose)
+    private void GenericMatrixTimesVector(double[] a_Source, double[] a_Destination, bool transpose)
     {
         int blockCount = m_MatrixBlocks.Count;
         MatrixBlock curBlock;
@@ -120,7 +121,7 @@ public class BlockSparseMatrix : ImplicitMatrix
                     int cellindex = i * curBlock.jLength + j; // cell (i,j) in matrix
 
                     a_Destination[k1] += curBlock.data[cellindex] * a_Source[k2];
-                    if (float.IsNaN(a_Destination[k1]) || float.IsInfinity(a_Destination[k1]))
+                    if (double.IsNaN(a_Destination[k1]) || double.IsInfinity(a_Destination[k1]))
                     {
                         throw new System.Exception("NaN or Inf in BSM.");
                     }

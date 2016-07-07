@@ -3,7 +3,7 @@
 public class Eq11LHS : ImplicitMatrix
 {
     private BlockSparseMatrix m_J;
-    private float[] m_W;
+    private double[] m_W;
     // = global n (2*particles)
     private readonly int m_Size;
     // This is a symetric matrix: m=n (= global m)
@@ -16,16 +16,16 @@ public class Eq11LHS : ImplicitMatrix
 	 * JWJT = m*m
 	*/
 
-    public Eq11LHS(BlockSparseMatrix a_J, float[] a_W)
+    public Eq11LHS(BlockSparseMatrix a_J, double[] a_W)
     {
         m_J = a_J;
         m_W = a_W;
         m_Size = a_J.getM();
     }
 
-    protected override void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTimesVectorImpl(double[] a_Source, double[] a_Destination)
     {
-        float[] temp = new float[m_W.Length];
+        double[] temp = new double[m_W.Length];
         m_J.MatrixTransposeTimesVector(a_Source, temp); //temp = JTa
         int vectorSize = a_Destination.Length;
         for (int i = 0; i < vectorSize; ++i)
@@ -35,7 +35,7 @@ public class Eq11LHS : ImplicitMatrix
         m_J.MatrixTimesVector(temp, a_Destination); // a_Destination = JWJTa
     }
 
-    protected override void MatrixTransposeTimesVectorImpl(float[] a_Source, float[] a_Destination)
+    protected override void MatrixTransposeTimesVectorImpl(double[] a_Source, double[] a_Destination)
     {
         // JWJTranspose is a symmetric matrix.
         MatrixTimesVector(a_Source, a_Destination);
@@ -51,23 +51,24 @@ public class Eq11LHS : ImplicitMatrix
         return m_Size;
     }
 
-	public override float getValue(int i, int j)
-	{
-		float x = 0;
-		for (int k = 0; k < m_J.getN (); k++) {
-			float y = m_J.getValue (i, k);
-			float z = m_W[k] * m_J.getValue(j,k);
-			x += y * z;
-		}
-		return x;
-	}
+    public override double getValue(int i, int j)
+    {
+        double x = 0;
+        for (int k = 0; k < m_J.getN(); k++)
+        {
+            double y = m_J.getValue(i, k);
+            double z = m_W[k] * m_J.getValue(j, k);
+            x += y * z;
+        }
+        return x;
+    }
 
-	public override void printX()
-	{
-		Debug.Log ("J= ");
-		m_J.printX ();
-		Debug.Log ("JWJT = ");
-		base.printX ();
-	}
+    public override void printX()
+    {
+        Debug.Log("J= ");
+        m_J.printX();
+        Debug.Log("JWJT = ");
+        base.printX();
+    }
 
 }
