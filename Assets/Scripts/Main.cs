@@ -16,8 +16,8 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_AngleDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
-    private const float m_MouseSelectSpringConstant = 10f;
-    private const float m_MouseSelectDampingConstant = 1f;
+    private const float m_MouseSelectSpringConstant = 20f;
+    private const float m_MouseSelectDampingConstant = 2f;
     private bool m_HasMouseSelection = false;
     private MouseSpringForce m_CurrentMouseForce;
 
@@ -44,8 +44,8 @@ public sealed class Main : MonoBehaviour
     {
         const float constraintSpringConstant = 1000f;
         const float constraintDampingConstant = 100f;
-        const float solverEpsilon = 0.000001f;
-        const int solverSteps = 500;
+        const float solverEpsilon = float.Epsilon * 1000f;
+        const int solverSteps = 1000;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
         m_Scenario = new TestScenario();
