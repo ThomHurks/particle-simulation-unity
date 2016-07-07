@@ -122,7 +122,7 @@ public class AngularSpringForce : Force
             m_ForceM = new Vector2(0, 0);
             return;
         }
-        float dCdy = 1f / (Mathf.Sqrt(1 - y * y));
+        float dCdy = 1f / (Mathf.Sqrt(1.005f - y * y));
         float ydot = (r1r3mag * (r1dotr3d + r3dotr1d) - r1dotr3 * (r1dotr1d * r3mag / r1mag + r3dotr3d * r1mag / r3mag)) / r1r3magsq;
         float Cdot = dCdy * ydot;
         float C = Mathf.Acos(r1dotr3 / r1r3mag) - m_Angle;

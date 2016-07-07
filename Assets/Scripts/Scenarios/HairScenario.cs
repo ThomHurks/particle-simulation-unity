@@ -26,12 +26,13 @@ public class HairScenario : Scenario
         }
         ks = 2f;
         kd = 1f;
-        float angle = Mathf.PI / 2;
+        float angle = 3 * Mathf.PI / 4;
         for (int i = 1; i <= internalParticles; i++)
         {
             a_ParticleSystem.AddForce(new AngularSpringForce(a_ParticleSystem.Particles[i], a_ParticleSystem.Particles[i - 1], 
                     a_ParticleSystem.Particles[i + 1], angle, ks, kd));
         }
+        a_ParticleSystem.AddForce(new ViscousDragForce(1f));
     }
 }
 

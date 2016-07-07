@@ -38,27 +38,27 @@ public class TestScenario : Scenario
         p7.Position = new Vector2(0, -6f);
         a_ParticleSystem.AddParticle(p7);
         Constraint c3 = new RodConstraint(p6, p7, a_ParticleSystem);
-        /*
-		Particle p8 = new Particle (1);
-		p8.Position = new Vector2 (-3, -1);
-		a_ParticleSystem.AddParticle (p8);
-		Constraint c4 = new FixedPointConstraint (p8,a_ParticleSystem);
+
+        Particle p8 = new Particle(1);
+        p8.Position = new Vector2(-3, -1);
+        a_ParticleSystem.AddParticle(p8);
+        Constraint c4 = new FixedPointConstraint(p8, a_ParticleSystem);
 
 
-		Particle p9 = new Particle (1);
-		p9.Position = new Vector2 (-3, -2);
-		a_ParticleSystem.AddParticle (p9);
-		Constraint c5 = new HLineConstraint (p9,a_ParticleSystem);
+        Particle p9 = new Particle(1);
+        p9.Position = new Vector2(-3, -2);
+        a_ParticleSystem.AddParticle(p9);
+        Constraint c5 = new HLineConstraint(p9, a_ParticleSystem);
 
-		Particle p10 = new Particle (1);
-		p10.Position = new Vector2 (5, -2);
-		a_ParticleSystem.AddParticle (p10);
-		Constraint c6 = new VLineConstraint (p10,a_ParticleSystem);
+        Particle p10 = new Particle(1);
+        p10.Position = new Vector2(5, -2);
+        a_ParticleSystem.AddParticle(p10);
+        Constraint c6 = new VLineConstraint(p10, a_ParticleSystem);
 
 
-		Force dragForce = new ViscousDragForce(2f);
-		a_ParticleSystem.AddForce(dragForce);
-*/
+        Force dragForce = new ViscousDragForce(2f);
+        a_ParticleSystem.AddForce(dragForce);
+
 
 
 
