@@ -12,6 +12,8 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_SolverDropdown;
     private UnityEngine.UI.Dropdown m_ScenarioDropdown;
     private UnityEngine.UI.Dropdown m_CircleDropdown;
+    private UnityEngine.UI.Dropdown m_RodDropdown;
+    private UnityEngine.UI.Dropdown m_AngleDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 10f;
@@ -40,9 +42,9 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
-        const float constraintSpringConstant = 10f;
-        const float constraintDampingConstant = 1f;
-        const float solverEpsilon = 0.0001f;
+        const float constraintSpringConstant = 1000f;
+        const float constraintDampingConstant = 100f;
+        const float solverEpsilon = 0.000001f;
         const int solverSteps = 500;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
@@ -103,6 +105,18 @@ public sealed class Main : MonoBehaviour
         else
         {
             m_CircleDropdown.value = 1;
+        }
+
+        m_CircleDropdown.RefreshShownValue();
+
+        m_RodDropdown = GameObject.Find("RodDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (RodConstraint.OLD)
+        {
+            m_RodDropdown.value = 0;
+        }
+        else
+        {
+            m_RodDropdown.value = 1;
         }
 
         m_CircleDropdown.RefreshShownValue();
@@ -249,6 +263,21 @@ public sealed class Main : MonoBehaviour
             case 1:
                 CircularWireConstraint.OLD = false;
                 Debug.Log("Switched to Linear Circles");
+                break;
+        }
+    }
+
+    public void OnRodTypeChanged()
+    {
+        switch (m_CircleDropdown.value)
+        {
+            case 0:
+                CircularWireConstraint.OLD = true;
+                Debug.Log("Switched to Quadratic Rods");
+                break;
+            case 1:
+                CircularWireConstraint.OLD = false;
+                Debug.Log("Switched to Linear Rods");
                 break;
         }
     }

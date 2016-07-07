@@ -24,14 +24,18 @@ public class LinearSolver
         float[] t = new float[n];
         float[] temp = new float[n];
 
-		if (x.Length != b.Length) {
-			throw new System.Exception ("Sizes do not match");
-		} else if (x.Length != A.getN ()) {
-			throw new System.Exception ("Sizes do not match!");
-		}
-		else if (x.Length != n) {
-			throw new System.Exception ("Sizes do not match!");
-		}
+        if (x.Length != b.Length)
+        {
+            throw new System.Exception("Sizes do not match");
+        }
+        else if (x.Length != A.getN())
+        {
+            throw new System.Exception("Sizes do not match!");
+        }
+        else if (x.Length != n)
+        {
+            throw new System.Exception("Sizes do not match!");
+        }
 
         vecAssign(n, x, b);//x:=b
 
@@ -54,18 +58,21 @@ public class LinearSolver
 
         if (rSqrLen > epsilon)
         {
-			Debug.Log ("start");
-			A.printX ();
-			Debug.Log (toString (b));
+            //Debug.Log("start");
+            //A.printX ();
+            //Debug.Log (toString (b));
             while (i < iMax)
             {
 				
                 i++;
-				A.MatrixTimesVector(d, t);
+                A.MatrixTimesVector(d, t);
                 u = vecDot(n, d, t);
-				if (float.IsInfinity (u)) {
-					throw new System.Exception ("u = infinity");
-				}
+                if (float.IsInfinity(u))
+                {
+                    throw new System.Exception("u = infinity");
+                }
+                    
+
 
                 if (u == 0f)
                 {
@@ -80,10 +87,10 @@ public class LinearSolver
                 vecAssign(n, temp, d);//temp = d
                 vecTimesScalar(n, temp, alpha);//temp = alpha * temp = alpha* d
                 vecAddEqual(n, x, temp);
-				//Debug.Log (toString (temp));
-				//Debug.Log (u);
-				//Debug.Log (toString(d));
-				//Debug.Log (toString(t));
+                //Debug.Log (toString (temp));
+                //Debug.Log (u);
+                //Debug.Log (toString(d));
+                //Debug.Log (toString(t));
                 if ((i & 0x3F) == 0x3F)
                 {
                     vecAssign(n, temp, t);
@@ -163,14 +170,13 @@ public class LinearSolver
         return vecDot(n, v, v);
     }
 
-	private string toString(float[] a)
-		{
-		string s = "";
-		for(int i = 0; i < a.Length;i++
-		)
-			{
-			s = s + a[i] + ", ";		
-			}
-		return s;
-			}
+    private string toString(float[] a)
+    {
+        string s = "";
+        for (int i = 0; i < a.Length; i++)
+        {
+            s = s + a[i] + ", ";		
+        }
+        return s;
+    }
 }

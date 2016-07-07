@@ -24,21 +24,21 @@ public class TestScenario : Scenario
         a_ParticleSystem.AddForce(gravityForce);
 
 
-
-		Particle p5 = new Particle (1);
-		p5.Position = new Vector2 (2, 2);
-		a_ParticleSystem.AddParticle (p5);
-		Constraint c2 = new CircularWireConstraint (p5,p5.Position+Vector2.right,a_ParticleSystem);
-
 */
-		Particle p6 = new Particle (1);
-		p6.Position = new Vector2 (2, -3);
-		a_ParticleSystem.AddParticle (p6);
-		Particle p7 = new Particle (1);
-		p7.Position = new Vector2 (1, -3);
-		a_ParticleSystem.AddParticle (p7);
-		Constraint c3 = new RodConstraint (p6,p7,a_ParticleSystem);
-		/*
+        Particle p5 = new Particle(0.01f);
+        p5.Position = new Vector2(2, 2);
+        a_ParticleSystem.AddParticle(p5);
+        Constraint c2 = new CircularWireConstraint(p5, p5.Position + Vector2.right, a_ParticleSystem);
+
+
+        Particle p6 = new Particle(1);
+        p6.Position = new Vector2(0, -4);
+        a_ParticleSystem.AddParticle(p6);
+        Particle p7 = new Particle(1);
+        p7.Position = new Vector2(0, -6f);
+        a_ParticleSystem.AddParticle(p7);
+        Constraint c3 = new RodConstraint(p6, p7, a_ParticleSystem);
+        /*
 		Particle p8 = new Particle (1);
 		p8.Position = new Vector2 (-3, -1);
 		a_ParticleSystem.AddParticle (p8);

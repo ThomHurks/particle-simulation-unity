@@ -3,7 +3,7 @@
 public class RodConstraint : Constraint
 {
 
-	private static readonly bool OLD= true;
+    public static bool OLD = true;
 
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ_A;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ_B;
@@ -17,9 +17,9 @@ public class RodConstraint : Constraint
     public RodConstraint(Particle a_ParticleA, Particle a_ParticleB, ParticleSystem a_System)
     {
         int i = a_System.AddConstraint(this);
-		Debug.Log("Creating " + (OLD?"old":"new") + " rod constraint with index " + i);
-		m_Distance = (a_ParticleA.Position-a_ParticleB.Position).magnitude;
-		m_DistanceSquared = m_Distance * m_Distance;
+        Debug.Log("Creating " + (OLD ? "old" : "new") + " rod constraint with index " + i);
+        m_Distance = (a_ParticleA.Position - a_ParticleB.Position).magnitude;
+        m_DistanceSquared = m_Distance * m_Distance;
         m_ParticleA = a_ParticleA;
         m_ParticleB = a_ParticleB;
         int iLength = GetConstraintDimension();
@@ -34,28 +34,31 @@ public class RodConstraint : Constraint
         m_MatrixBlockJDot_B = a_System.MatrixJDot.CreateMatrixBlock(i, j_B, iLength, jLength);
     }
 
-	public void UpdateJacobians(ParticleSystem a_ParticleSystem)
-	{
-		if (OLD) {
-			UpdateJacobiansOld (a_ParticleSystem);
-		} else {
-			UpdateJacobiansNew (a_ParticleSystem);
-		}
-	}
+    public void UpdateJacobians(ParticleSystem a_ParticleSystem)
+    {
+        if (OLD)
+        {
+            UpdateJacobiansOld(a_ParticleSystem);
+        }
+        else
+        {
+            UpdateJacobiansNew(a_ParticleSystem);
+        }
+    }
 
-	public float[] GetValue(ParticleSystem a_ParticleSystem)
-	{
-		return OLD ? GetValueOld (a_ParticleSystem) : GetValueNew (a_ParticleSystem);
-	}
+    public float[] GetValue(ParticleSystem a_ParticleSystem)
+    {
+        return OLD ? GetValueOld(a_ParticleSystem) : GetValueNew(a_ParticleSystem);
+    }
 
-	public float[] GetDerivativeValue(ParticleSystem a_ParticleSystem)
-	{
-		return OLD ? GetDerivativeValueOld (a_ParticleSystem) : GetDerivativeValueNew (a_ParticleSystem);
-	}
+    public float[] GetDerivativeValue(ParticleSystem a_ParticleSystem)
+    {
+        return OLD ? GetDerivativeValueOld(a_ParticleSystem) : GetDerivativeValueNew(a_ParticleSystem);
+    }
 
     public void UpdateJacobiansNew(ParticleSystem a_ParticleSystem)
     {
-        Vector2 l    = m_ParticleA.Position - m_ParticleB.Position; 
+        Vector2 l = m_ParticleA.Position - m_ParticleB.Position; 
         Vector2 ldot = m_ParticleA.Velocity - m_ParticleB.Velocity;
         float lmag = l.magnitude;
         if (Mathf.Abs(lmag) < float.Epsilon)
@@ -83,9 +86,9 @@ public class RodConstraint : Constraint
     public float[] GetValueNew(ParticleSystem a_ParticleSystem)
     {
         Vector2 l = m_ParticleA.Position - m_ParticleB.Position;
-		float[] v = new float[GetConstraintDimension ()];
-		v [0] = l.magnitude - m_Distance;
-		return v;
+        float[] v = new float[GetConstraintDimension()];
+        v[0] = l.magnitude - m_Distance;
+        return v;
     }
 
     public float[] GetDerivativeValueNew(ParticleSystem a_ParticleSystem)
@@ -97,46 +100,46 @@ public class RodConstraint : Constraint
         {
             mag = float.Epsilon;
         }
-		float[] v = new float[GetConstraintDimension ()];
-		v [0] = Vector2.Dot(l, ldot) / mag;
-		return v;
+        float[] v = new float[GetConstraintDimension()];
+        v[0] = Vector2.Dot(l, ldot) / mag;
+        return v;
     }
 
 
 
 
     public void UpdateJacobiansOld(ParticleSystem a_ParticleSystem)
-	{
-		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
-		Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
+    {
+        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+        Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
 
-		m_MatrixBlockJ_A.data[0] = deltaPosition.x;
-		m_MatrixBlockJ_A.data[1] = deltaPosition.y;
-		m_MatrixBlockJDot_A.data[0] = deltaVelocity.x;
-		m_MatrixBlockJDot_A.data[1] = deltaVelocity.y;
+        m_MatrixBlockJ_A.data[0] = deltaPosition.x;
+        m_MatrixBlockJ_A.data[1] = deltaPosition.y;
+        m_MatrixBlockJDot_A.data[0] = deltaVelocity.x;
+        m_MatrixBlockJDot_A.data[1] = deltaVelocity.y;
 
-		m_MatrixBlockJ_B.data[0] = -deltaPosition.x;
-		m_MatrixBlockJ_B.data[1] = -deltaPosition.y;
-		m_MatrixBlockJDot_B.data[0] = -deltaVelocity.x;
-		m_MatrixBlockJDot_B.data[1] = -deltaVelocity.y;
-	}
+        m_MatrixBlockJ_B.data[0] = -deltaPosition.x;
+        m_MatrixBlockJ_B.data[1] = -deltaPosition.y;
+        m_MatrixBlockJDot_B.data[0] = -deltaVelocity.x;
+        m_MatrixBlockJDot_B.data[1] = -deltaVelocity.y;
+    }
 
-	public float[] GetValueOld(ParticleSystem a_ParticleSystem)
-	{
-		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
-		float[] v = new float[GetConstraintDimension ()];
-		v [0] = (deltaPosition.sqrMagnitude - m_DistanceSquared) / 2f;
-		return v;
-	}
+    public float[] GetValueOld(ParticleSystem a_ParticleSystem)
+    {
+        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+        float[] v = new float[GetConstraintDimension()];
+        v[0] = (deltaPosition.sqrMagnitude - m_DistanceSquared) / 2f;
+        return v;
+    }
 
-	public float[] GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
-	{
-		Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
-		Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
-		float[] v = new float[GetConstraintDimension ()];
-		v [0] = Vector2.Dot(deltaVelocity, deltaPosition);
-		return v;
-	}
+    public float[] GetDerivativeValueOld(ParticleSystem a_ParticleSystem)
+    {
+        Vector2 deltaPosition = m_ParticleA.Position - m_ParticleB.Position;
+        Vector2 deltaVelocity = m_ParticleA.Velocity - m_ParticleB.Velocity;
+        float[] v = new float[GetConstraintDimension()];
+        v[0] = Vector2.Dot(deltaVelocity, deltaPosition);
+        return v;
+    }
 
     public int GetConstraintDimension()
     {
