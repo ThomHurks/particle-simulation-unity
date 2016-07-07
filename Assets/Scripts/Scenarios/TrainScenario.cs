@@ -4,7 +4,7 @@ public class TrainScenario : Scenario
 {
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        const float particleMass = 10f;
+        const float particleMass = 1f;
 
         Particle p1 = new Particle(particleMass);
         p1.Position = new Vector2(-3, 0);

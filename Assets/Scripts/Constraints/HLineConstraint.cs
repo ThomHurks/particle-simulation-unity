@@ -5,7 +5,7 @@ public class HLineConstraint : Constraint
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
     private readonly Particle m_Particle;
-    private double m_Y;
+    private readonly double m_Y;
 
     public HLineConstraint(Particle a_Particle, ParticleSystem a_System)
     {
@@ -42,7 +42,7 @@ public class HLineConstraint : Constraint
     public double[] GetDerivativeValue(ParticleSystem a_ParticleSystem)
     {
         double[] v = new double[GetConstraintDimension()];
-        v[0] = m_Particle.Velocity.x;
+        v[0] = m_Particle.Velocity.y;
         return v;
     }
 

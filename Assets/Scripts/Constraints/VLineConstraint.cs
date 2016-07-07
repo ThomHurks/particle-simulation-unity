@@ -3,11 +3,10 @@
 
 public class VLineConstraint :Constraint
 {
-
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
     private readonly Particle m_Particle;
-    private double m_X;
+    private readonly double m_X;
 
     public VLineConstraint(Particle a_Particle, ParticleSystem a_System)
     {
