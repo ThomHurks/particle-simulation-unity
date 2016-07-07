@@ -29,8 +29,8 @@ public class ClothScenario : Scenario
                 a_ParticleSystem.AddParticle(p);
             }
         }
-        const float ks = 1f;
-        const float kd = 0.01f;
+        const float ks = 10f;
+        const float kd = 1f;
         float rest = dist / 1.05f;
         for (int i = 0; i < dim; i++)
         {
@@ -76,8 +76,9 @@ public class ClothScenario : Scenario
             }
         }
         a_ParticleSystem.AddForce(new GravityForce(Mathf.Pow(10, -2.5f)));
-		for (int i = 0; i <= dim; i++) {
-			new HLineConstraint (a_ParticleSystem.Particles[i*(dim+1)+dim],a_ParticleSystem);
-		}
+        for (int i = 0; i <= dim; i++)
+        {
+            new HLineConstraint(a_ParticleSystem.Particles[i * (dim + 1) + dim], a_ParticleSystem);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿public sealed class LinearSolver
+﻿using UnityEngine;
+
+public sealed class LinearSolver
 {
     private const int MAX_STEPS = 1000000000;
 
@@ -28,7 +30,7 @@
         }
         else if (x.Length != A.getN())
         {
-            throw new System.Exception("Sizes do not match!");
+            throw new System.Exception("Sizes do not match!" + x.Length + " " + A.getN());
         }
         else if (x.Length != n)
         {
@@ -56,9 +58,9 @@
 
         if (rSqrLen > epsilon)
         {
-            //Debug.Log("start");
-            //A.printX ();
-            //Debug.Log (toString (b));
+            Debug.Log("start - A = ");
+            A.printX();
+            Debug.Log("b = " + toString(b));
             while (i < iMax)
             {
 				
@@ -117,6 +119,7 @@
             }
         }
         stepsPerformed = i;
+        Debug.Log("Result: x =" + toString(x));
         return rSqrLen;
     }
 

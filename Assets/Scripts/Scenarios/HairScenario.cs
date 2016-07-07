@@ -4,7 +4,7 @@ public class HairScenario : Scenario
 {
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        const int internalParticles = 1; //amount of particles in hair is this + 2
+        const int internalParticles = 2; //amount of particles in hair is this + 2
         Vector2 start = new Vector2(-4f, 0f);
         Vector2 end = new Vector2(4f, 0f);
 

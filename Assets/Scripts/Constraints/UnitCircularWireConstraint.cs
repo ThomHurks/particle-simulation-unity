@@ -2,13 +2,20 @@
 
 public class UnitCircularWireConstraint : Constraint
 {
+
+
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJDot;
     private Particle m_Particle;
 
+
+
+
     public UnitCircularWireConstraint(Particle a_Particle, ParticleSystem a_System)
     {
         int i = a_System.AddConstraint(this);
+        Debug.Log("Creating unit circular wire constraint with index " + i);
+
         m_Particle = a_Particle;
         int j = a_System.GetParticleIndex(a_Particle) * a_System.GetParticleDimension();
         int iLength = GetConstraintDimension();

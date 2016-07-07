@@ -42,19 +42,20 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
-        const float constraintSpringConstant = 1000f;
-        const float constraintDampingConstant = 100f;
+        const float constraintSpringConstant = 100f;
+        const float constraintDampingConstant = 10f;
         const float solverEpsilon = float.Epsilon * 1000f;
         const int solverSteps = 1000;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-        m_Scenario = new TestScenario();
+        m_Scenario = new TrainScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
     }
 
     void Start()
     {
+        Test();
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         if (m_Solver is EulerSolver)
         {
@@ -133,6 +134,26 @@ public sealed class Main : MonoBehaviour
 
         m_CircleDropdown.RefreshShownValue();
     }
+
+    private void Test()
+    {
+        BlockSparseMatrix t = new BlockSparseMatrix();
+        BlockSparseMatrix.MatrixBlock block = t.CreateMatrixBlock(0, 0, 2, 2);
+        block.data[0] = 1.00000573252623;
+        block.data[1] = 0;
+        block.data[2] = 0;
+        block.data[3] = 1.00017166114287;
+        t.SetN(2);
+        double[] b = new double[2];
+        b[0] = -0.613226112857389;
+        b[1] = -1.71996067336795;
+        const float solverEpsilon = float.Epsilon * 1000f;
+        const int solverSteps = 1000;
+        double[] x = new double[2];
+        int steps = 0;
+        new LinearSolver().ConjGrad(2, t, x, b, solverEpsilon, solverSteps, out steps);
+    }
+
 
     void Update()
     {
