@@ -141,7 +141,7 @@ public class ParticleSystem
         ValidateVector(Q);
         float[] C = ConstraintsGetValues();
         ValidateVector(C);
-        int numConstraints = C.Length;
+        int numConstraints = C.Length; // = number of SCALAR! constraints, so fixedpoint contributes 2 to this!
         float[] CDot = ConstraintsGetDerivativeValues();
         ValidateVector(CDot);
         int n = GetParticleDimension() * m_Particles.Count;
@@ -161,10 +161,11 @@ public class ParticleSystem
         m_J.MatrixTimesVector(WQ, JWQ);
         ValidateVector(JWQ);
         // Compute the RHS of equation 11.
-        float[] RHS = new float[n];
+        float[] RHS = new float[numConstraints];
         for (int i = 0; i < numConstraints; ++i)
         {
             RHS[i] = -JDotqdot[i] - JWQ[i] - a_SpringConstant * C[i] - a_DampingConstant * CDot[i];
+			//Debug.Log("RHS["+i+"] = " + (-JDotqdot[i] ) + " + " + (-JWQ[i]) + " + " + (- a_SpringConstant) + "*" + C[i] + " + " + (- a_DampingConstant) + "*" + CDot[i] + " = " + RHS[i]);
             if (float.IsNaN(RHS[i]) || float.IsNaN(RHS[i]))
             {
                 throw new System.Exception("NaN or Inf in RHS of eq 11");

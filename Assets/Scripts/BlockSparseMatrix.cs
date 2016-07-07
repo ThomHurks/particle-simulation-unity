@@ -89,6 +89,19 @@ public class BlockSparseMatrix : ImplicitMatrix
         GenericMatrixTimesVector(a_Source, a_Destination, true);//Do a transpose multiplication
     }
 
+	public override float getValue(int i, int j)
+
+	{
+		for (int k = 0; k < m_MatrixBlocks.Count; k++) {
+			MatrixBlock b = m_MatrixBlocks [k];
+			if (b.i <= i && i < b.i + b.iLength && b.j <= j && j < b.j + b.jLength) {
+				return b.data[(i-b.i)*b.jLength+j-b.j];
+			}
+		}
+		return 0;
+	}
+
+
     private void GenericMatrixTimesVector(float[] a_Source, float[] a_Destination, bool transpose)
     {
         int blockCount = m_MatrixBlocks.Count;
@@ -117,39 +130,7 @@ public class BlockSparseMatrix : ImplicitMatrix
         }
     }
 
-    public void printX()
-    {
-        String[,] xs = new String[m_m, m_n];
-        for (int i = 0; i < m_m; i++)
-        {
-            for (int j = 0; j < m_n; j++)
-            {
-                xs[i, j] = "O";
-            }
-        }
-        for (int index = 0; index < m_MatrixBlocks.Count; index++)
-        {
-            MatrixBlock b = m_MatrixBlocks[index];
-            for (int i = b.i; i < b.i + b.iLength; i++)
-            {
-                for (int j = b.j; j < b.j + b.jLength; j++)
-                {
-                    xs[i, j] = "X";
-                }
-            }
-        }
-        String x = "";
-        for (int i = 0; i < m_m; i++)
-        {
-            String line = "";
-            for (int j = 0; j < m_n; j++)
-            {
-                line = line + xs[i, j];
-            }
-            x = x + line + "\n";
-        }
-        Debug.Log(x);
-    }
+
 
     public void Clear()
     {

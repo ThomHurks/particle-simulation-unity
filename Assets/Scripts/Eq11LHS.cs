@@ -1,4 +1,6 @@
-﻿public class Eq11LHS : ImplicitMatrix
+﻿using UnityEngine;
+
+public class Eq11LHS : ImplicitMatrix
 {
     private BlockSparseMatrix m_J;
     private float[] m_W;
@@ -48,5 +50,24 @@
     {
         return m_Size;
     }
+
+	public override float getValue(int i, int j)
+	{
+		float x = 0;
+		for (int k = 0; k < m_J.getN (); k++) {
+			float y = m_J.getValue (i, k);
+			float z = m_W[k] * m_J.getValue(j,k);
+			x += y * z;
+		}
+		return x;
+	}
+
+	public override void printX()
+	{
+		Debug.Log ("J= ");
+		m_J.printX ();
+		Debug.Log ("JWJT = ");
+		base.printX ();
+	}
 
 }

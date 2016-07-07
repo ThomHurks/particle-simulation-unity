@@ -1,4 +1,6 @@
-﻿public abstract class ImplicitMatrix
+﻿using UnityEngine;
+
+public abstract class ImplicitMatrix
 {
     // These functions must be implemented in the inheriting classes.
     protected abstract void MatrixTimesVectorImpl(float[] a_Source, float[] a_Destination);
@@ -8,6 +10,8 @@
     public abstract int getM();
 
     public abstract int getN();
+
+	public abstract float getValue (int i, int j);
 
     // Perform safety checks in abstract class.
     public void MatrixTimesVector(float[] a_Source, float[] a_Destination)
@@ -58,4 +62,28 @@
             }
         }
     }
+
+	public virtual void printX()
+	{
+		string[,] xs = new string[getM(), getN()];
+		for (int i = 0; i < getM(); i++)
+		{
+			for (int j = 0; j < getN(); j++)
+			{
+				xs [i, j] = "" + getValue (i, j).ToString() + ", ";
+			}
+		}
+
+		string x = "";
+		for (int i = 0; i < getM(); i++)
+		{
+			string line = "";
+			for (int j = 0; j < getN(); j++)
+			{
+				line = line + xs[i, j];
+			}
+			x = x + line + "\n";
+		}
+		Debug.Log(x);
+	}
 }

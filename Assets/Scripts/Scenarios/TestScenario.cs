@@ -4,7 +4,7 @@ public class TestScenario : Scenario
 {
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        Particle particle1 = new Particle(1000f);
+        /*Particle particle1 = new Particle(1000f);
         particle1.Position = new Vector2(-2f, 0f);
         a_ParticleSystem.AddParticle(particle1);
         Particle particle2 = new Particle(1f);
@@ -30,7 +30,7 @@ public class TestScenario : Scenario
 		a_ParticleSystem.AddParticle (p5);
 		Constraint c2 = new CircularWireConstraint (p5,p5.Position+Vector2.right,a_ParticleSystem);
 
-
+*/
 		Particle p6 = new Particle (1);
 		p6.Position = new Vector2 (2, -3);
 		a_ParticleSystem.AddParticle (p6);
@@ -38,7 +38,7 @@ public class TestScenario : Scenario
 		p7.Position = new Vector2 (1, -3);
 		a_ParticleSystem.AddParticle (p7);
 		Constraint c3 = new RodConstraint (p6,p7,a_ParticleSystem);
-
+		/*
 		Particle p8 = new Particle (1);
 		p8.Position = new Vector2 (-3, -1);
 		a_ParticleSystem.AddParticle (p8);
@@ -58,7 +58,7 @@ public class TestScenario : Scenario
 
 		Force dragForce = new ViscousDragForce(2f);
 		a_ParticleSystem.AddForce(dragForce);
-
+*/
 
 
 

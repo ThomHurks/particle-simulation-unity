@@ -41,9 +41,9 @@ public sealed class Main : MonoBehaviour
     void Awake()
     {
         const float constraintSpringConstant = 10f;
-        const float constraintDampingConstant = 0f;
-        const float solverEpsilon = 0.1f;
-        const int solverSteps = 50;
+        const float constraintDampingConstant = 1f;
+        const float solverEpsilon = 0.0001f;
+        const int solverSteps = 500;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
         m_Scenario = new TestScenario();
