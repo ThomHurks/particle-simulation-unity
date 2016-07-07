@@ -1457,6 +1457,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Runge Kutta 4th
       m_Image: {fileID: 0}
+    - m_Text: Verlet
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2027,6 +2029,10 @@ MonoBehaviour:
     - m_Text: Hair
       m_Image: {fileID: 0}
     - m_Text: Cloth
+      m_Image: {fileID: 0}
+    - m_Text: Circles & Springs
+      m_Image: {fileID: 0}
+    - m_Text: Train
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

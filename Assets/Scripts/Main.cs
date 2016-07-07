@@ -9,9 +9,9 @@ public sealed class Main : MonoBehaviour
     private Scenario m_Scenario;
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
-	private UnityEngine.UI.Dropdown m_SolverDropdown;
-	private UnityEngine.UI.Dropdown m_ScenarioDropdown;
-	private UnityEngine.UI.Dropdown m_CircleDropdown;
+    private UnityEngine.UI.Dropdown m_SolverDropdown;
+    private UnityEngine.UI.Dropdown m_ScenarioDropdown;
+    private UnityEngine.UI.Dropdown m_CircleDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 10f;
@@ -62,36 +62,50 @@ public sealed class Main : MonoBehaviour
         {
             m_SolverDropdown.value = 1;
         }
-		else if (m_Solver is RungeKutta4Solver)
-		{
-			m_SolverDropdown.value = 2;
-		}else if (m_Solver is VerletSolver)
-		{
-			m_SolverDropdown.value = 3;
-		}
+        else if (m_Solver is RungeKutta4Solver)
+        {
+            m_SolverDropdown.value = 2;
+        }
+        else if (m_Solver is VerletSolver)
+        {
+            m_SolverDropdown.value = 3;
+        }
         m_SolverDropdown.RefreshShownValue();
 
         m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-		if (m_Scenario is TestScenario) {
-			m_ScenarioDropdown.value = 0;
-		} else if (m_Scenario is HairScenario) {
-			m_ScenarioDropdown.value = 1;
-		} else if (m_Scenario is ClothScenario) {
-			m_ScenarioDropdown.value = 2;
-		} else if (m_Scenario is CirclesAndSpringsScenario) {
-			m_ScenarioDropdown.value = 3;
-		}
+        if (m_Scenario is TestScenario)
+        {
+            m_ScenarioDropdown.value = 0;
+        }
+        else if (m_Scenario is HairScenario)
+        {
+            m_ScenarioDropdown.value = 1;
+        }
+        else if (m_Scenario is ClothScenario)
+        {
+            m_ScenarioDropdown.value = 2;
+        }
+        else if (m_Scenario is CirclesAndSpringsScenario)
+        {
+            m_ScenarioDropdown.value = 3;
+        }
+        else if (m_Scenario is TrainScenario)
+        {
+            m_ScenarioDropdown.value = 4;
+        }
         m_ScenarioDropdown.RefreshShownValue();
 
-		m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-		if(CircularWireConstraint.OLD)
-		{
-			m_CircleDropdown.value = 0;
-		}else{
-			m_CircleDropdown.value = 1;
-		}
+        m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (CircularWireConstraint.OLD)
+        {
+            m_CircleDropdown.value = 0;
+        }
+        else
+        {
+            m_CircleDropdown.value = 1;
+        }
 
-		m_CircleDropdown.RefreshShownValue();
+        m_CircleDropdown.RefreshShownValue();
     }
 
     void Update()
@@ -105,10 +119,10 @@ public sealed class Main : MonoBehaviour
         {
             m_Solver.Step(m_ParticleSystem, Time.fixedDeltaTime);
         }
-		catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogError("We encountered an error, so we will reset the scenario.");
-			Debug.LogError (e.Message +"\n" + e.StackTrace);
+            Debug.LogError(e.Message + "\n" + e.StackTrace);
             Reset();
         }
     }
@@ -189,10 +203,10 @@ public sealed class Main : MonoBehaviour
                 m_Solver = new RungeKutta4Solver();
                 Debug.Log("Switched to Runge Kutta 4th");
                 break;
-			case 3:
-				m_Solver = new VerletSolver ();
-				Debug.Log ("Switched to Verlet");
-				break;
+            case 3:
+                m_Solver = new VerletSolver();
+                Debug.Log("Switched to Verlet");
+                break;
         }
     }
 
@@ -212,28 +226,32 @@ public sealed class Main : MonoBehaviour
                 m_Scenario = new ClothScenario(true);
                 Debug.Log("Switched to cloth scenario");
                 break;
-			case 3:
-				m_Scenario = new CirclesAndSpringsScenario();
-				Debug.Log("Switched to circles&springs scenario");
-				break;
+            case 3:
+                m_Scenario = new CirclesAndSpringsScenario();
+                Debug.Log("Switched to circles & springs scenario");
+                break;
+            case 4:
+                m_Scenario = new TrainScenario();
+                Debug.Log("Switched to train scenario");
+                break;
         }
         Reset();
     }
 
-	public void OnCircleTypeChanged()
-	{
-		switch (m_CircleDropdown.value)
-		{
-		case 0:
-			CircularWireConstraint.OLD = true;
-			Debug.Log("Switched to Quadratic Circles");
-			break;
-		case 1:
-			CircularWireConstraint.OLD = false;
-			Debug.Log("Switched to Linear Circles");
-			break;
-		}
-	}
+    public void OnCircleTypeChanged()
+    {
+        switch (m_CircleDropdown.value)
+        {
+            case 0:
+                CircularWireConstraint.OLD = true;
+                Debug.Log("Switched to Quadratic Circles");
+                break;
+            case 1:
+                CircularWireConstraint.OLD = false;
+                Debug.Log("Switched to Linear Circles");
+                break;
+        }
+    }
 
     private void SetupDebugGameObjects()
     {
