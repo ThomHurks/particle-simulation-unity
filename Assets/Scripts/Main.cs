@@ -188,7 +188,7 @@ public sealed class Main : MonoBehaviour
         UpdateDebugGameObjects();
     }
 
-    private void Reset()
+    public void Reset()
     {
         m_HasMouseSelection = false;
         m_CurrentMouseForce = null;
