@@ -28,7 +28,7 @@ public class TrainScenario : Scenario
         HooksLawSpring s2 = new HooksLawSpring(p2, p4, 0.5f, 100f, 10f);
         a_ParticleSystem.AddForce(s2);
 
-        new RodConstraint(p3, p4, a_ParticleSystem);
+        //new RodConstraint(p3, p4, a_ParticleSystem);
 
         Particle p5 = new Particle(particleMass);
         p5.Position = new Vector2(1, 0);
