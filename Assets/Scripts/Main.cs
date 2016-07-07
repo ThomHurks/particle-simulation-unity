@@ -120,6 +120,18 @@ public sealed class Main : MonoBehaviour
         }
 
         m_CircleDropdown.RefreshShownValue();
+
+        m_AngleDropdown = GameObject.Find("AngleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (AngularSpringForce.INIT_AD_HOC)
+        {
+            m_AngleDropdown.value = 0;
+        }
+        else
+        {
+            m_AngleDropdown.value = 1;
+        }
+
+        m_CircleDropdown.RefreshShownValue();
     }
 
     void Update()
@@ -280,6 +292,22 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to Linear Rods");
                 break;
         }
+    }
+
+    public void OnAngleTypeChanged()
+    {
+        switch (m_AngleDropdown.value)
+        {
+            case 0:
+                AngularSpringForce.INIT_AD_HOC = true;
+                Debug.Log("Switched to ad hoc angle springs: New scenarios will initialize with ad hoc angular springs");
+                break;
+            case 1:
+                AngularSpringForce.INIT_AD_HOC = false;
+                Debug.Log("Switched to analitic angle springs: New scenarios will initialize with analitical angular springs");
+                break;
+        }
+        Reset();
     }
 
     private void SetupDebugGameObjects()
