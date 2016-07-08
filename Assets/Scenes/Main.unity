@@ -2476,7 +2476,7 @@ GameObject:
   - 114: {fileID: 884114570}
   - 114: {fileID: 884114569}
   m_Layer: 5
-  m_Name: SolverDropdown
+  m_Name: IntegratorDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2559,7 +2559,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 946976744}
-        m_MethodName: OnSolverTypeChanged
+        m_MethodName: OnIntegratorTypeChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

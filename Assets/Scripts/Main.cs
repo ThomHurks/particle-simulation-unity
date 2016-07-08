@@ -5,11 +5,11 @@ using System;
 public sealed class Main : MonoBehaviour
 {
     private ParticleSystem m_ParticleSystem;
-    private Integrator m_Solver;
+    private Integrator m_Integrator;
     private Scenario m_Scenario;
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
-    private UnityEngine.UI.Dropdown m_SolverDropdown;
+    private UnityEngine.UI.Dropdown m_IntegratorDropdown;
     private UnityEngine.UI.Dropdown m_ScenarioDropdown;
     private UnityEngine.UI.Dropdown m_CircleDropdown;
     private UnityEngine.UI.Dropdown m_RodDropdown;
@@ -47,8 +47,8 @@ public sealed class Main : MonoBehaviour
         double solverEpsilon = Math.Pow(10, -2);// Having this too small causes issues, since the solver works by squaring.
 
         const int solverSteps = 10;
-        m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Solver = new RungeKutta4Integrator();
+        m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
+        m_Integrator = new RungeKutta4Integrator();
         m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
@@ -57,24 +57,24 @@ public sealed class Main : MonoBehaviour
     void Start()
     {
         Test();
-        m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-        if (m_Solver is EulerIntegrator)
+        m_IntegratorDropdown = GameObject.Find("IntegratorDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        if (m_Integrator is EulerIntegrator)
         {
-            m_SolverDropdown.value = 0;
+            m_IntegratorDropdown.value = 0;
         }
-        else if (m_Solver is MidpointIntegrator)
+        else if (m_Integrator is MidpointIntegrator)
         {
-            m_SolverDropdown.value = 1;
+            m_IntegratorDropdown.value = 1;
         }
-        else if (m_Solver is RungeKutta4Integrator)
+        else if (m_Integrator is RungeKutta4Integrator)
         {
-            m_SolverDropdown.value = 2;
+            m_IntegratorDropdown.value = 2;
         }
-        else if (m_Solver is VerletIntegrator)
+        else if (m_Integrator is VerletIntegrator)
         {
-            m_SolverDropdown.value = 3;
+            m_IntegratorDropdown.value = 3;
         }
-        m_SolverDropdown.RefreshShownValue();
+        m_IntegratorDropdown.RefreshShownValue();
 
         m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         if (m_Scenario is TestScenario)
@@ -169,7 +169,7 @@ public sealed class Main : MonoBehaviour
     {
         try
         {
-            m_Solver.Step(m_ParticleSystem, Time.fixedDeltaTime);
+            m_Integrator.Step(m_ParticleSystem, Time.fixedDeltaTime);
         }
         catch (Exception e)
         {
@@ -239,24 +239,24 @@ public sealed class Main : MonoBehaviour
         }
     }
 
-    public void OnSolverTypeChanged()
+    public void OnIntegratorTypeChanged()
     {
-        switch (m_SolverDropdown.value)
+        switch (m_IntegratorDropdown.value)
         {
             case 0:
-                m_Solver = new EulerIntegrator();
+                m_Integrator = new EulerIntegrator();
                 Debug.Log("Switched to Euler");
                 break;
             case 1:
-                m_Solver = new MidpointIntegrator();
+                m_Integrator = new MidpointIntegrator();
                 Debug.Log("Switched to Midpoint");
                 break;
             case 2:
-                m_Solver = new RungeKutta4Integrator();
+                m_Integrator = new RungeKutta4Integrator();
                 Debug.Log("Switched to Runge Kutta 4th");
                 break;
             case 3:
-                m_Solver = new VerletIntegrator();
+                m_Integrator = new VerletIntegrator();
                 Debug.Log("Switched to Verlet");
                 break;
         }

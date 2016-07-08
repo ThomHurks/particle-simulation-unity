@@ -12,6 +12,7 @@ public class ParticleSystem
     private float m_Time;
     private float m_ConstraintSpringConstant;
     private float m_ConstraintDampingConstant;
+    private LinearSolver m_Solver;
     private double m_SolverEpsilon;
     private int m_SolverSteps;
 
@@ -24,6 +25,14 @@ public class ParticleSystem
     {
         get { return m_Time; }
         set { m_Time = value; }
+    }
+
+    public void SetSolver(LinearSolver a_Solver)
+    {
+        if (a_Solver != null)
+        {
+            m_Solver = a_Solver;
+        }
     }
 
     public List<Particle> Particles
@@ -41,8 +50,13 @@ public class ParticleSystem
         get { return m_JDot; }
     }
 
-    public ParticleSystem(double a_SolverEpsilon, int a_SolverSteps, float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
+    public ParticleSystem(LinearSolver a_Solver, double a_SolverEpsilon, int a_SolverSteps, float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
     {
+        m_Solver = a_Solver;
+        if (m_Solver == null)
+        {
+            throw new Exception("Please provide a valid solver.");
+        }
         m_Particles = new List<Particle>();
         m_Forces = new List<Force>();
         m_Constraints = new List<Constraint>();
@@ -174,10 +188,9 @@ public class ParticleSystem
         }
         // Set up implicit matrix of LHS and solve.
         Eq11LHS LHS = new Eq11LHS(m_J, W);// J W JT = m*m if all goes well
-        LinearSolver solver = new JacobiSolver();
         double[] lambda = new double[numConstraints];
         int stepsPerformed = 0;
-        solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
+        m_Solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
         ValidateVector(lambda);
         //Debug.Log("Nr of iterations in conjgrad solver: " + stepsPerformed);
         double[] QHat = new double[n];
