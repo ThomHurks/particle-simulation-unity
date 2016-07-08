@@ -2,6 +2,7 @@
 
 public sealed class ConjGradSolver2 : LinearSolver
 {
+    private const bool logging = false;
     //****************************************************************************80
 
     private int iter;
@@ -266,8 +267,11 @@ public sealed class ConjGradSolver2 : LinearSolver
                     if (rSqrLen <= epsilon || iterations >= steps)
                     {
                         stepsPerformed = iterations;
-                        Debug.Log(VectorToString(x));
-                        Debug.Log(VectorToString(b));
+                        if (logging)
+                        {
+                            Debug.Log(VectorToString(x));
+                            Debug.Log(VectorToString(b));
+                        }
                         return rSqrLen;
                     }
                     break;

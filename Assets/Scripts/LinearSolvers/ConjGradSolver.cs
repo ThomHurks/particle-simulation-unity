@@ -3,7 +3,7 @@
 public sealed class ConjGradSolver : LinearSolver
 {
     private const int MAX_STEPS = 10000;
-    private const bool log = false;
+    private const bool logging = false;
 
     // Solve Ax = b for a symmetric, positive definite matrix A
     // A is represented implicitly by the function "matVecMult"
@@ -59,7 +59,7 @@ public sealed class ConjGradSolver : LinearSolver
 
         if (rSqrLen > epsilon)
         {
-            if (log)
+            if (logging)
             {
                 Debug.Log("start - eps = " + epsilon + ", iter = " + steps + " A = ");
                 A.printX();
@@ -126,7 +126,7 @@ public sealed class ConjGradSolver : LinearSolver
                 vecTimesScalar(n, d, beta);
                 vecAddEqual(n, d, r);
             }
-            if (log)
+            if (logging)
             {
                 Debug.Log("Residual sq: " + rSqrLen);
                 Debug.Log("Result: x =" + VectorToString(x) + " steps: " + i);
