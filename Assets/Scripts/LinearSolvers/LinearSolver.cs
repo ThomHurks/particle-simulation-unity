@@ -21,16 +21,20 @@
 
     protected static string VectorToString(double[] a)
     {
-        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder((a.Length * 2) - 1);
-        int length = a.Length - 1;
-        const string sep = ", ";
-        for (int i = 0; i < length; i++)
+        if (a != null && a.Length > 0)
         {
-            stringBuilder.Append(a[i]);
-            stringBuilder.Append(sep);  
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder((a.Length * 2) - 1);
+            int length = a.Length - 1;
+            const string sep = ", ";
+            for (int i = 0; i < length; i++)
+            {
+                stringBuilder.Append(a[i]);
+                stringBuilder.Append(sep);  
+            }
+            stringBuilder.Append(a[length]);
+            return stringBuilder.ToString();
         }
-        stringBuilder.Append(a[length]);
-        return stringBuilder.ToString();
+        return string.Empty;
     }
 }
 

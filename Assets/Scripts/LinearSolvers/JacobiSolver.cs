@@ -1,6 +1,4 @@
-﻿using System;
-
-public class JacobiSolver : LinearSolver
+﻿public class JacobiSolver : LinearSolver
 {
     public override double Solve(ImplicitMatrix A, double[] x, double[] b,
                                  double epsilon,    // how low should we go?

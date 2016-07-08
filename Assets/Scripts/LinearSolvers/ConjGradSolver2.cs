@@ -226,6 +226,12 @@ public sealed class ConjGradSolver2 : LinearSolver
         double[] q = new double[n];
         double[] temp = new double[n];
 
+        // Inital guess solution for x.
+        for (int i = 0; i < n; ++i)
+        {
+            x[i] = 1;
+        }
+
         int job_next = cg_rc(n, b, x, r, z, p, q, 1);
         int iterations = 1;
         while (true)

@@ -14,6 +14,7 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_CircleDropdown;
     private UnityEngine.UI.Dropdown m_RodDropdown;
     private UnityEngine.UI.Dropdown m_AngleDropdown;
+    private UnityEngine.UI.Dropdown m_SolverDropdown;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 20f;
@@ -138,6 +139,9 @@ public sealed class Main : MonoBehaviour
         }
 
         m_CircleDropdown.RefreshShownValue();
+
+        m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
+        m_SolverDropdown.value = 1; // ConjGrad2 is default.
     }
 
     private void Test()
@@ -156,7 +160,7 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100000;
         double[] x = new double[2];
         int steps = 0;
-        new ConjGradSolver().Solve(A, x, b, solverEpsilon, solverSteps, out steps);
+        new ConjGradSolver2().Solve(A, x, b, solverEpsilon, solverSteps, out steps);
     }
 
 
@@ -258,6 +262,25 @@ public sealed class Main : MonoBehaviour
             case 3:
                 m_Integrator = new VerletIntegrator();
                 Debug.Log("Switched to Verlet");
+                break;
+        }
+    }
+
+    public void OnSolverTypeChanged()
+    {
+        switch (m_SolverDropdown.value)
+        {
+            case 0:
+                m_ParticleSystem.SetSolver(new ConjGradSolver());
+                Debug.Log("Switched to original conjugate gradient solver");
+                break;
+            case 1:
+                m_ParticleSystem.SetSolver(new ConjGradSolver2());
+                Debug.Log("Switched to conjugate gradient solver 2");
+                break;
+            case 2:
+                m_ParticleSystem.SetSolver(new JacobiSolver());
+                Debug.Log("Switched to Jacobi solver");
                 break;
         }
     }
