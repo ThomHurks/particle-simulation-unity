@@ -50,7 +50,7 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 10;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new RungeKutta4Integrator();
-        m_Scenario = new PendulumScenario();
+        m_Scenario = new DualCircleScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
     }
@@ -101,6 +101,10 @@ public sealed class Main : MonoBehaviour
         else if (m_Scenario is PendulumScenario)
         {
             m_ScenarioDropdown.value = 5;
+        }
+        else if (m_Scenario is DualCircleScenario)
+        {
+            m_ScenarioDropdown.value = 6;
         }
         m_ScenarioDropdown.RefreshShownValue();
 
@@ -312,6 +316,10 @@ public sealed class Main : MonoBehaviour
             case 5:
                 m_Scenario = new PendulumScenario();
                 Debug.Log("Switched to pendulum scenario");
+                break;
+            case 6:
+                m_Scenario = new DualCircleScenario();
+                Debug.Log("Switched to dual circle scenario");
                 break;
         }
         Reset();
