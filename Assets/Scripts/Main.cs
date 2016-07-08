@@ -46,7 +46,7 @@ public sealed class Main : MonoBehaviour
         const float constraintDampingConstant = 10f;
         double solverEpsilon = Math.Pow(10, -2);// Having this too small causes issues, since the solver works by squaring.
 
-        const int solverSteps = 100;
+        const int solverSteps = 10;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Integrator();
         m_Scenario = new PendulumScenario();

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class ImplicitMatrix
+public abstract class ImplicitMatrix:Matrix
 {
     private System.Text.StringBuilder m_DebugStringBuilder;
 
@@ -14,6 +14,19 @@ public abstract class ImplicitMatrix
     public abstract int getN();
 
     public abstract double getValue(int i, int j);
+
+    public ExplicitMatrix toExplicitMatrix()
+    {
+        ExplicitMatrix B = new ExplicitMatrix(getM(), getN());
+        for (int i = 0; i < getM(); i++)
+        {
+            for (int j = 0; j < getN(); j++)
+            {
+                B.setValue(i, j, getValue(i, j));
+            }
+        }
+        return B;
+    }
 
     // Perform safety checks in abstract class.
     public void MatrixTimesVector(double[] a_Source, double[] a_Destination)

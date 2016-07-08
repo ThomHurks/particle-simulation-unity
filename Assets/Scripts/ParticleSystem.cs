@@ -174,7 +174,7 @@ public class ParticleSystem
         }
         // Set up implicit matrix of LHS and solve.
         Eq11LHS LHS = new Eq11LHS(m_J, W);// J W JT = m*m if all goes well
-        LinearSolver solver = new ConjGradSolver();
+        LinearSolver solver = new JacobiSolver();
         double[] lambda = new double[numConstraints];
         int stepsPerformed = 0;
         solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
