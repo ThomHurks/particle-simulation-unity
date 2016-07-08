@@ -145,7 +145,7 @@ public sealed class Main : MonoBehaviour
         m_CircleDropdown.RefreshShownValue();
 
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-        m_SolverDropdown.value = 1; // ConjGrad2 is default.
+        m_SolverDropdown.value = 2; // Jacobi is default.
     }
 
     private void Test()
