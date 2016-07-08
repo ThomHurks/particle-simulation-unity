@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public sealed class LinearSolver
+public sealed class ConjGradSolver : LinearSolver
 {
     private const int MAX_STEPS = 10000;
-    private const bool log = true;
+    private const bool log = false;
 
     // Solve Ax = b for a symmetric, positive definite matrix A
     // A is represented implicitly by the function "matVecMult"
@@ -12,11 +12,11 @@ public sealed class LinearSolver
     // "epsilon" is the error tolerance
     // "steps", as passed, is the maximum number of steps, or 0 (implying MAX_STEPS)
     // Upon completion, "steps" contains the number of iterations taken
-    public double ConjGrad(int n, ImplicitMatrix A, double[] x, double[] b,
-                           double epsilon,    // how low should we go?
-                           int steps, out int stepsPerformed)
+    public double Solve(ImplicitMatrix A, double[] x, double[] b,
+                        double epsilon,    // how low should we go?
+                        int steps, out int stepsPerformed)
     {
-		
+        int n = A.getN();
         int i, iMax;
         double alpha, beta, rSqrLen, rSqrLenOld, u;
 
@@ -95,12 +95,13 @@ public sealed class LinearSolver
                 //Debug.Log (u);
                 //Debug.Log (toString(d));
                 //Debug.Log (toString(t));
-                if (i % 64 != 0)
+                // if (i % 64 != 0)
                 {
                     vecAssign(n, temp, t);
                     vecTimesScalar(n, temp, alpha);
                     vecDiffEqual(n, r, temp);
                 }
+                /*
                 else
                 {
                     
@@ -109,13 +110,14 @@ public sealed class LinearSolver
                     A.MatrixTimesVector(x, temp);
                     vecDiffEqual(n, r, temp);
                 }
-
+                */
                 rSqrLenOld = rSqrLen;
                 rSqrLen = vecSqrLen(n, r);
 
                 // Converged! Let's get out of here
                 if (rSqrLen <= epsilon)
                 {
+                    
                     break;
                 }
 
@@ -126,7 +128,7 @@ public sealed class LinearSolver
             }
             if (log)
             {
-
+                Debug.Log("Residual sq: " + rSqrLen);
                 Debug.Log("Result: x =" + toString(x) + " steps: " + i);
             }
         }

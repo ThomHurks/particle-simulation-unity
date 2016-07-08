@@ -1,4 +1,4 @@
-﻿public class VerletSolver : Solver
+﻿public class VerletIntegrator : Integrator
 {
 
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)

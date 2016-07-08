@@ -1,4 +1,4 @@
-﻿public abstract class Solver
+﻿public abstract class Integrator
 {
     public abstract void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime);
 

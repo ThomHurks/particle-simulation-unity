@@ -1,4 +1,4 @@
-﻿public class MidpointSolver : Solver
+﻿public class MidpointIntegrator : Integrator
 {
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {

@@ -1,4 +1,4 @@
-﻿public class RungeKutta4Solver : Solver
+﻿public class RungeKutta4Integrator : Integrator
 {
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {

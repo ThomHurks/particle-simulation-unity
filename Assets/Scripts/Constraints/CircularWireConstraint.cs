@@ -28,7 +28,6 @@ public class CircularWireConstraint : Constraint
 
     public void UpdateJacobians(ParticleSystem a_ParticleSystem)
     {
-        //Debug.Log (OLD);
         if (OLD)
         {
             UpdateJacobiansOld(a_ParticleSystem);

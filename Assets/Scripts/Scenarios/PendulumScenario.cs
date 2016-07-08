@@ -7,11 +7,11 @@ public class PendulumScenario : Scenario
 
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 3; i++)
         {
             createPendulum(a_ParticleSystem, (i - 1) * 2, .5f, i + 2);
         }
-        Force f = new GravityForce(.1f);
+        Force f = new GravityForce(1f);
         a_ParticleSystem.AddForce(f);
         f = new ViscousDragForce(.05f);
         a_ParticleSystem.AddForce(f);
