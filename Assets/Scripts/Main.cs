@@ -44,12 +44,12 @@ public sealed class Main : MonoBehaviour
     {
         const float constraintSpringConstant = 100f;
         const float constraintDampingConstant = 10f;
-        const double solverEpsilon = double.Epsilon * 1000f;
+        double solverEpsilon = Math.Pow(10, -7);// Having this too small causes issues, since the solver works by squaring.
 
         const int solverSteps = 1000;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Solver = new RungeKutta4Solver();
-        m_Scenario = new TrainScenario();
+        m_Scenario = new TestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
     }

@@ -188,7 +188,7 @@ public class ParticleSystem
         }
         for (int i = 0; i < m_Particles.Count; ++i)
         {
-            Debug.Log(QHat[i * 2] + " // " + QHat[(i * 2) + 1]);
+            //Debug.Log(QHat[i * 2] + " // " + QHat[(i * 2) + 1]);
             m_Particles[i].ForceAccumulator += new Vector2((float)QHat[i * 2], (float)QHat[(i * 2) + 1]);
             Vector2 newForce = m_Particles[i].ForceAccumulator;
             if (double.IsNaN(newForce.x) || double.IsNaN(newForce.y) || double.IsInfinity(newForce.x) || double.IsInfinity(newForce.y))
