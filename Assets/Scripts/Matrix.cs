@@ -6,5 +6,5 @@ public interface Matrix
 
     int getM();
 
-    float getValue();
+    double getValue(int i, int j);
 }

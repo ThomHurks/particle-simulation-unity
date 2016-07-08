@@ -6,6 +6,7 @@ public class JacobiSolver : LinearSolver
                         double epsilon,    // how low should we go?
                         int steps, out int stepsPerformed)
     {
+        ExplicitMatrix B = A.toExplicitMatrix();
         int n = A.getN();
         int steps2 = 0;
         double[] xnext = new double[n];
@@ -19,11 +20,11 @@ public class JacobiSolver : LinearSolver
                 {
                     if (j != i)
                     {
-                        sigma = sigma + A.getValue(i, j) * x[j];
+                        sigma = sigma + B.getValue(i, j) * x[j];
                     }
                 }
 
-                xnext[i] = (b[i] - sigma) / A.getValue(i, i);
+                xnext[i] = (b[i] - sigma) / B.getValue(i, i);
             }
             double d = 0;
             A.MatrixTimesVector(xnext, r);
