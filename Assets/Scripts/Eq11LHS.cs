@@ -2,7 +2,7 @@
 
 public class Eq11LHS : ImplicitMatrix
 {
-    private BlockSparseMatrix m_J;
+    private readonly BlockSparseMatrix m_J;
     private double[] m_W;
     // = global n (2*particles)
     private readonly int m_Size;

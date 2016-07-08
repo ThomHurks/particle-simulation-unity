@@ -1,13 +1,7 @@
-﻿using System;
-
-
-public class ExplicitMatrix:Matrix
+﻿public class ExplicitMatrix : Matrix
 {
-
-
-    private double[,] m_Values;
+    private readonly double[,] m_Values;
     private readonly int m_M, m_N;
-
 
     public ExplicitMatrix(int m, int n)
     {
@@ -36,5 +30,3 @@ public class ExplicitMatrix:Matrix
         return m_Values[i, j];
     }
 }
-
-

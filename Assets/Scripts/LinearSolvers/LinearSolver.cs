@@ -36,6 +36,14 @@
         }
         return string.Empty;
     }
+
+    protected static void ClearVectorWithValue(double[] a, double v)
+    {
+        for (int i = 0; i < a.Length; ++i)
+        {
+            a[i] = v;
+        }
+    }
 }
 
 

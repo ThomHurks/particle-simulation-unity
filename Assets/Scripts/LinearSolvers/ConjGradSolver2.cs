@@ -227,10 +227,7 @@ public sealed class ConjGradSolver2 : LinearSolver
         double[] temp = new double[n];
 
         // Inital guess solution for x.
-        for (int i = 0; i < n; ++i)
-        {
-            x[i] = 1;
-        }
+        ClearVectorWithValue(x, 1);
 
         int job_next = cg_rc(n, b, x, r, z, p, q, 1);
         int iterations = 1;
@@ -251,6 +248,7 @@ public sealed class ConjGradSolver2 : LinearSolver
                     break;
                 case 3:
                     // compute R = R - A * X;
+                    ClearVectorWithValue(temp, 0);
                     A.MatrixTimesVector(x, temp);
                     for (int i = 0; i < n; ++i)
                     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class ImplicitMatrix:Matrix
+public abstract class ImplicitMatrix : Matrix
 {
     private System.Text.StringBuilder m_DebugStringBuilder;
 
