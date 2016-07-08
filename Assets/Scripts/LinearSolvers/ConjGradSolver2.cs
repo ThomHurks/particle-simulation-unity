@@ -237,6 +237,7 @@ public sealed class ConjGradSolver2 : LinearSolver
             {
                 case 1:
                     // compute Q = A * P;
+                    ClearVectorWithValue(q, 0);
                     A.MatrixTimesVector(p, q);
                     break;
                 case 2:
