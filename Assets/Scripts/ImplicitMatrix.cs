@@ -2,6 +2,8 @@
 
 public abstract class ImplicitMatrix
 {
+    private System.Text.StringBuilder m_DebugStringBuilder;
+
     // These functions must be implemented in the inheriting classes.
     protected abstract void MatrixTimesVectorImpl(double[] a_Source, double[] a_Destination);
 
@@ -66,16 +68,21 @@ public abstract class ImplicitMatrix
     public virtual void printX()
     {
         const string sep = ", ";
-        System.Text.StringBuilder x = new System.Text.StringBuilder(getM() * getN() * 2);
+        if (m_DebugStringBuilder == null)
+        {
+            m_DebugStringBuilder = new System.Text.StringBuilder();
+        }
+        m_DebugStringBuilder.Remove(0, m_DebugStringBuilder.Length);
+        m_DebugStringBuilder.EnsureCapacity(getM() * getN() * 64 * 2);
         for (int i = 0; i < getM(); i++)
         {
             for (int j = 0; j < getN(); j++)
             {
-                x.Append(getValue(i, j));
-                x.Append(sep);
+                m_DebugStringBuilder.Append(getValue(i, j));
+                m_DebugStringBuilder.Append(sep);
             }
-            x.Append("\n");
+            m_DebugStringBuilder.Append("\n");
         }
-        Debug.Log(x.ToString());
+        Debug.Log(m_DebugStringBuilder.ToString());
     }
 }
