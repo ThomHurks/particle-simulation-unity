@@ -85,6 +85,11 @@ public sealed class LinearSolver
                 vecAssign(n, temp, d);//temp = d
                 vecTimesScalar(n, temp, alpha);//temp = alpha * temp = alpha* d
                 vecAddEqual(n, x, temp);
+                if (!ValidateVector(x))
+                {
+                    throw new System.Exception("Wrong value in solver!");
+                }
+
                 //Debug.Log (toString (temp));
                 //Debug.Log (u);
                 //Debug.Log (toString(d));
@@ -121,6 +126,18 @@ public sealed class LinearSolver
         stepsPerformed = i;
         Debug.Log("Result: x =" + toString(x));
         return rSqrLen;
+    }
+
+    private static bool ValidateVector(double[] a)
+    {
+        for (int i = 0; i < a.Length; ++i)
+        {
+            if (double.IsNaN(a[i]) || double.IsInfinity(a[i]) || System.Math.Abs(a[i]) > 1000)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void vecAddEqual(int n, double[] r, double[] v)

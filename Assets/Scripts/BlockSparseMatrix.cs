@@ -131,8 +131,6 @@ public class BlockSparseMatrix : ImplicitMatrix
         }
     }
 
-
-
     public void Clear()
     {
         m_m = 0;
