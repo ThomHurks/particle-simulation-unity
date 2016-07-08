@@ -97,6 +97,10 @@ public sealed class Main : MonoBehaviour
         {
             m_ScenarioDropdown.value = 4;
         }
+        else if (m_Scenario is PendulumScenario)
+        {
+            m_ScenarioDropdown.value = 5;
+        }
         m_ScenarioDropdown.RefreshShownValue();
 
         m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
@@ -140,16 +144,16 @@ public sealed class Main : MonoBehaviour
     {
         BlockSparseMatrix t = new BlockSparseMatrix();
         BlockSparseMatrix.MatrixBlock block = t.CreateMatrixBlock(0, 0, 2, 2);
-        block.data[0] = 1.00000573252623;
+        block.data[0] = 50;
         block.data[1] = 0;
         block.data[2] = 0;
-        block.data[3] = 1.00017166114287;
+        block.data[3] = 1.00678410253204;
         t.SetN(2);
         double[] b = new double[2];
-        b[0] = -0.613226112857389;
-        b[1] = -1.71996067336795;
-        const float solverEpsilon = float.Epsilon * 1000f;
-        const int solverSteps = 1000;
+        b[0] = 3.89261960983276;
+        b[1] = -67.8883167144682;
+        double solverEpsilon = Math.Pow(10, -7);
+        const int solverSteps = 100000;
         double[] x = new double[2];
         int steps = 0;
         new LinearSolver().ConjGrad(2, t, x, b, solverEpsilon, solverSteps, out steps);
@@ -281,6 +285,10 @@ public sealed class Main : MonoBehaviour
             case 4:
                 m_Scenario = new TrainScenario();
                 Debug.Log("Switched to train scenario");
+                break;
+            case 5:
+                m_Scenario = new PendulumScenario();
+                Debug.Log("Switched to pendulum scenario");
                 break;
         }
         Reset();
