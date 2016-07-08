@@ -153,6 +153,7 @@ public class ParticleSystem
         double[] WQ = new double[n];
         for (int i = 0; i < n; ++i)
         {
+            //Debug.Log("Q[ " + i + "] =" + Q[i]);
             WQ[i] = W[i] * Q[i];
         }
         ValidateVector(WQ);
@@ -165,7 +166,7 @@ public class ParticleSystem
         for (int i = 0; i < numConstraints; ++i)
         {
             RHS[i] = -JDotqdot[i] - JWQ[i] - a_SpringConstant * C[i] - a_DampingConstant * CDot[i];
-            //Debug.Log("RHS["+i+"] = " + (-JDotqdot[i] ) + " + " + (-JWQ[i]) + " + " + (- a_SpringConstant) + "*" + C[i] + " + " + (- a_DampingConstant) + "*" + CDot[i] + " = " + RHS[i]);
+            //Debug.Log("RHS[" + i + "] = " + (-JDotqdot[i]) + " + " + (-JWQ[i]) + " + " + (-a_SpringConstant) + "*" + C[i] + " + " + (-a_DampingConstant) + "*" + CDot[i] + " = " + RHS[i]);
             if (double.IsNaN(RHS[i]) || double.IsNaN(RHS[i]))
             {
                 throw new System.Exception("NaN or Inf in RHS of eq 11");
@@ -173,10 +174,10 @@ public class ParticleSystem
         }
         // Set up implicit matrix of LHS and solve.
         Eq11LHS LHS = new Eq11LHS(m_J, W);// J W JT = m*m if all goes well
-        LinearSolver solver = new LinearSolver();
+        LinearSolver solver = new ConjGradSolver();
         double[] lambda = new double[numConstraints];
         int stepsPerformed = 0;
-        solver.ConjGrad(numConstraints, LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
+        solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
         ValidateVector(lambda);
         //Debug.Log("Nr of iterations in conjgrad solver: " + stepsPerformed);
         double[] QHat = new double[n];

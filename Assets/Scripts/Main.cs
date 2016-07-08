@@ -5,7 +5,7 @@ using System;
 public sealed class Main : MonoBehaviour
 {
     private ParticleSystem m_ParticleSystem;
-    private Solver m_Solver;
+    private Integrator m_Solver;
     private Scenario m_Scenario;
     private static Material m_LineMaterial;
     private List<Transform> m_DebugGameObjects;
@@ -44,12 +44,12 @@ public sealed class Main : MonoBehaviour
     {
         const float constraintSpringConstant = 100f;
         const float constraintDampingConstant = 10f;
-        double solverEpsilon = Math.Pow(10, -7);// Having this too small causes issues, since the solver works by squaring.
+        double solverEpsilon = Math.Pow(10, -2);// Having this too small causes issues, since the solver works by squaring.
 
-        const int solverSteps = 1000;
+        const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Solver = new RungeKutta4Solver();
-        m_Scenario = new TestScenario();
+        m_Solver = new RungeKutta4Integrator();
+        m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
     }
@@ -58,19 +58,19 @@ public sealed class Main : MonoBehaviour
     {
         Test();
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-        if (m_Solver is EulerSolver)
+        if (m_Solver is EulerIntegrator)
         {
             m_SolverDropdown.value = 0;
         }
-        else if (m_Solver is MidpointSolver)
+        else if (m_Solver is MidpointIntegrator)
         {
             m_SolverDropdown.value = 1;
         }
-        else if (m_Solver is RungeKutta4Solver)
+        else if (m_Solver is RungeKutta4Integrator)
         {
             m_SolverDropdown.value = 2;
         }
-        else if (m_Solver is VerletSolver)
+        else if (m_Solver is VerletIntegrator)
         {
             m_SolverDropdown.value = 3;
         }
@@ -142,21 +142,21 @@ public sealed class Main : MonoBehaviour
 
     private void Test()
     {
-        BlockSparseMatrix t = new BlockSparseMatrix();
-        BlockSparseMatrix.MatrixBlock block = t.CreateMatrixBlock(0, 0, 2, 2);
+        BlockSparseMatrix A = new BlockSparseMatrix();
+        BlockSparseMatrix.MatrixBlock block = A.CreateMatrixBlock(0, 0, 2, 2);
         block.data[0] = 50;
         block.data[1] = 0;
         block.data[2] = 0;
         block.data[3] = 1.00678410253204;
-        t.SetN(2);
+        A.SetN(2);
         double[] b = new double[2];
         b[0] = 3.89261960983276;
         b[1] = -67.8883167144682;
-        double solverEpsilon = Math.Pow(10, -7);
+        double solverEpsilon = Math.Pow(10, -5);
         const int solverSteps = 100000;
         double[] x = new double[2];
         int steps = 0;
-        new LinearSolver().ConjGrad(2, t, x, b, solverEpsilon, solverSteps, out steps);
+        new ConjGradSolver().Solve(A, x, b, solverEpsilon, solverSteps, out steps);
     }
 
 
@@ -244,19 +244,19 @@ public sealed class Main : MonoBehaviour
         switch (m_SolverDropdown.value)
         {
             case 0:
-                m_Solver = new EulerSolver();
+                m_Solver = new EulerIntegrator();
                 Debug.Log("Switched to Euler");
                 break;
             case 1:
-                m_Solver = new MidpointSolver();
+                m_Solver = new MidpointIntegrator();
                 Debug.Log("Switched to Midpoint");
                 break;
             case 2:
-                m_Solver = new RungeKutta4Solver();
+                m_Solver = new RungeKutta4Integrator();
                 Debug.Log("Switched to Runge Kutta 4th");
                 break;
             case 3:
-                m_Solver = new VerletSolver();
+                m_Solver = new VerletIntegrator();
                 Debug.Log("Switched to Verlet");
                 break;
         }
