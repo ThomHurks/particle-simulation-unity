@@ -12,9 +12,9 @@ public sealed class ConjGradSolver : LinearSolver
     // "epsilon" is the error tolerance
     // "steps", as passed, is the maximum number of steps, or 0 (implying MAX_STEPS)
     // Upon completion, "steps" contains the number of iterations taken
-    public double Solve(ImplicitMatrix A, double[] x, double[] b,
-                        double epsilon,    // how low should we go?
-                        int steps, out int stepsPerformed)
+    public override double Solve(ImplicitMatrix A, double[] x, double[] b,
+                                 double epsilon,    // how low should we go?
+                                 int steps, out int stepsPerformed)
     {
         int n = A.getN();
         int i, iMax;
@@ -63,7 +63,7 @@ public sealed class ConjGradSolver : LinearSolver
             {
                 Debug.Log("start - eps = " + epsilon + ", iter = " + steps + " A = ");
                 A.printX();
-                Debug.Log("b = " + toString(b));
+                Debug.Log("b = " + VectorToString(b));
             }
             while (i < iMax)
             {
@@ -129,7 +129,7 @@ public sealed class ConjGradSolver : LinearSolver
             if (log)
             {
                 Debug.Log("Residual sq: " + rSqrLen);
-                Debug.Log("Result: x =" + toString(x) + " steps: " + i);
+                Debug.Log("Result: x =" + VectorToString(x) + " steps: " + i);
             }
         }
         stepsPerformed = i;
@@ -177,34 +177,5 @@ public sealed class ConjGradSolver : LinearSolver
         {
             v[i] *= s;
         }
-    }
-
-    private static double vecDot(int n, double[] v1, double[] v2)
-    {
-        double dot = 0;
-        for (int i = 0; i < n; i++)
-        {
-            dot += v1[i] * v2[i];
-        }
-        return dot;
-    }
-
-    private static double vecSqrLen(int n, double[] v)
-    {
-        return vecDot(n, v, v);
-    }
-
-    private string toString(double[] a)
-    {
-        System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder((a.Length * 2) - 1);
-        int length = a.Length - 1;
-        const string sep = ", ";
-        for (int i = 0; i < length; i++)
-        {
-            stringBuilder.Append(a[i]);
-            stringBuilder.Append(sep);	
-        }
-        stringBuilder.Append(a[length]);
-        return stringBuilder.ToString();
     }
 }

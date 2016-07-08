@@ -2,9 +2,9 @@
 
 public class JacobiSolver : LinearSolver
 {
-    public double Solve(ImplicitMatrix A, double[] x, double[] b,
-                        double epsilon,    // how low should we go?
-                        int steps, out int stepsPerformed)
+    public override double Solve(ImplicitMatrix A, double[] x, double[] b,
+                                 double epsilon,    // how low should we go?
+                                 int steps, out int stepsPerformed)
     {
         ExplicitMatrix B = A.toExplicitMatrix();
         int n = A.getN();
