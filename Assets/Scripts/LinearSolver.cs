@@ -2,7 +2,8 @@
 
 public sealed class LinearSolver
 {
-    private const int MAX_STEPS = 1000000000;
+    private const int MAX_STEPS = 10000;
+    private const bool log = false;
 
     // Solve Ax = b for a symmetric, positive definite matrix A
     // A is represented implicitly by the function "matVecMult"
@@ -58,9 +59,12 @@ public sealed class LinearSolver
 
         if (rSqrLen > epsilon)
         {
-            Debug.Log("start - A = ");
-            A.printX();
-            Debug.Log("b = " + toString(b));
+            if (log)
+            {
+                Debug.Log("start - A = ");
+                A.printX();
+                Debug.Log("b = " + toString(b));
+            }
             while (i < iMax)
             {
 				
@@ -119,9 +123,13 @@ public sealed class LinearSolver
                 vecTimesScalar(n, d, beta);
                 vecAddEqual(n, d, r);
             }
+            if (log)
+            {
+
+                Debug.Log("Result: x =" + toString(x));
+            }
         }
         stepsPerformed = i;
-        Debug.Log("Result: x =" + toString(x));
         return rSqrLen;
     }
 
