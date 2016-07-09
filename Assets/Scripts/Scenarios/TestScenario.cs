@@ -56,6 +56,11 @@ public class TestScenario : Scenario
         Constraint c6 = new VLineConstraint(p10, a_ParticleSystem);
 */
 
+        Particle q1 = new Particle(1);
+        q1.Position = new Vector2(-3, 3);
+        a_ParticleSystem.AddParticle(q1);
+        new EllipticalWireConstraint(q1, q1.Position + new Vector2(1f, -.3f), q1.Position + new Vector2(-1f, -.3f), a_ParticleSystem);
+
         Force dragForce = new ViscousDragForce(.2f);
         a_ParticleSystem.AddForce(dragForce);
 

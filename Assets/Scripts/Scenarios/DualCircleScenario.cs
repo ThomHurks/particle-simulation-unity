@@ -31,6 +31,12 @@ public class DualCircleScenario : Scenario
         a_ParticleSystem.AddForce(new HooksLawSpring(p2, p3, 2, 5, 1));
 
         a_ParticleSystem.AddForce(new GravityForce(.2f));
+
+        Particle p6 = new Particle(1);
+        p6.Position = new Vector2(-3, 4);
+        a_ParticleSystem.AddParticle(p6);
+        new HLineConstraint(p6, a_ParticleSystem);
+        new VLineConstraint(p6, a_ParticleSystem);
     }
 }
 

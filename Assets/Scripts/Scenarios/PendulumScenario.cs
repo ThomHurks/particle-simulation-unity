@@ -7,9 +7,11 @@ public class PendulumScenario : Scenario
 
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        for (int i = 0; i < 3; i++)
+        int max = 6;
+        int max1 = max - 1;
+        for (int i = 0; i < max; i++)
         {
-            createPendulum(a_ParticleSystem, (i - 1) * 2, .5f, i + 2);
+            createPendulum(a_ParticleSystem, i * i * .5f - max1 * max1 * .5f + 4, .5f, i + 2);
         }
         Force f = new GravityForce(1f);
         a_ParticleSystem.AddForce(f);

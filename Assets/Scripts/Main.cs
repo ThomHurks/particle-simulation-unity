@@ -47,7 +47,7 @@ public sealed class Main : MonoBehaviour
         const float constraintDampingConstant = 10f;
         double solverEpsilon = Math.Pow(10, -2);// Having this too small causes issues, since the solver works by squaring.
 
-        const int solverSteps = 10;
+        const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new RungeKutta4Integrator();
         m_Scenario = new DualCircleScenario();
@@ -145,7 +145,7 @@ public sealed class Main : MonoBehaviour
         m_CircleDropdown.RefreshShownValue();
 
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
-        m_SolverDropdown.value = 2; // Jacobi is default.
+        m_SolverDropdown.value = 1; // CG2 default
     }
 
     private void Test()
