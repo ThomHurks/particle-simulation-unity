@@ -59,7 +59,6 @@ public sealed class Main : MonoBehaviour
 
     void Start()
     {
-        Test();
         m_IntegratorDropdown = GameObject.Find("IntegratorDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         if (m_Integrator is EulerIntegrator)
         {
@@ -159,26 +158,6 @@ public sealed class Main : MonoBehaviour
 
         m_SimulationFlowToggle = GameObject.Find("ReverseSimulationToggle").GetComponent<UnityEngine.UI.Toggle>();
     }
-
-    private void Test()
-    {
-        BlockSparseMatrix A = new BlockSparseMatrix();
-        BlockSparseMatrix.MatrixBlock block = A.CreateMatrixBlock(0, 0, 2, 2);
-        block.data[0] = 50;
-        block.data[1] = 0;
-        block.data[2] = 0;
-        block.data[3] = 1.00678410253204;
-        A.SetN(2);
-        double[] b = new double[2];
-        b[0] = 3.89261960983276;
-        b[1] = -67.8883167144682;
-        double solverEpsilon = Math.Pow(10, -5);
-        const int solverSteps = 100000;
-        double[] x = new double[2];
-        int steps = 0;
-        new ConjGradSolver2().Solve(A, x, b, solverEpsilon, solverSteps, out steps);
-    }
-
 
     void Update()
     {

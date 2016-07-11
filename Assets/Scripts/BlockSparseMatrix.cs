@@ -72,8 +72,8 @@ public class BlockSparseMatrix : ImplicitMatrix
         MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
         m_MatrixBlocks.Add(block);
         m_m = Math.Max(m_m, a_i + a_iLength);
-        printX();
-        Debug.Log(m_MatrixBlocks.Count);
+        //printX();
+        //Debug.Log(m_MatrixBlocks.Count);
         return block;
     }
 
