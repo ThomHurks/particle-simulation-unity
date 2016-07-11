@@ -20,6 +20,5 @@
         ScaleVector(temp1, a_DeltaTime); //whole timestep
         AddVectors(originals, temp1, temp2);
         a_ParticleSystem.ParticlesSetState(temp2);
-        a_ParticleSystem.Time += a_DeltaTime;
     }
 }

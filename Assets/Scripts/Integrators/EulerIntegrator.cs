@@ -10,6 +10,5 @@
         a_ParticleSystem.ParticlesGetState(temp2);
         AddVectors(temp1, temp2, temp2);
         a_ParticleSystem.ParticlesSetState(temp2);
-        a_ParticleSystem.Time += a_DeltaTime;
     }
 }

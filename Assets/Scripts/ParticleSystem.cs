@@ -112,7 +112,22 @@ public class ParticleSystem
                 return i;
             }
         }
-        throw new System.Exception("Particle not found in particle list!");
+        throw new Exception("Particle not found in particle list!");
+    }
+
+    public void ReverseParticleVelocities()
+    {
+        int vectorLength = ParticleDimensions;
+        double[] temp = new double[vectorLength];
+        ParticlesGetState(temp);
+        vectorLength /= 4;
+        for (int i = 0; i < vectorLength; ++i)
+        {
+            int index = (i << 2) + 2;
+            temp[index] *= -1;
+            temp[index + 1] *= -1;
+        }
+        ParticlesSetState(temp);
     }
 
     public void ComputeForces()

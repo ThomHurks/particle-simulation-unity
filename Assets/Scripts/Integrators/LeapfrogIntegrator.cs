@@ -24,7 +24,6 @@
         a_ParticleSystem.ParticleDerivative(temp);
         ScaleAndAddVelocities(temp, originals, originals, a_DeltaTime);
         a_ParticleSystem.ParticlesSetState(originals);
-        a_ParticleSystem.Time += a_DeltaTime;
     }
 
     private void ScaleAndAddVelocities(double[] a_VectorA, double[] a_VectorB, double[] a_VectorOut,

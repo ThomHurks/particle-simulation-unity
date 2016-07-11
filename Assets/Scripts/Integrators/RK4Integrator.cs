@@ -41,6 +41,5 @@
         AddVectorsScale(temp, k4, temp, 1, 1f / 6f);
 
         a_ParticleSystem.ParticlesSetState(temp);
-        a_ParticleSystem.Time += a_DeltaTime;
     }
 }

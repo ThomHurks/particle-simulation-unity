@@ -189,17 +189,13 @@ public sealed class Main : MonoBehaviour
     {
         if (m_ParticleSystem.Time < 0)
         {
-            m_ReversedTime = false;
-            m_SimulationFlowToggle.isOn = false;
+            Reset();
         }
         float delta = Time.fixedDeltaTime;
-        if (m_ReversedTime)
-        {
-            delta *= -1;
-        }
         try
         {
             m_Integrator.Step(m_ParticleSystem, delta);
+            m_ParticleSystem.Time += (m_ReversedTime ? -delta : delta);
         }
         catch (Exception e)
         {
@@ -227,6 +223,11 @@ public sealed class Main : MonoBehaviour
     {
         m_HasMouseSelection = false;
         m_CurrentMouseForce = null;
+        m_ReversedTime = false;
+        if (m_SimulationFlowToggle != null)
+        {
+            m_SimulationFlowToggle.isOn = false;
+        }
         m_ParticleSystem.Clear();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
@@ -408,6 +409,7 @@ public sealed class Main : MonoBehaviour
     public void OnSimulationFlowChanged()
     {
         m_ReversedTime = m_SimulationFlowToggle.isOn;
+        m_ParticleSystem.ReverseParticleVelocities();
     }
 
     private void SetupDebugGameObjects()

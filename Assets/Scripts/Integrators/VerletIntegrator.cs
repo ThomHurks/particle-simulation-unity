@@ -29,6 +29,5 @@
             temp2[i * 4 + 2] = temp1[i * 4] + temp3[i * 4 + 2] * a_DeltaTime / 2f;
         }
         a_ParticleSystem.ParticlesSetState(temp2);
-        a_ParticleSystem.Time += a_DeltaTime;
     }
 }
