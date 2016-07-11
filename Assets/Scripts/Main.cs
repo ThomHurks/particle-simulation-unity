@@ -75,6 +75,10 @@ public sealed class Main : MonoBehaviour
         {
             m_IntegratorDropdown.value = 3;
         }
+        else if (m_Integrator is LeapfrogIntegrator)
+        {
+            m_IntegratorDropdown.value = 4;
+        }
         m_IntegratorDropdown.RefreshShownValue();
 
         m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
@@ -270,6 +274,10 @@ public sealed class Main : MonoBehaviour
             case 3:
                 m_Integrator = new VerletIntegrator();
                 Debug.Log("Switched to Verlet");
+                break;
+            case 4:
+                m_Integrator = new LeapfrogIntegrator();
+                Debug.Log("Switched to Leapfrog");
                 break;
         }
     }
