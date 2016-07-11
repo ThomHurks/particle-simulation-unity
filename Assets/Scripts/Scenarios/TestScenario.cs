@@ -23,39 +23,35 @@ public class TestScenario : Scenario
         Force gravityForce = new GravityForce(.001f);
         a_ParticleSystem.AddForce(gravityForce);
 
-
-
-
-
         Particle p6 = new Particle(.5f);
         p6.Position = new Vector2(0, -4);
         a_ParticleSystem.AddParticle(p6);
         Particle p7 = new Particle(1);
         p7.Position = new Vector2(0, -5f);
         a_ParticleSystem.AddParticle(p7);
-        Constraint c3 = new RodConstraint(p6, p7, a_ParticleSystem);
+        new RodConstraint(p6, p7, a_ParticleSystem);
 
 
         Particle p5 = new Particle(.5f);
         p5.Position = new Vector2(2, 2);
         a_ParticleSystem.AddParticle(p5);
-        Constraint c2 = new CircularWireConstraint(p5, p5.Position + Vector2.right, a_ParticleSystem);
+        new CircularWireConstraint(p5, p5.Position + Vector2.right, a_ParticleSystem);
 
         Particle p8 = new Particle(0.5f);
         p8.Position = new Vector2(-3, -1);
         a_ParticleSystem.AddParticle(p8);
-        Constraint c4 = new FixedPointConstraint(p8, a_ParticleSystem);
+        new FixedPointConstraint(p8, a_ParticleSystem);
 
 
         Particle p9 = new Particle(.5f);
         p9.Position = new Vector2(-3, -2);
         a_ParticleSystem.AddParticle(p9);
-        Constraint c5 = new HLineConstraint(p9, a_ParticleSystem);
+        new HLineConstraint(p9, a_ParticleSystem);
 
         Particle p10 = new Particle(.5f);
         p10.Position = new Vector2(5, -2);
         a_ParticleSystem.AddParticle(p10);
-        Constraint c6 = new VLineConstraint(p10, a_ParticleSystem);
+        new VLineConstraint(p10, a_ParticleSystem);
 
 
         Particle q1 = new Particle(.5f);

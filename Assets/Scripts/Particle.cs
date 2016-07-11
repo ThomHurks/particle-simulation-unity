@@ -9,7 +9,7 @@ public class Particle
 
     public Particle(float a_Mass)
     {
-        m_Mass = a_Mass * 1f;
+        m_Mass = a_Mass;
     }
 
     public float Mass { get { return m_Mass; } }
