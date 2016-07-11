@@ -329,6 +329,10 @@ public sealed class Main : MonoBehaviour
                 m_Scenario = new ElipticalEngineScenario();
                 Debug.Log("Switched to elipse Engine scenario");
                 break;
+            case 8:
+                m_Scenario = new SlicedEllipseScenario();
+                Debug.Log("Switched to elipse Engine scenario");
+                break;
         }
         Reset();
     }
