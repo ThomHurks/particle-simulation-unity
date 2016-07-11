@@ -63,22 +63,3 @@
         m_Initialized = true;
     }
 }
-
-
-/*
- Choose an initial guess {\displaystyle x^{(0)}}  to the solution
-{\displaystyle k=0} 
-while convergence not reached do
-  for i := 1 step until n do
-    {\displaystyle \sigma =0} 
-    for j := 1 step until n do
-      if j ≠ i then
-        {\displaystyle \sigma =\sigma +a_{ij}x_{j}^{(k)}} 
-      end if
-    end (j-loop)
-    {\displaystyle x_{i}^{(k+1)}={{\left({b_{i}-\sigma }\right)} \over {a_{ii}}}} 
-  end (i-loop)
-  check if convergence is reached
-  {\displaystyle k=k+1} 
-loop (while convergence condition not reached)
- */

@@ -155,7 +155,7 @@ public class ParticleSystem
         {
             if (double.IsNaN(a_Vector[i]) || double.IsInfinity(a_Vector[i]))
             {
-                throw new System.Exception("Vector did not validate: NaN or Inf found.");
+                throw new Exception("Vector did not validate: NaN or Inf found.");
             }
         }
     }

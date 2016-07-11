@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class BlockSparseMatrix : ImplicitMatrix
 {
@@ -72,8 +71,6 @@ public class BlockSparseMatrix : ImplicitMatrix
         MatrixBlock block = new MatrixBlock(a_i, a_j, a_iLength, a_jLength);
         m_MatrixBlocks.Add(block);
         m_m = Math.Max(m_m, a_i + a_iLength);
-        //printX();
-        //Debug.Log(m_MatrixBlocks.Count);
         return block;
     }
 
@@ -116,14 +113,14 @@ public class BlockSparseMatrix : ImplicitMatrix
                 for (int i = 0; i < curBlock.iLength; ++i)
                 {
                     int globi = i + curBlock.i;
-                    int k1 = !transpose ? globi : globj;//dest
-                    int k2 = !transpose ? globj : globi;//source
+                    int k1 = !transpose ? globi : globj; //dest
+                    int k2 = !transpose ? globj : globi; //source
                     int cellindex = i * curBlock.jLength + j; // cell (i,j) in matrix
 
                     a_Destination[k1] += curBlock.data[cellindex] * a_Source[k2];
                     if (double.IsNaN(a_Destination[k1]) || double.IsInfinity(a_Destination[k1]))
                     {
-                        throw new System.Exception("NaN or Inf in BSM.");
+                        throw new Exception("NaN or Inf in BSM.");
                     }
                 }
             }
