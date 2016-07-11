@@ -4,6 +4,12 @@ public sealed class ConjGradSolver : LinearSolver
 {
     private const int MAX_STEPS = 10000;
     private const bool logging = false;
+    private double[] r;
+    private double[] d;
+    private double[] t;
+    private double[] temp;
+    private bool m_Initialized = false;
+    private int m_Size;
 
     // Solve Ax = b for a symmetric, positive definite matrix A
     // A is represented implicitly by the function "matVecMult"
@@ -20,10 +26,7 @@ public sealed class ConjGradSolver : LinearSolver
         int i, iMax;
         double alpha, beta, rSqrLen, rSqrLenOld, u;
 
-        double[] r = new double[n];//n is actually m in our case: the number of constraints
-        double[] d = new double[n];
-        double[] t = new double[n];
-        double[] temp = new double[n];
+        InitializeOrClear(n);
 
         if (x.Length != b.Length)
         {
@@ -177,5 +180,25 @@ public sealed class ConjGradSolver : LinearSolver
         {
             v[i] *= s;
         }
+    }
+
+    private void InitializeOrClear(int a_Size)
+    {
+        if (m_Initialized == false || m_Size != a_Size)
+        {
+            r = new double[a_Size];
+            d = new double[a_Size];
+            t = new double[a_Size];
+            temp = new double[a_Size];
+        }
+        else
+        {
+            ClearVectorWithValue(r, 0d);
+            ClearVectorWithValue(d, 0d);
+            ClearVectorWithValue(t, 0d);
+            ClearVectorWithValue(temp, 0d);
+        }
+        m_Size = a_Size;
+        m_Initialized = true;
     }
 }

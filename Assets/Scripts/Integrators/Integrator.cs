@@ -2,6 +2,8 @@
 {
     public abstract void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime);
 
+    public abstract void Initialize(ParticleSystem a_ParticleSystem);
+
     protected void ScaleVector(double[] a_Vector, double a_ScaleFactor)
     {
         for (int i = 0; i < a_Vector.Length; ++i)

@@ -59,6 +59,7 @@ public sealed class Main : MonoBehaviour
 
     void Start()
     {
+        m_Integrator.Initialize(m_ParticleSystem);
         m_IntegratorDropdown = GameObject.Find("IntegratorDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         if (m_Integrator is EulerIntegrator)
         {
@@ -209,6 +210,7 @@ public sealed class Main : MonoBehaviour
         }
         m_ParticleSystem.Clear();
         m_Scenario.CreateScenario(m_ParticleSystem);
+        m_Integrator.Initialize(m_ParticleSystem);
         SetupDebugGameObjects();
     }
 
@@ -255,22 +257,27 @@ public sealed class Main : MonoBehaviour
         {
             case 0:
                 m_Integrator = new EulerIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Euler");
                 break;
             case 1:
                 m_Integrator = new MidpointIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Midpoint");
                 break;
             case 2:
                 m_Integrator = new RungeKutta4Integrator();
+                m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Runge Kutta 4th");
                 break;
             case 3:
                 m_Integrator = new VerletIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Verlet");
                 break;
             case 4:
                 m_Integrator = new LeapfrogIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Leapfrog");
                 break;
         }

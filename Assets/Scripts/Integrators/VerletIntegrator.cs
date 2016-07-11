@@ -1,13 +1,21 @@
 ﻿public class VerletIntegrator : Integrator
 {
+    private double[] temp1;
+    private double[] temp2;
+    private double[] temp3;
+    private double[] originals;
+
+    public override void Initialize(ParticleSystem a_ParticleSystem)
+    {
+        int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
+        temp1 = new double[particleDimensions];
+        temp2 = new double[particleDimensions];
+        temp3 = new double[particleDimensions];
+        originals = new double[particleDimensions];
+    }
 
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {
-        int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        double[] temp1 = new double[particleDimensions];
-        double[] temp2 = new double[particleDimensions];
-        double[] temp3 = new double[particleDimensions];
-        double[] originals = new double[particleDimensions];
         a_ParticleSystem.ParticlesGetState(originals); //backup original locations and speeds
 
         //perform half an euler step
@@ -23,7 +31,7 @@
         a_ParticleSystem.ParticlesSetState(temp2);
 
         a_ParticleSystem.ParticleDerivative(temp3); // v+1,a+1
-        int n = particleDimensions / 4;
+        int n = a_ParticleSystem.ParticleDimensions / 4;
         for (int i = 0; i < n; i++)
         {
             temp2[i * 4 + 2] = temp1[i * 4] + temp3[i * 4 + 2] * a_DeltaTime / 2f;

@@ -1,11 +1,19 @@
 ﻿public class MidpointIntegrator : Integrator
 {
-    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    private double[] temp1;
+    private double[] temp2;
+    private double[] originals;
+
+    public override void Initialize(ParticleSystem a_ParticleSystem)
     {
         int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        double[] temp1 = new double[particleDimensions];
-        double[] temp2 = new double[particleDimensions];
-        double[] originals = new double[particleDimensions];
+        temp1 = new double[particleDimensions];
+        temp2 = new double[particleDimensions];
+        originals = new double[particleDimensions];
+    }
+
+    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    {
         a_ParticleSystem.ParticlesGetState(originals); //backup original locations and speeds
 
         //perform half an euler step
