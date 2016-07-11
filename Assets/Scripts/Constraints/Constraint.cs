@@ -8,5 +8,7 @@
 
     int GetConstraintDimension();
 
+    double getAvgMass();
+
     void Draw();
 }

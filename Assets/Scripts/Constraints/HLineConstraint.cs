@@ -59,6 +59,11 @@ public class HLineConstraint : Constraint
         GL.Vertex(new Vector2(100, (float)m_Y));
         GL.End();
     }
+
+    public double getAvgMass()
+    {
+        return m_Particle.Mass;
+    }
 }
 
 

@@ -77,6 +77,11 @@ public class FixedPointConstraint: Constraint
         GL.End();
     }
 
+    public double getAvgMass()
+    {
+        return m_Particle.Mass;
+    }
+
 
 }
 

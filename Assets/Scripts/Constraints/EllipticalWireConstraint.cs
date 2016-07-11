@@ -131,4 +131,9 @@ public class EllipticalWireConstraint : Constraint
         GL.End();
     }
 
+    public double getAvgMass()
+    {
+        return m_Particle.Mass;
+    }
+
 }

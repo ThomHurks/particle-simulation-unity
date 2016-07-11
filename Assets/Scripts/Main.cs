@@ -52,7 +52,7 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new RungeKutta4Integrator();
-        m_Scenario = new DualCircleScenario();
+        m_Scenario = new TestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         SetupDebugGameObjects();
     }

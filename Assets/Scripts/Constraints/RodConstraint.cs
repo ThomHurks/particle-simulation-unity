@@ -151,5 +151,10 @@ public class RodConstraint : Constraint
         GL.Vertex(m_ParticleB.Position);
         GL.End();
     }
+
+    public double getAvgMass()
+    {
+        return (m_ParticleA.Mass + m_ParticleB.Mass) / 2;
+    }
     
 }

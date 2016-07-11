@@ -63,6 +63,10 @@ public class AnyLineConstraint:Constraint
         GL.Vertex(m_B + 100 * m_A);
         GL.End();
     }
+
+    {
+        return m_Particle.Mass;
+    }
 }
 
 

@@ -7,7 +7,7 @@ public class PendulumScenario : Scenario
 
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
-        int max = 6;
+        int max = 10;
         int max1 = max - 1;
         for (int i = 0; i < max; i++)
         {

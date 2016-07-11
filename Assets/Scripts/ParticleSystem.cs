@@ -164,12 +164,16 @@ public class ParticleSystem
     {
         double[] qdot = ParticlesGetVelocities();
         ValidateVector(qdot);
+        //double[] M = ParticlesMassMatrix();
+        //ValidateVector(M);
         double[] W = ParticlesInverseMassMatrix();
         ValidateVector(W);
         double[] Q = ParticlesGetForces();
         ValidateVector(Q);
         double[] C = ConstraintsGetValues();
         ValidateVector(C);
+        double[] CMass = ConstraintsGetAvgMasses();
+        ValidateVector(CMass);
         int numConstraints = C.Length; // = number of SCALAR! constraints, so fixedpoint contributes 2 to this!
         double[] CDot = ConstraintsGetDerivativeValues();
         ValidateVector(CDot);
@@ -184,6 +188,7 @@ public class ParticleSystem
         {
             //Debug.Log("Q[ " + i + "] =" + Q[i]);
             WQ[i] = W[i] * Q[i];
+            //WQ[i] = Q[i];
         }
         ValidateVector(WQ);
         // J times WQ.
@@ -243,6 +248,27 @@ public class ParticleSystem
             for (int j = 0; j < m_Constraints[i].GetConstraintDimension(); j++)
             {
                 C[k++] = cVal[j];
+            }
+        }
+        return C;
+    }
+
+
+    private double[] ConstraintsGetAvgMasses()
+    {
+        // Gather constraint values into vector CMass.
+        int numConstraints = 0;
+        for (int i = 0; i < m_Constraints.Count; i++)
+        {
+            numConstraints += m_Constraints[i].GetConstraintDimension();
+        }
+        double[] C = new double[numConstraints];
+        int k = 0;
+        for (int i = 0; i < m_Constraints.Count; ++i)
+        {
+            for (int j = 0; j < m_Constraints[i].GetConstraintDimension(); j++)
+            {
+                C[k++] = m_Constraints[i].getAvgMass();
             }
         }
         return C;
@@ -319,6 +345,24 @@ public class ParticleSystem
             W[curIndex + 1] = massInverse;
         }
         return W;
+    }
+
+    private double[] ParticlesMassMatrix()
+    {
+        // Construct  of mass matrix M as a vector.
+        int numParticles = m_Particles.Count;
+        int particleMassDims = numParticles * 2;
+        double[] M = new double[particleMassDims];
+        Particle curParticle = null;
+        for (int i = 0; i < numParticles; ++i)
+        {
+            curParticle = m_Particles[i];
+            int curIndex = 2 * i;
+            double massInverse = curParticle.Mass;
+            M[curIndex] = massInverse;
+            M[curIndex + 1] = massInverse;
+        }
+        return M;
     }
 
     private double[] ParticlesGetForces()
