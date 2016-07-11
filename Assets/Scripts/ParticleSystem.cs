@@ -172,8 +172,8 @@ public class ParticleSystem
         ValidateVector(Q);
         double[] C = ConstraintsGetValues();
         ValidateVector(C);
-        double[] CMass = ConstraintsGetAvgMasses();
-        ValidateVector(CMass);
+        //double[] CMass = ConstraintsGetAvgMasses();
+        //ValidateVector(CMass);
         int numConstraints = C.Length; // = number of SCALAR! constraints, so fixedpoint contributes 2 to this!
         double[] CDot = ConstraintsGetDerivativeValues();
         ValidateVector(CDot);
