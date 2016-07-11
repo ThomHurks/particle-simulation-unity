@@ -106,6 +106,10 @@ public sealed class Main : MonoBehaviour
         {
             m_ScenarioDropdown.value = 6;
         }
+        else if (m_Scenario is ElipticalEngineScenario)
+        {
+            m_ScenarioDropdown.value = 7;
+        }
         m_ScenarioDropdown.RefreshShownValue();
 
         m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
@@ -320,6 +324,10 @@ public sealed class Main : MonoBehaviour
             case 6:
                 m_Scenario = new DualCircleScenario();
                 Debug.Log("Switched to dual circle scenario");
+                break;
+            case 7:
+                m_Scenario = new ElipticalEngineScenario();
+                Debug.Log("Switched to elipse Engine scenario");
                 break;
         }
         Reset();

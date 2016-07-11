@@ -118,7 +118,7 @@ public class CircularWireConstraint : Constraint
         GL.Begin(GL.LINES);
         GL.Color(Color.red);
         Vector2 prev = new Vector2(m_Center.x + m_Radius, m_Center.y);
-        for (int i = 18; i <= 360; i += 18)
+        for (int i = 12; i <= 360; i += 12)
         {
             float degInRad = i * Mathf.PI / 180;
             Vector2 vertex = new Vector2(m_Center.x + Mathf.Cos(degInRad) * m_Radius, m_Center.y + Mathf.Sin(degInRad) * m_Radius);

@@ -19,6 +19,16 @@ public class HooksLawSpring : Force
         m_DampingConstant = a_DampingConstant;
     }
 
+    public HooksLawSpring(Particle a_ParticleA, Particle a_ParticleB, 
+                          float a_SpringConstant, float a_DampingConstant)
+    {
+        m_ParticleA = a_ParticleA;
+        m_ParticleB = a_ParticleB;
+        m_RestLength = (a_ParticleA.Position - a_ParticleB.Position).magnitude;
+        m_SpringConstant = a_SpringConstant;
+        m_DampingConstant = a_DampingConstant;
+    }
+
     public void ApplyForce(ParticleSystem a_ParticleSystem)
     {
         Vector2 l = m_ParticleA.Position - m_ParticleB.Position;
