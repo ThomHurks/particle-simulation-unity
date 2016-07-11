@@ -1,12 +1,18 @@
 ﻿public class LeapfrogIntegrator : Integrator
 {
+    private double[] temp;
+    private double[] originals;
     private int m_StepCount = 0;
+
+    public override void Initialize(ParticleSystem a_ParticleSystem)
+    {
+        int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
+        temp = new double[particleDimensions];
+        originals = new double[particleDimensions];
+    }
 
     public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
     {
-        int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        double[] temp = new double[particleDimensions];
-        double[] originals = new double[particleDimensions];
         a_ParticleSystem.ParticlesGetState(originals);
 
         // Perform half an Euler step for the velocities only, on the first step.

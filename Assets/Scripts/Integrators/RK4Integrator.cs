@@ -1,14 +1,25 @@
 ﻿public class RungeKutta4Integrator : Integrator
 {
-    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    private double[] originals;
+    private double[] k1;
+    private double[] k2;
+    private double[] k3;
+    private double[] k4;
+    private double[] temp;
+
+    public override void Initialize(ParticleSystem a_ParticleSystem)
     {
         int particleDimensions = a_ParticleSystem.ParticleDimensions; // = 4n
-        double[] originals = new double[particleDimensions];
-        double[] k1 = new double[particleDimensions];
-        double[] k2 = new double[particleDimensions];
-        double[] k3 = new double[particleDimensions];
-        double[] k4 = new double[particleDimensions];
-        double[] temp = new double[particleDimensions];
+        originals = new double[particleDimensions];
+        k1 = new double[particleDimensions];
+        k2 = new double[particleDimensions];
+        k3 = new double[particleDimensions];
+        k4 = new double[particleDimensions];
+        temp = new double[particleDimensions];
+    }
+
+    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    {
         a_ParticleSystem.ParticlesGetState(originals); //backup original locations and speeds
         double h = a_DeltaTime;//To keep consistent with slide notation
 

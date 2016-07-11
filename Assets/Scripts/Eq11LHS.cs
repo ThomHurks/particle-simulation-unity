@@ -6,6 +6,7 @@ public class Eq11LHS : ImplicitMatrix
     private double[] m_W;
     // = global n (2*particles)
     private readonly int m_Size;
+    private double[] m_TempVector;
     // This is a symetric matrix: m=n (= global m)
 
     /*
@@ -21,18 +22,22 @@ public class Eq11LHS : ImplicitMatrix
         m_J = a_J;
         m_W = a_W;
         m_Size = a_J.getM();
+        m_TempVector = new double[m_W.Length];
     }
 
     protected override void MatrixTimesVectorImpl(double[] a_Source, double[] a_Destination)
     {
-        double[] temp = new double[m_W.Length];
-        m_J.MatrixTransposeTimesVector(a_Source, temp); //temp = JTa
+        for (int i = 0; i < m_TempVector.Length; ++i)
+        {
+            m_TempVector[i] = 0;
+        }
+        m_J.MatrixTransposeTimesVector(a_Source, m_TempVector); //temp = JTa
         int vectorSize = a_Destination.Length;
         for (int i = 0; i < vectorSize; ++i)
         {
-            temp[i] = temp[i] * m_W[i]; //temp = WTJa
+            m_TempVector[i] = m_TempVector[i] * m_W[i]; //temp = WTJa
         }
-        m_J.MatrixTimesVector(temp, a_Destination); // a_Destination = JWJTa
+        m_J.MatrixTimesVector(m_TempVector, a_Destination); // a_Destination = JWJTa
     }
 
     protected override void MatrixTransposeTimesVectorImpl(double[] a_Source, double[] a_Destination)

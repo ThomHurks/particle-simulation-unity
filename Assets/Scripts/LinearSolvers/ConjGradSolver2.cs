@@ -9,6 +9,13 @@ public sealed class ConjGradSolver2 : LinearSolver
     private double rho;
     private double rho_old;
     private int rlbl;
+    private double[] r;
+    private double[] z;
+    private double[] p;
+    private double[] q;
+    private double[] temp;
+    private bool m_Initialized = false;
+    private int m_Size;
 
     private int cg_rc(int n, double[] b, double[] x, double[] r, double[] z, 
                       double[] p, double[] q, int job)
@@ -221,11 +228,7 @@ public sealed class ConjGradSolver2 : LinearSolver
         rlbl = 0;
 
         int n = A.getN();
-        double[] r = new double[n];
-        double[] z = new double[n];
-        double[] p = new double[n];
-        double[] q = new double[n];
-        double[] temp = new double[n];
+        InitializeOrClear(n);
 
         // Inital guess solution for x.
         ClearVectorWithValue(x, 1);
@@ -279,5 +282,27 @@ public sealed class ConjGradSolver2 : LinearSolver
             job_next = cg_rc(n, b, x, r, z, p, q, 2);
             ++iterations;
         }
+    }
+
+    private void InitializeOrClear(int a_Size)
+    {
+        if (m_Initialized == false || m_Size != a_Size)
+        {
+            r = new double[a_Size];
+            z = new double[a_Size];
+            p = new double[a_Size];
+            q = new double[a_Size];
+            temp = new double[a_Size];
+        }
+        else
+        {
+            ClearVectorWithValue(r, 0d);
+            ClearVectorWithValue(z, 0d);
+            ClearVectorWithValue(p, 0d);
+            ClearVectorWithValue(q, 0d);
+            ClearVectorWithValue(temp, 0d);
+        }
+        m_Size = a_Size;
+        m_Initialized = true;
     }
 }

@@ -1,10 +1,17 @@
 ﻿public class EulerIntegrator : Integrator
 {
-    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    private double[] temp1;
+    private double[] temp2;
+
+    public override void Initialize(ParticleSystem a_ParticleSystem)
     {
         int particleDimensions = a_ParticleSystem.ParticleDimensions;
-        double[] temp1 = new double[particleDimensions];
-        double[] temp2 = new double[particleDimensions];
+        temp1 = new double[particleDimensions];
+        temp2 = new double[particleDimensions];
+    }
+
+    public override void Step(ParticleSystem a_ParticleSystem, float a_DeltaTime)
+    {
         a_ParticleSystem.ParticleDerivative(temp1);
         ScaleVector(temp1, a_DeltaTime);
         a_ParticleSystem.ParticlesGetState(temp2);

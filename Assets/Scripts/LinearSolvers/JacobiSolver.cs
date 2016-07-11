@@ -1,5 +1,10 @@
 ﻿public class JacobiSolver : LinearSolver
 {
+    private double[] xnext;
+    private double[] r;
+    private bool m_Initialized = false;
+    private int m_Size;
+
     public override double Solve(ImplicitMatrix A, double[] x, double[] b,
                                  double epsilon,    // how low should we go?
                                  int steps, out int stepsPerformed)
@@ -7,8 +12,9 @@
         ExplicitMatrix B = A.toExplicitMatrix();
         int n = A.getN();
         int steps2 = 0;
-        double[] xnext = new double[n];
-        double[] r = new double[n];
+
+        InitializeOrClear(n);
+
         for (; steps2 < steps; steps2++)
         {
             for (int i = 0; i < n; i++)
@@ -39,6 +45,22 @@
 
         stepsPerformed = steps2;
         return 0;
+    }
+
+    private void InitializeOrClear(int a_Size)
+    {
+        if (m_Initialized == false || m_Size != a_Size)
+        {
+            r = new double[a_Size];
+            xnext = new double[a_Size];
+        }
+        else
+        {
+            ClearVectorWithValue(r, 0d);
+            ClearVectorWithValue(xnext, 0d);
+        }
+        m_Size = a_Size;
+        m_Initialized = true;
     }
 }
 
