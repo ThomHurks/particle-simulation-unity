@@ -15,12 +15,14 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_RodDropdown;
     private UnityEngine.UI.Dropdown m_AngleDropdown;
     private UnityEngine.UI.Dropdown m_SolverDropdown;
+    private UnityEngine.UI.Toggle m_SimulationFlowToggle;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 20f;
     private const float m_MouseSelectDampingConstant = 2f;
     private bool m_HasMouseSelection = false;
     private MouseSpringForce m_CurrentMouseForce;
+    private bool m_ReversedTime = false;
 
     static void CreateLineMaterial()
     {
@@ -154,6 +156,8 @@ public sealed class Main : MonoBehaviour
 
         m_SolverDropdown = GameObject.Find("SolverDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         m_SolverDropdown.value = 1; // CG2 default
+
+        m_SimulationFlowToggle = GameObject.Find("ReverseSimulationToggle").GetComponent<UnityEngine.UI.Toggle>();
     }
 
     private void Test()
@@ -183,9 +187,19 @@ public sealed class Main : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (m_ParticleSystem.Time < 0)
+        {
+            m_ReversedTime = false;
+            m_SimulationFlowToggle.isOn = false;
+        }
+        float delta = Time.fixedDeltaTime;
+        if (m_ReversedTime)
+        {
+            delta *= -1;
+        }
         try
         {
-            m_Integrator.Step(m_ParticleSystem, Time.fixedDeltaTime);
+            m_Integrator.Step(m_ParticleSystem, delta);
         }
         catch (Exception e)
         {
@@ -389,6 +403,11 @@ public sealed class Main : MonoBehaviour
                 break;
         }
         Reset();
+    }
+
+    public void OnSimulationFlowChanged()
+    {
+        m_ReversedTime = m_SimulationFlowToggle.isOn;
     }
 
     private void SetupDebugGameObjects()
