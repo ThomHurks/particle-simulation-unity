@@ -32,7 +32,7 @@ public class TestScenario : Scenario
         new RodConstraint(p6, p7, a_ParticleSystem);
 
 
-        Particle p5 = new Particle(.5f);
+        Particle p5 = new Particle(500f);
         p5.Position = new Vector2(2, 2);
         a_ParticleSystem.AddParticle(p5);
         new CircularWireConstraint(p5, p5.Position + Vector2.right, a_ParticleSystem);

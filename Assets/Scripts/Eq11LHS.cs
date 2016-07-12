@@ -25,8 +25,8 @@ public class Eq11LHS : ImplicitMatrix
     {
         m_J = a_J;
         m_W = a_W;
-        m_Size = a_J.GetM();
-        m_TempVector = new double[m_W.Length];
+        m_Size = a_J.GetM();//=m
+        m_TempVector = new double[m_W.Length];//=n
     }
 
     protected override void MatrixTimesVectorImpl(double[] a_Source, double[] a_Destination)
@@ -36,10 +36,9 @@ public class Eq11LHS : ImplicitMatrix
             m_TempVector[i] = 0;
         }
         m_J.MatrixTransposeTimesVector(a_Source, m_TempVector); //temp = JTa
-        int vectorSize = a_Destination.Length;
-        for (int i = 0; i < vectorSize; ++i)
+        for (int i = 0; i < m_W.Length; ++i)
         {
-            m_TempVector[i] = m_TempVector[i] * m_W[i]; //temp = WTJa
+            m_TempVector[i] = m_TempVector[i] * m_W[i]; //temp = WJTa
         }
         m_J.MatrixTimesVector(m_TempVector, a_Destination); // a_Destination = JWJTa
     }
