@@ -1,4 +1,4 @@
-﻿public class Verlet2Integrator : Integrator
+﻿public class MidpointVerletIntegrator : Integrator
 {
     private double[] derivativeI;
     private double[] stateStorage;

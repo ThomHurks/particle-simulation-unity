@@ -88,7 +88,7 @@ public sealed class Main : MonoBehaviour
         {
             m_IntegratorDropdown.value = 4;
         }
-        else if (m_Integrator is Verlet2Integrator)
+        else if (m_Integrator is MidpointVerletIntegrator)
         {
             m_IntegratorDropdown.value = 5;
         }
@@ -373,25 +373,26 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to Midpoint");
                 break;
             case 2:
-                m_Integrator = new RungeKutta4Integrator();
-                m_Integrator.Initialize(m_ParticleSystem);
-                Debug.Log("Switched to Runge Kutta 4th");
-                break;
-            case 3:
-                m_Integrator = new VerletIntegrator();
-                m_Integrator.Initialize(m_ParticleSystem);
-                Debug.Log("Switched to Verlet 2nd order");
-                break;
-            case 4:
-                m_Integrator = new Verlet2Integrator();
-                m_Integrator.Initialize(m_ParticleSystem);
-                Debug.Log("Switched to Verlet 3rd order");
-                break;
-            case 5:
                 m_Integrator = new LeapfrogIntegrator();
                 m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Leapfrog");
                 break;
+            case 3:
+                m_Integrator = new RungeKutta4Integrator();
+                m_Integrator.Initialize(m_ParticleSystem);
+                Debug.Log("Switched to Runge Kutta 4th");
+                break;
+            case 4:
+                m_Integrator = new VerletIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
+                Debug.Log("Switched to Verlet 2nd order");
+                break;
+            case 5:
+                m_Integrator = new MidpointVerletIntegrator();
+                m_Integrator.Initialize(m_ParticleSystem);
+                Debug.Log("Switched to Verlet 3rd order");
+                break;
+            
         }
     }
 
