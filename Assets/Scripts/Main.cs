@@ -18,7 +18,7 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Toggle m_SimulationFlowToggle;
     private UnityEngine.UI.Slider m_SpeedSlider;
     private UnityEngine.UI.Text m_SpeedSliderText;
-    private const float m_ParticleSelectThreshold = 0.2f;
+    private const float m_ParticleSelectThreshold = 0.3f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 20f;
     private const float m_MouseSelectDampingConstant = 2f;
@@ -26,6 +26,7 @@ public sealed class Main : MonoBehaviour
     private float m_Speed = 1f;
     private MouseSpringForce m_CurrentMouseForce;
     private bool m_ReversedTime = false;
+    private Dictionary<int, MouseSpringForce> m_TouchForces;
 
     static void CreateLineMaterial()
     {
@@ -54,11 +55,12 @@ public sealed class Main : MonoBehaviour
 
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Integrator = new MidpointIntegrator();
-        m_Scenario = new PendulumScenario();
+        m_Integrator = new RungeKutta4Integrator();
+        m_Scenario = new TestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_Speed = 1f;
         SetupDebugGameObjects();
+        m_TouchForces = new Dictionary<int, MouseSpringForce>();
     }
 
     void Start()
@@ -179,7 +181,7 @@ public sealed class Main : MonoBehaviour
 
     void Update()
     {
-        HandleMouseInteraction();
+        HandleUserInteraction();
     }
 
     void FixedUpdate()
@@ -243,41 +245,96 @@ public sealed class Main : MonoBehaviour
         m_SpeedSlider.value = 1f;
     }
 
-    private void HandleMouseInteraction()
+    private void HandleUserInteraction()
     {
-        if (!m_HasMouseSelection && Input.GetMouseButtonDown(0))
+        if (Input.touchSupported)
+        {
+            if (Input.touchCount > 0)
+            {
+                Touch[] touches = Input.touches;
+                for (int i = 0; i < touches.Length; ++i)
+                {
+                    Touch touch = touches[i];
+                    int id = touch.fingerId;
+                    Vector3 touchPos3D = Camera.main.ScreenToWorldPoint(touch.position);
+                    Vector2 touchPos = new Vector2(touchPos3D.x, touchPos3D.y);
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        Particle closestParticle;
+                        if (GetClosestParticle(touchPos, m_ParticleSelectThreshold, out closestParticle))
+                        {
+                            MouseSpringForce touchForce = new MouseSpringForce(closestParticle, touchPos, m_MouseSelectRestLength, m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
+                            m_TouchForces[id] = touchForce;
+                            m_ParticleSystem.AddForce(touchForce);
+                        }
+                    }
+                    else if (touch.phase == TouchPhase.Moved)
+                    {
+                        m_TouchForces[id].UpdateMousePosition(touchPos);
+                    }
+                    else if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended)
+                    {
+                        MouseSpringForce touchForce;
+                        if (m_TouchForces.TryGetValue(id, out touchForce))
+                        {
+                            m_ParticleSystem.RemoveForce(touchForce);
+                        }
+                    }
+                }
+            }
+        }
+        else
         {
             Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
 
-            int numParticles = m_ParticleSystem.Particles.Count;
-            Particle closestParticle = null;
-            float particleDistanceSqr = float.MaxValue;
-            Particle curParticle = null;
-            for (int i = 0; i < numParticles; ++i)
+            if (!m_HasMouseSelection && Input.GetMouseButtonDown(0))
             {
-                curParticle = m_ParticleSystem.Particles[i];
-                float curDistanceSqr = (mousePos - curParticle.Position).sqrMagnitude;
-                if (curDistanceSqr < particleDistanceSqr)
+                Particle closestParticle;
+                if (GetClosestParticle(mousePos, m_ParticleSelectThreshold, out closestParticle))
                 {
-                    closestParticle = curParticle;
-                    particleDistanceSqr = curDistanceSqr;
+                    m_CurrentMouseForce = new MouseSpringForce(closestParticle, mousePos, m_MouseSelectRestLength,
+                        m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
+                    m_ParticleSystem.AddForce(m_CurrentMouseForce);
+                    m_HasMouseSelection = true;
                 }
             }
-            if (closestParticle != null && particleDistanceSqr < (m_ParticleSelectThreshold * m_ParticleSelectThreshold))
+            else if (m_HasMouseSelection && Input.GetMouseButtonDown(1))
             {
-                m_CurrentMouseForce = new MouseSpringForce(closestParticle, m_MouseSelectRestLength,
-                    m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
-                m_ParticleSystem.AddForce(m_CurrentMouseForce);
-                m_HasMouseSelection = true;
+                m_ParticleSystem.RemoveForce(m_CurrentMouseForce);
+                m_CurrentMouseForce = null;
+                m_HasMouseSelection = false;
+            }
+            else if (m_HasMouseSelection)
+            {
+                m_CurrentMouseForce.UpdateMousePosition(mousePos);
             }
         }
-        else if (m_HasMouseSelection && Input.GetMouseButtonDown(1))
+    }
+
+    private bool GetClosestParticle(Vector2 a_Position, float a_Threshold, out Particle out_Particle)
+    {
+        int numParticles = m_ParticleSystem.Particles.Count;
+        Particle closestParticle = null;
+        float particleDistanceSqr = float.MaxValue;
+        Particle curParticle = null;
+        for (int i = 0; i < numParticles; ++i)
         {
-            m_ParticleSystem.RemoveForce(m_CurrentMouseForce);
-            m_CurrentMouseForce = null;
-            m_HasMouseSelection = false;
+            curParticle = m_ParticleSystem.Particles[i];
+            float curDistanceSqr = (a_Position - curParticle.Position).sqrMagnitude;
+            if (curDistanceSqr < particleDistanceSqr)
+            {
+                closestParticle = curParticle;
+                particleDistanceSqr = curDistanceSqr;
+            }
         }
+        if (closestParticle != null && particleDistanceSqr < (a_Threshold * a_Threshold))
+        {
+            out_Particle = closestParticle;
+            return true;
+        }
+        out_Particle = null;
+        return false;
     }
 
     public void OnIntegratorTypeChanged()

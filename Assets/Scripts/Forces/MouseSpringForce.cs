@@ -6,21 +6,25 @@ public class MouseSpringForce : Force
     private float m_RestLength;
     private float m_SpringConstant;
     private float m_DampingConstant;
+    private Vector2 m_MousePosition;
 
-    public MouseSpringForce(Particle a_Particle, float a_RestLength, float a_SpringConstant, float a_DampingConstant)
+    public MouseSpringForce(Particle a_Particle, Vector2 a_MousePosition, float a_RestLength, float a_SpringConstant, float a_DampingConstant)
     {
         m_Particle = a_Particle;
         m_RestLength = a_RestLength;
         m_SpringConstant = a_SpringConstant;
         m_DampingConstant = a_DampingConstant;
+        m_MousePosition = a_MousePosition;
+    }
+
+    public void UpdateMousePosition(Vector2 a_MousePosition)
+    {
+        m_MousePosition = a_MousePosition;
     }
 
     public void ApplyForce(ParticleSystem a_ParticleSystem)
     {
-        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
-
-        Vector2 relative = mousePos - m_Particle.Position;
+        Vector2 relative = m_MousePosition - m_Particle.Position;
         float magnitude = relative.magnitude;
         Vector2 velocity = m_Particle.Velocity;
         Vector2 direction = relative.normalized;
@@ -38,12 +42,9 @@ public class MouseSpringForce : Force
 
     public void Draw()
     {
-        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
-
         GL.Begin(GL.LINES);
         GL.Color(new Color(1f, 0.7f, 0.8f));
-        GL.Vertex(mousePos);
+        GL.Vertex(m_MousePosition);
         GL.Vertex(m_Particle.Position);
         GL.End();
     }

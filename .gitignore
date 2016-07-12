@@ -17,3 +17,5 @@ ProjectSettings/ProjectVersion.txt
 ProjectSettings/ProjectSettings.asset
 particle-simulation-unity.userprefs
 ProjectSettings/ProjectVersion.txt
+ParticleSimulationiOS/*
+ParticleSimulationWebGL
