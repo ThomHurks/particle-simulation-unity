@@ -9,8 +9,8 @@
                                  double epsilon,    // how low should we go?
                                  int steps, out int stepsPerformed)
     {
-        ExplicitMatrix B = A.toExplicitMatrix();
-        int n = A.getN();
+        ExplicitMatrix B = A.AsExplicitMatrix();
+        int n = A.GetN();
         int steps2 = 0;
 
         InitializeOrClear(n);
@@ -24,11 +24,11 @@
                 {
                     if (j != i)
                     {
-                        sigma = sigma + B.getValue(i, j) * x[j];
+                        sigma = sigma + B.GetValue(i, j) * x[j];
                     }
                 }
 
-                xnext[i] = (b[i] - sigma) / B.getValue(i, i);
+                xnext[i] = (b[i] - sigma) / B.GetValue(i, i);
             }
             double d = 0;
             A.MatrixTimesVector(xnext, r);

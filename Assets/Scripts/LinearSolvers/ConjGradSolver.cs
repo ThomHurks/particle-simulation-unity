@@ -22,7 +22,7 @@ public sealed class ConjGradSolver : LinearSolver
                                  double epsilon,    // how low should we go?
                                  int steps, out int stepsPerformed)
     {
-        int n = A.getN();
+        int n = A.GetN();
         int i, iMax;
         double alpha, beta, rSqrLen, rSqrLenOld, u;
 
@@ -32,9 +32,9 @@ public sealed class ConjGradSolver : LinearSolver
         {
             throw new System.Exception("Sizes do not match");
         }
-        else if (x.Length != A.getN())
+        else if (x.Length != A.GetN())
         {
-            throw new System.Exception("Sizes do not match!" + x.Length + " " + A.getN());
+            throw new System.Exception("Sizes do not match!" + x.Length + " " + A.GetN());
         }
         else if (x.Length != n)
         {

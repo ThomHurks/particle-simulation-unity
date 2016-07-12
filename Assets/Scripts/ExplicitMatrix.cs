@@ -10,23 +10,34 @@
         m_Values = new double[m, n];
     }
 
-    public void setValue(int i, int j, double value)
+    public void SetValue(int i, int j, double value)
     {
         m_Values[i, j] = value;
     }
 
-    public int getM()
+    public int GetM()
     {
         return m_M;
     }
 
-    public int getN()
+    public int GetN()
     {
         return m_N;
     }
 
-    public double getValue(int i, int j)
+    public double GetValue(int i, int j)
     {
         return m_Values[i, j];
+    }
+
+    public void Clear()
+    {
+        for (int i = 0; i < m_Values.GetLength(0); ++i)
+        {
+            for (int j = 0; j < m_Values.GetLength(1); ++j)
+            {
+                m_Values[i, j] = 0;
+            }
+        }
     }
 }

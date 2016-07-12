@@ -9,24 +9,13 @@ public abstract class ImplicitMatrix : Matrix
 
     protected abstract void MatrixTransposeTimesVectorImpl(double[] a_Source, double[] a_Destination);
 
-    public abstract int getM();
+    public abstract int GetM();
 
-    public abstract int getN();
+    public abstract int GetN();
 
-    public abstract double getValue(int i, int j);
+    public abstract double GetValue(int i, int j);
 
-    public ExplicitMatrix toExplicitMatrix()
-    {
-        ExplicitMatrix B = new ExplicitMatrix(getM(), getN());
-        for (int i = 0; i < getM(); i++)
-        {
-            for (int j = 0; j < getN(); j++)
-            {
-                B.setValue(i, j, getValue(i, j));
-            }
-        }
-        return B;
-    }
+    public abstract ExplicitMatrix AsExplicitMatrix();
 
     // Perform safety checks in abstract class.
     public void MatrixTimesVector(double[] a_Source, double[] a_Destination)
@@ -45,25 +34,25 @@ public abstract class ImplicitMatrix : Matrix
 
     private void VerifyCorrectSize(double[] a_Source, double[] a_Destination)
     {
-        if (a_Destination.Length != getM())
+        if (a_Destination.Length != GetM())
         {
-            throw new System.Exception("Output size wrong! Should be " + getM() + ",but is " + a_Destination.Length);
+            throw new System.Exception("Output size wrong! Should be " + GetM() + ",but is " + a_Destination.Length);
         }
-        if (a_Source.Length != this.getN())
+        if (a_Source.Length != this.GetN())
         {
-            throw new System.Exception("Input size wrong! Should be " + getN() + ",but is " + a_Source.Length);
+            throw new System.Exception("Input size wrong! Should be " + GetN() + ",but is " + a_Source.Length);
         }
     }
 
     private void VerifyCorrectTransposeSize(double[] a_Source, double[] a_Destination)
     {
-        if (a_Destination.Length != getN())
+        if (a_Destination.Length != GetN())
         {
-            throw new System.Exception("Output size wrong! Should be " + getN() + ",but is " + a_Destination.Length);
+            throw new System.Exception("Output size wrong! Should be " + GetN() + ",but is " + a_Destination.Length);
         }
-        if (a_Source.Length != getM())
+        if (a_Source.Length != GetM())
         {
-            throw new System.Exception("Input size wrong! Should be " + getM() + ",but is " + a_Source.Length);
+            throw new System.Exception("Input size wrong! Should be " + GetM() + ",but is " + a_Source.Length);
         }
     }
 
@@ -86,12 +75,12 @@ public abstract class ImplicitMatrix : Matrix
             m_DebugStringBuilder = new System.Text.StringBuilder();
         }
         m_DebugStringBuilder.Remove(0, m_DebugStringBuilder.Length);
-        m_DebugStringBuilder.EnsureCapacity(getM() * getN() * 64 * 2);
-        for (int i = 0; i < getM(); i++)
+        m_DebugStringBuilder.EnsureCapacity(GetM() * GetN() * 64 * 2);
+        for (int i = 0; i < GetM(); i++)
         {
-            for (int j = 0; j < getN(); j++)
+            for (int j = 0; j < GetN(); j++)
             {
-                m_DebugStringBuilder.Append(getValue(i, j));
+                m_DebugStringBuilder.Append(GetValue(i, j));
                 m_DebugStringBuilder.Append(sep);
             }
             m_DebugStringBuilder.Append("\n");

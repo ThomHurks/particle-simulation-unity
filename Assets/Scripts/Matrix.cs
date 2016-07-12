@@ -1,10 +1,8 @@
-﻿using System;
-
-public interface Matrix
+﻿public interface Matrix
 {
-    int getN();
+    int GetN();
 
-    int getM();
+    int GetM();
 
-    double getValue(int i, int j);
+    double GetValue(int i, int j);
 }

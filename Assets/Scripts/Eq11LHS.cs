@@ -7,6 +7,10 @@ public class Eq11LHS : ImplicitMatrix
     // = global n (2*particles)
     private readonly int m_Size;
     private double[] m_TempVector;
+    // Purely as a cache if we computed it at some point:
+    private ExplicitMatrix m_ExplicitMatrix;
+
+
     // This is a symetric matrix: m=n (= global m)
 
     /*
@@ -21,7 +25,7 @@ public class Eq11LHS : ImplicitMatrix
     {
         m_J = a_J;
         m_W = a_W;
-        m_Size = a_J.getM();
+        m_Size = a_J.GetM();
         m_TempVector = new double[m_W.Length];
     }
 
@@ -46,26 +50,62 @@ public class Eq11LHS : ImplicitMatrix
         MatrixTimesVector(a_Source, a_Destination);
     }
 
-    public override int getM()
+    public override int GetM()
     {
         return m_Size;
     }
 
-    public override int getN()
+    public override int GetN()
     {
         return m_Size;
     }
 
-    public override double getValue(int i, int j)
+    public override ExplicitMatrix AsExplicitMatrix()
     {
-        double x = 0;
-        for (int k = 0; k < m_J.getN(); k++)
+        if (m_ExplicitMatrix == null || m_ExplicitMatrix.GetM() != m_Size || m_ExplicitMatrix.GetN() != m_Size)
         {
-            double y = m_J.getValue(i, k);
-            double z = m_W[k] * m_J.getValue(j, k);
-            x += y * z;
+            m_ExplicitMatrix = new ExplicitMatrix(m_Size, m_Size);
         }
-        return x;
+        else
+        {
+            m_ExplicitMatrix.Clear();
+        }
+        ExplicitMatrix J_Explicit = m_J.AsExplicitMatrix();
+        for (int i = 0; i < m_Size; ++i)
+        {
+            for (int j = 0; j < m_Size; ++j)
+            {
+                double x = 0;
+                for (int k = 0; k < J_Explicit.GetN(); ++k)
+                {
+                    double y = J_Explicit.GetValue(i, k);
+                    double z = m_W[k] * J_Explicit.GetValue(j, k);
+                    x += y * z;
+                }
+                m_ExplicitMatrix.SetValue(i, j, x);
+            }
+        }
+        /*for (int k = 0; k < J_Explicit.GetN(); ++k)
+        {
+            double mwk = m_W[k];
+            for (int i = 0; i < m_Size; ++i)
+            {
+                double y = J_Explicit.GetValue(i, k);
+                for (int j = 0; j < m_Size; ++j)
+                {
+                    double z = mwk * J_Explicit.GetValue(j, k);
+                    z *= y;
+                    z += m_ExplicitMatrix.GetValue(i, j);
+                    m_ExplicitMatrix.SetValue(i, j, z);
+                }
+            }
+        }*/
+        return m_ExplicitMatrix;
+    }
+
+    public override double GetValue(int i, int j)
+    {
+        throw new System.NotImplementedException();
     }
 
     public override void printX()

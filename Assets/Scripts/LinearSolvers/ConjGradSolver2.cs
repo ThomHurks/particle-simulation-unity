@@ -227,7 +227,7 @@ public sealed class ConjGradSolver2 : LinearSolver
         rho_old = 0d;
         rlbl = 0;
 
-        int n = A.getN();
+        int n = A.GetN();
         InitializeOrClear(n);
 
         // Inital guess solution for x.
