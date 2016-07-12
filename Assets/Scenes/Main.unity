@@ -3563,9 +3563,9 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Runge Kutta 4th
       m_Image: {fileID: 0}
-    - m_Text: Verlet 2nd
+    - m_Text: Verlet
       m_Image: {fileID: 0}
-    - m_Text: Verlet 3rd
+    - m_Text: Verlet + Midpoint
       m_Image: {fileID: 0}
     - m_Text: Leapfrog
       m_Image: {fileID: 0}
