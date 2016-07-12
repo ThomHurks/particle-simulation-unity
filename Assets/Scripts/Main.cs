@@ -84,9 +84,13 @@ public sealed class Main : MonoBehaviour
         {
             m_IntegratorDropdown.value = 3;
         }
-        else if (m_Integrator is LeapfrogIntegrator)
+        else if (m_Integrator is Verlet2Integrator)
         {
             m_IntegratorDropdown.value = 4;
+        }
+        else if (m_Integrator is LeapfrogIntegrator)
+        {
+            m_IntegratorDropdown.value = 5;
         }
         m_IntegratorDropdown.RefreshShownValue();
 
@@ -130,6 +134,10 @@ public sealed class Main : MonoBehaviour
         else if (m_Scenario is ReversibleScenario)
         {
             m_ScenarioDropdown.value = 9;
+        }
+        else if (m_Scenario is LeapfrogTestScenario)
+        {
+            m_ScenarioDropdown.value = 10;
         }
         m_ScenarioDropdown.RefreshShownValue();
 
@@ -359,12 +367,12 @@ public sealed class Main : MonoBehaviour
             case 3:
                 m_Integrator = new VerletIntegrator();
                 m_Integrator.Initialize(m_ParticleSystem);
-                Debug.Log("Switched to Verlet");
+                Debug.Log("Switched to Verlet 2nd order");
                 break;
             case 4:
                 m_Integrator = new Verlet2Integrator();
                 m_Integrator.Initialize(m_ParticleSystem);
-                Debug.Log("Switched to Verlet2");
+                Debug.Log("Switched to Verlet 3rd order");
                 break;
             case 5:
                 m_Integrator = new LeapfrogIntegrator();
@@ -437,11 +445,9 @@ public sealed class Main : MonoBehaviour
                 m_Scenario = new ReversibleScenario();
                 Debug.Log("Switched to reversible scenario");
                 break;
-
             case 10:
                 m_Scenario = new LeapfrogTestScenario();
-                Debug.Log("Switched to reversible scenario");
-
+                Debug.Log("Switched to leapfrog test scenario");
                 break;
         }
         ResetSimulation();

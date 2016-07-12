@@ -3563,9 +3563,9 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Runge Kutta 4th
       m_Image: {fileID: 0}
-    - m_Text: Verlet
+    - m_Text: Verlet 2nd
       m_Image: {fileID: 0}
-    - m_Text: Verlet2
+    - m_Text: Verlet 3rd
       m_Image: {fileID: 0}
     - m_Text: Leapfrog
       m_Image: {fileID: 0}
@@ -4405,7 +4405,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Reversible
       m_Image: {fileID: 0}
-    - m_Text: LeapTest
+    - m_Text: Leapfrog Test
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
