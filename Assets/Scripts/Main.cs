@@ -239,6 +239,7 @@ public sealed class Main : MonoBehaviour
         {
             m_SimulationFlowToggle.isOn = false;
         }
+        m_TouchForces.Clear();
         m_ParticleSystem.Clear();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_ParticleSystem.Initialize();
@@ -272,20 +273,31 @@ public sealed class Main : MonoBehaviour
                         if (GetClosestParticle(touchPos, m_ParticleSelectThreshold, out closestParticle))
                         {
                             MouseSpringForce touchForce = new MouseSpringForce(closestParticle, touchPos, m_MouseSelectRestLength, m_MouseSelectSpringConstant, m_MouseSelectDampingConstant);
+                            // This should never happen, but adding anyway for robustness:
+                            MouseSpringForce existingForce;
+                            if (m_TouchForces.TryGetValue(id, out existingForce))
+                            {
+                                m_ParticleSystem.RemoveForce(existingForce);
+                            }
                             m_TouchForces[id] = touchForce;
                             m_ParticleSystem.AddForce(touchForce);
                         }
                     }
                     else if (touch.phase == TouchPhase.Moved)
                     {
-                        m_TouchForces[id].UpdateMousePosition(touchPos);
+                        MouseSpringForce existingForce;
+                        if (m_TouchForces.TryGetValue(id, out existingForce))
+                        {
+                            existingForce.UpdateMousePosition(touchPos);
+                        }
                     }
                     else if (touch.phase == TouchPhase.Canceled || touch.phase == TouchPhase.Ended)
                     {
-                        MouseSpringForce touchForce;
-                        if (m_TouchForces.TryGetValue(id, out touchForce))
+                        MouseSpringForce existingForce;
+                        if (m_TouchForces.TryGetValue(id, out existingForce))
                         {
-                            m_ParticleSystem.RemoveForce(touchForce);
+                            m_ParticleSystem.RemoveForce(existingForce);
+                            m_TouchForces.Remove(id);
                         }
                     }
                 }
