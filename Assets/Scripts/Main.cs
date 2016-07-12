@@ -186,7 +186,7 @@ public sealed class Main : MonoBehaviour
     {
         if (m_ParticleSystem.Time < 0)
         {
-            Reset();
+            ResetSimulation();
         }
         float delta = Time.fixedDeltaTime * m_Speed;
         try
@@ -198,7 +198,7 @@ public sealed class Main : MonoBehaviour
         {
             Debug.LogError("We encountered an error, so we will reset the scenario.");
             Debug.LogError(e.Message + "\n" + e.StackTrace);
-            Reset();
+            ResetSimulation();
         }
     }
 
@@ -216,7 +216,7 @@ public sealed class Main : MonoBehaviour
         UpdateDebugGameObjects();
     }
 
-    public void Reset()
+    public void ResetSimulation()
     {
         m_HasMouseSelection = false;
         m_CurrentMouseForce = null;
@@ -234,6 +234,13 @@ public sealed class Main : MonoBehaviour
         m_ParticleSystem.Initialize();
         m_Integrator.Initialize(m_ParticleSystem);
         SetupDebugGameObjects();
+    }
+
+    public void ResetSpeed()
+    {
+        m_Speed = 1f;
+        m_SpeedSliderText.text = "1x";
+        m_SpeedSlider.value = 1f;
     }
 
     private void HandleMouseInteraction()
@@ -369,7 +376,7 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to reversible scenario");
                 break;
         }
-        Reset();
+        ResetSimulation();
     }
 
     public void OnCircleTypeChanged()
@@ -415,7 +422,7 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to analitic angle springs: New scenarios will initialize with analitical angular springs");
                 break;
         }
-        Reset();
+        ResetSimulation();
     }
 
     public void OnSimulationFlowChanged()
