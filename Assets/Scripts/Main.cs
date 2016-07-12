@@ -55,7 +55,7 @@ public sealed class Main : MonoBehaviour
 
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Integrator = new LeapfrogIntegrator();
+        m_Integrator = new MidpointVerletIntegrator();
         m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_Speed = 1f;
