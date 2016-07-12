@@ -59,6 +59,7 @@ public sealed class Main : MonoBehaviour
 
     void Start()
     {
+        m_ParticleSystem.Initialize();
         m_Integrator.Initialize(m_ParticleSystem);
         m_IntegratorDropdown = GameObject.Find("IntegratorDropdown").GetComponent<UnityEngine.UI.Dropdown>();
         if (m_Integrator is EulerIntegrator)
@@ -210,6 +211,7 @@ public sealed class Main : MonoBehaviour
         }
         m_ParticleSystem.Clear();
         m_Scenario.CreateScenario(m_ParticleSystem);
+        m_ParticleSystem.Initialize();
         m_Integrator.Initialize(m_ParticleSystem);
         SetupDebugGameObjects();
     }
