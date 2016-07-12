@@ -28,7 +28,7 @@ public class EllipticalWireConstraint : Constraint
         m_C = (a_Center1 - a_Center2).magnitude / 2;
         m_A = m_Radius / 2;
         m_B = Mathf.Sqrt(m_A * m_A - m_C * m_C);
-        Debug.Log("a = " + m_A + ", b = " + m_B);
+        //Debug.Log("a = " + m_A + ", b = " + m_B);
         m_Tilt = Mathf.Acos(Vector2.Dot(Vector2.right, (m_Focus1 - m_Focus2).normalized));
         int j = a_System.GetParticleIndex(a_Particle) * a_System.GetParticleDimension();
         int iLength = GetConstraintDimension();

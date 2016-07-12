@@ -27,6 +27,7 @@ public class ParticleSystem
     private double[] RHS;
     private double[] lambda;
     private double[] QHat;
+    private Eq11LHS LHS;
 
     public int Count
     {
@@ -194,6 +195,8 @@ public class ParticleSystem
         JWQ = new double[numConstraints];
         RHS = new double[numConstraints];
         lambda = new double[numConstraints];
+
+        LHS = new Eq11LHS(m_J, W);
     }
 
     private void SolveEquation11(float a_SpringConstant, float a_DampingConstant, double a_SolverEpsilon, int a_SolverSteps)
@@ -242,7 +245,6 @@ public class ParticleSystem
             }
         }
         // Set up implicit matrix of LHS and solve.
-        Eq11LHS LHS = new Eq11LHS(m_J, W); // J W JT = m*m if all goes well
         for (int i = 0; i < lambda.Length; ++i)
         {
             lambda[i] = 0;
