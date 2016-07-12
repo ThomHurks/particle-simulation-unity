@@ -362,6 +362,11 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to Verlet");
                 break;
             case 4:
+                m_Integrator = new Verlet2Integrator();
+                m_Integrator.Initialize(m_ParticleSystem);
+                Debug.Log("Switched to Verlet2");
+                break;
+            case 5:
                 m_Integrator = new LeapfrogIntegrator();
                 m_Integrator.Initialize(m_ParticleSystem);
                 Debug.Log("Switched to Leapfrog");
@@ -431,6 +436,12 @@ public sealed class Main : MonoBehaviour
             case 9: 
                 m_Scenario = new ReversibleScenario();
                 Debug.Log("Switched to reversible scenario");
+                break;
+
+            case 10:
+                m_Scenario = new LeapfrogTestScenario();
+                Debug.Log("Switched to reversible scenario");
+
                 break;
         }
         ResetSimulation();

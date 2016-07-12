@@ -3565,6 +3565,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Verlet
       m_Image: {fileID: 0}
+    - m_Text: Verlet2
+      m_Image: {fileID: 0}
     - m_Text: Leapfrog
       m_Image: {fileID: 0}
   m_OnValueChanged:
@@ -4402,6 +4404,8 @@ MonoBehaviour:
     - m_Text: Sliced Ellipse
       m_Image: {fileID: 0}
     - m_Text: Reversible
+      m_Image: {fileID: 0}
+    - m_Text: LeapTest
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

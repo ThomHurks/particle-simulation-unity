@@ -42,7 +42,7 @@
         int vecLength = a_VectorA.Length / 4;
         for (int i = 0; i < vecLength; ++i)
         {
-            int velIndex = (i << 2) + 2;
+            int velIndex = (i << 2) + 2;//i*4+2
             a_VectorOut[velIndex] = (a_VectorA[velIndex] * a_ScaleFactor) + a_VectorB[velIndex];
             a_VectorOut[velIndex + 1] = (a_VectorA[velIndex + 1] * a_ScaleFactor) + a_VectorB[velIndex + 1];
         }
