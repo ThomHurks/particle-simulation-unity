@@ -16,6 +16,8 @@ public sealed class Main : MonoBehaviour
     private UnityEngine.UI.Dropdown m_AngleDropdown;
     private UnityEngine.UI.Dropdown m_SolverDropdown;
     private UnityEngine.UI.Toggle m_SimulationFlowToggle;
+    private UnityEngine.UI.Slider m_SpeedSlider;
+    private UnityEngine.UI.Text m_SpeedSliderText;
     private const float m_ParticleSelectThreshold = 0.2f;
     private const float m_MouseSelectRestLength = 0f;
     private const float m_MouseSelectSpringConstant = 20f;
@@ -55,7 +57,7 @@ public sealed class Main : MonoBehaviour
         m_Integrator = new MidpointIntegrator();
         m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
-        m_Speed = 1f / 4f;
+        m_Speed = 1f;
         SetupDebugGameObjects();
     }
 
@@ -161,6 +163,10 @@ public sealed class Main : MonoBehaviour
         m_SolverDropdown.value = 1; // CG2 default
 
         m_SimulationFlowToggle = GameObject.Find("ReverseSimulationToggle").GetComponent<UnityEngine.UI.Toggle>();
+        m_SpeedSlider = GameObject.Find("SpeedSlider").GetComponent<UnityEngine.UI.Slider>();
+        m_SpeedSliderText = m_SpeedSlider.GetComponentInChildren<UnityEngine.UI.Text>();
+        m_SpeedSlider.value = Mathf.Clamp(m_Speed, 0.01f, 5f);
+        m_SpeedSliderText.text = m_Speed + "x";
     }
 
     void Update()
@@ -206,6 +212,11 @@ public sealed class Main : MonoBehaviour
     {
         m_HasMouseSelection = false;
         m_CurrentMouseForce = null;
+        m_Speed = 1f;
+        if (m_SpeedSliderText != null)
+        {
+            m_SpeedSliderText.text = "1x";
+        }
         m_ReversedTime = false;
         if (m_SimulationFlowToggle != null)
         {
@@ -400,6 +411,12 @@ public sealed class Main : MonoBehaviour
     {
         m_ReversedTime = m_SimulationFlowToggle.isOn;
         m_ParticleSystem.ReverseParticleVelocities();
+    }
+
+    public void OnSpeedSliderChanged()
+    {
+        m_Speed = m_SpeedSlider.value;
+        m_SpeedSliderText.text = Math.Round(m_Speed, 3) + "x";
     }
 
     private void SetupDebugGameObjects()
