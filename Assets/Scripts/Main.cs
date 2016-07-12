@@ -212,10 +212,9 @@ public sealed class Main : MonoBehaviour
     {
         m_HasMouseSelection = false;
         m_CurrentMouseForce = null;
-        m_Speed = 1f;
         if (m_SpeedSliderText != null)
         {
-            m_SpeedSliderText.text = "1x";
+            m_SpeedSliderText.text = Math.Round(m_Speed, 4) + "x";
         }
         m_ReversedTime = false;
         if (m_SimulationFlowToggle != null)
@@ -415,8 +414,8 @@ public sealed class Main : MonoBehaviour
 
     public void OnSpeedSliderChanged()
     {
-        m_Speed = m_SpeedSlider.value;
-        m_SpeedSliderText.text = Math.Round(m_Speed, 3) + "x";
+        m_Speed = (float)Math.Round(m_SpeedSlider.value, 4);
+        m_SpeedSliderText.text = Math.Round(m_Speed, 4) + "x";
     }
 
     private void SetupDebugGameObjects()
