@@ -55,8 +55,8 @@ public sealed class Main : MonoBehaviour
 
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Integrator = new RungeKutta4Integrator();
-        m_Scenario = new TestScenario();
+        m_Integrator = new LeapfrogIntegrator();
+        m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_Speed = 1f;
         SetupDebugGameObjects();
@@ -76,22 +76,23 @@ public sealed class Main : MonoBehaviour
         {
             m_IntegratorDropdown.value = 1;
         }
-        else if (m_Integrator is RungeKutta4Integrator)
+        else if (m_Integrator is LeapfrogIntegrator)
         {
             m_IntegratorDropdown.value = 2;
         }
-        else if (m_Integrator is VerletIntegrator)
+        else if (m_Integrator is RungeKutta4Integrator)
         {
             m_IntegratorDropdown.value = 3;
         }
-        else if (m_Integrator is Verlet2Integrator)
+        else if (m_Integrator is VerletIntegrator)
         {
             m_IntegratorDropdown.value = 4;
         }
-        else if (m_Integrator is LeapfrogIntegrator)
+        else if (m_Integrator is Verlet2Integrator)
         {
             m_IntegratorDropdown.value = 5;
         }
+
         m_IntegratorDropdown.RefreshShownValue();
 
         m_ScenarioDropdown = GameObject.Find("ScenarioDropdown").GetComponent<UnityEngine.UI.Dropdown>();
