@@ -30,10 +30,10 @@
         { 
             int i4 = i * 4;
             //+0 to make it more readable, compiler will fix it :)
-            stateStorage[i4 + 0] = originals[i4 + 0] + derivativeI[i4 + 0] * dt / 4; // x_{i+1} = x_i + v_i dt + a_i dtsq
-            stateStorage[i4 + 1] = originals[i4 + 1] + derivativeI[i4 + 1] * dt / 4;
-            stateStorage[i4 + 2] = originals[i4 + 2] + derivativeI[i4 + 2] * dt / 4;
-            stateStorage[i4 + 3] = originals[i4 + 3] + derivativeI[i4 + 0] * dt / 4;
+            stateStorage[i4 + 0] = originals[i4 + 0] + derivativeI[i4 + 0] * dt / 4f; // x_{i+1} = x_i + v_i dt + a_i dtsq
+            stateStorage[i4 + 1] = originals[i4 + 1] + derivativeI[i4 + 1] * dt / 4f;
+            stateStorage[i4 + 2] = originals[i4 + 2] + derivativeI[i4 + 2] * dt / 4f;
+            stateStorage[i4 + 3] = originals[i4 + 3] + derivativeI[i4 + 0] * dt / 4f;
         }
         a_ParticleSystem.ParticlesSetState(stateStorage); // 1/4 euler step
 

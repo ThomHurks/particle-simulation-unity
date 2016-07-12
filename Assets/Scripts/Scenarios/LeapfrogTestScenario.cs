@@ -3,7 +3,6 @@
 
 public class LeapfrogTestScenario : Scenario
 {
-    private static readonly float y = 3;
 
     public void CreateScenario(ParticleSystem a_ParticleSystem)
     {
