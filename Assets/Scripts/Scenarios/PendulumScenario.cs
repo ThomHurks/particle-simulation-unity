@@ -11,7 +11,9 @@ public class PendulumScenario : Scenario
         int max1 = max - 1;
         for (int i = 0; i < max; i++)
         {
-            createPendulum(a_ParticleSystem, i * i * .5f - max1 * max1 * .5f + 4, .5f, i + 2);
+            int y = i >= max / 2 ? 0 : 4;
+            float x = i >= max / 2 ? 3 * (i - max / 2) - 6 : 3 * i - 6;
+            createPendulum(a_ParticleSystem, x, y, .5f, i + 2);
         }
         Force f = new GravityForce(1f);
         a_ParticleSystem.AddForce(f);
@@ -19,7 +21,7 @@ public class PendulumScenario : Scenario
         a_ParticleSystem.AddForce(f);
     }
 
-    void createPendulum(ParticleSystem a_ParticleSystem, float x, float length, int n)
+    void createPendulum(ParticleSystem a_ParticleSystem, float x, float y, float length, int n)
     {
         Particle prev = new Particle(1f);
         prev.Position = new Vector2(x, y);

@@ -21,6 +21,7 @@ public sealed class Main : MonoBehaviour
     private const float m_MouseSelectSpringConstant = 20f;
     private const float m_MouseSelectDampingConstant = 2f;
     private bool m_HasMouseSelection = false;
+    private float m_Speed = 1f;
     private MouseSpringForce m_CurrentMouseForce;
     private bool m_ReversedTime = false;
 
@@ -51,9 +52,10 @@ public sealed class Main : MonoBehaviour
 
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Integrator = new RungeKutta4Integrator();
-        m_Scenario = new TestScenario();
+        m_Integrator = new MidpointIntegrator();
+        m_Scenario = new PendulumScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
+        m_Speed = 1f / 4f;
         SetupDebugGameObjects();
     }
 
@@ -172,7 +174,7 @@ public sealed class Main : MonoBehaviour
         {
             Reset();
         }
-        float delta = Time.fixedDeltaTime;
+        float delta = Time.fixedDeltaTime * m_Speed;
         try
         {
             m_Integrator.Step(m_ParticleSystem, delta);
