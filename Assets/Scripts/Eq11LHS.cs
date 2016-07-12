@@ -70,18 +70,21 @@ public class Eq11LHS : ImplicitMatrix
             m_ExplicitMatrix.Clear();
         }
         ExplicitMatrix J_Explicit = m_J.AsExplicitMatrix();
+
+        int jn = J_Explicit.GetN();
         for (int i = 0; i < m_Size; ++i)
         {
-            for (int j = 0; j < m_Size; ++j)
+            for (int j = i; j < m_Size; ++j)
             {
                 double x = 0;
-                for (int k = 0; k < J_Explicit.GetN(); ++k)
+                for (int k = 0; k < jn; ++k)
                 {
                     double y = J_Explicit.GetValue(i, k);
                     double z = m_W[k] * J_Explicit.GetValue(j, k);
                     x += y * z;
                 }
                 m_ExplicitMatrix.SetValue(i, j, x);
+                m_ExplicitMatrix.SetValue(j, i, x);
             }
         }
         /*for (int k = 0; k < J_Explicit.GetN(); ++k)
