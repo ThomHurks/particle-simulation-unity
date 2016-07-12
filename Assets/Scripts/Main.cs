@@ -121,6 +121,14 @@ public sealed class Main : MonoBehaviour
         {
             m_ScenarioDropdown.value = 7;
         }
+        else if (m_Scenario is SlicedEllipseScenario)
+        {
+            m_ScenarioDropdown.value = 8;
+        }
+        else if (m_Scenario is ReversibleScenario)
+        {
+            m_ScenarioDropdown.value = 9;
+        }
         m_ScenarioDropdown.RefreshShownValue();
 
         m_CircleDropdown = GameObject.Find("CircleDropdown").GetComponent<UnityEngine.UI.Dropdown>();
@@ -355,6 +363,10 @@ public sealed class Main : MonoBehaviour
             case 8:
                 m_Scenario = new SlicedEllipseScenario();
                 Debug.Log("Switched to elipse Engine scenario");
+                break;
+            case 9: 
+                m_Scenario = new ReversibleScenario();
+                Debug.Log("Switched to reversible scenario");
                 break;
         }
         Reset();
