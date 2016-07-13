@@ -4405,7 +4405,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Reversible
       m_Image: {fileID: 0}
-    - m_Text: Leapfrog Test
+    - m_Text: Speed Test
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

@@ -56,7 +56,7 @@ public sealed class Main : MonoBehaviour
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new MidpointVerletIntegrator();
-        m_Scenario = new PendulumScenario();
+        m_Scenario = new SpeedTestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_Speed = 1f;
         SetupDebugGameObjects();
@@ -136,7 +136,7 @@ public sealed class Main : MonoBehaviour
         {
             m_ScenarioDropdown.value = 9;
         }
-        else if (m_Scenario is LeapfrogTestScenario)
+        else if (m_Scenario is SpeedTestScenario)
         {
             m_ScenarioDropdown.value = 10;
         }
@@ -460,7 +460,7 @@ public sealed class Main : MonoBehaviour
                 Debug.Log("Switched to reversible scenario");
                 break;
             case 10:
-                m_Scenario = new LeapfrogTestScenario();
+                m_Scenario = new SpeedTestScenario();
                 Debug.Log("Switched to leapfrog test scenario");
                 break;
         }
