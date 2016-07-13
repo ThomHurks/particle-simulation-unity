@@ -11,6 +11,7 @@
     {
         ExplicitMatrix B = A.AsExplicitMatrix();
         int n = A.GetN();
+        ClearVectorWithValue(x, 0d);
         int steps2 = 0;
 
         InitializeOrClear(n);
