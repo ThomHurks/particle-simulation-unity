@@ -190,6 +190,10 @@ public sealed class ConjGradSolver2 : LinearSolver
                 pdotq = pdotq + p[i] * q[i];
             }
             alpha = rho / pdotq;
+            if (double.IsNaN(alpha))
+            {
+                alpha = 1d;
+            }
             for (i = 0; i < n; i++)
             {
                 x[i] = x[i] + alpha * p[i];
