@@ -1,4 +1,4 @@
-# C\# Particle Simulation
+# C\# Physically Based Particle Simulation
 This project is a particle simulation written in C\# based on the SIGGRAPH 2001 Physically Based Modeling course notes by Andrew Witkin and David Baraff.
 
 ## Online Demo
