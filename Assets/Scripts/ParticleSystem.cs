@@ -7,8 +7,8 @@ public class ParticleSystem
     private readonly List<Particle> m_Particles;
     private readonly List<Force> m_Forces;
     private readonly List<Constraint> m_Constraints;
-    private BlockSparseMatrix m_J;
-    private BlockSparseMatrix m_JDot;
+    private readonly BlockSparseMatrix m_J;
+    private readonly BlockSparseMatrix m_JDot;
     private float m_Time;
     private float m_ConstraintSpringConstant;
     private float m_ConstraintDampingConstant;
@@ -197,7 +197,7 @@ public class ParticleSystem
         lambda = new double[numConstraints];
         for (int i = 0; i < numConstraints; ++i)
         {
-            lambda[i] = 1;
+            lambda[i] = 1d;
         }
 
         LHS = new Eq11LHS(m_J, W);
