@@ -48,8 +48,10 @@
             stateStorage[i4 + 1] = originals[i4 + 1] + vIPlusOneHalve[i4 + 3] * dt;
             //stateStorage[i4 + 0] = originals[i4 + 0] + originals[i4 + 2] * dt + derivativeIPlusOneFourth[i4 + 2] * dt * dt / 2f; // x_{i+1} = x_i + v_i dt + a_i dtsq
             //stateStorage[i4 + 1] = originals[i4 + 1] + originals[i4 + 3] * dt + derivativeIPlusOneFourth[i4 + 3] * dt * dt / 2f;
-            stateStorage[i4 + 2] = originals[i4 + 2];
-            stateStorage[i4 + 3] = originals[i4 + 3];
+            //stateStorage[i4 + 2] = originals[i4 + 2];
+            //stateStorage[i4 + 3] = originals[i4 + 3];
+            stateStorage[i4 + 2] = vIPlusOneHalve[i4 + 2];
+            stateStorage[i4 + 3] = vIPlusOneHalve[i4 + 3];
         }
         a_ParticleSystem.ParticlesSetState(stateStorage); // same first step as normal verlet, except this time based on midpoint
 

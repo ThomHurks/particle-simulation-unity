@@ -51,9 +51,9 @@ public sealed class Main : MonoBehaviour
     {
         const float constraintSpringConstant = 100f;
         const float constraintDampingConstant = 10f;
-        double solverEpsilon = Math.Pow(10, -2);// Having this too small causes issues, since the solver works by squaring.
-
-        const int solverSteps = 100;
+        double solverEpsilon = Math.Pow(10, -3);// Having this too small causes issues, since the solver works by squaring.
+        Application.runInBackground = true;
+        const int solverSteps = 1000;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new RungeKutta4Integrator();
         m_Scenario = new TestScenario();

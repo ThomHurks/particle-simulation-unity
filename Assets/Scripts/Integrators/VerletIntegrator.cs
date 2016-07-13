@@ -27,8 +27,8 @@
             //+0 to make it more readable, compiler will fix it :)
             temp2[i4 + 0] = originals[i4 + 0] + originals[i4 + 2] * dt + temp1[i4 + 2] * dt * dt / 2f; // x_{i+1} = x_i + v_i dt + a_i dtsq
             temp2[i4 + 1] = originals[i4 + 1] + originals[i4 + 3] * dt + temp1[i4 + 3] * dt * dt / 2f;
-            temp2[i4 + 2] = originals[i4 + 2];
-            temp2[i4 + 3] = originals[i4 + 3];
+            temp2[i4 + 2] = originals[i4 + 2] + temp1[14 + 2] * dt / 2;
+            temp2[i4 + 3] = originals[i4 + 3] + temp1[14 + 3] * dt / 2; //to improve results, also do a halve step on speeds
         }
         a_ParticleSystem.ParticlesSetState(temp2);
 

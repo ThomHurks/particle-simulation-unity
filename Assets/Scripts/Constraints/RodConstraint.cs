@@ -3,7 +3,7 @@
 public class RodConstraint : Constraint
 {
 
-    public static bool OLD = true;
+    public static bool OLD = false;
 
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ_A;
     private BlockSparseMatrix.MatrixBlock m_MatrixBlockJ_B;
