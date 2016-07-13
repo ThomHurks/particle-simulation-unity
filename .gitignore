@@ -19,3 +19,5 @@ particle-simulation-unity.userprefs
 ProjectSettings/ProjectVersion.txt
 ParticleSimulationiOS/*
 ParticleSimulationWebGL
+
+*.zip
