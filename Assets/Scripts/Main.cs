@@ -27,6 +27,8 @@ public sealed class Main : MonoBehaviour
     private MouseSpringForce m_CurrentMouseForce;
     private bool m_ReversedTime = false;
     private Dictionary<int, MouseSpringForce> m_TouchForces;
+    private double m_SolverEpsilon;
+    private const int m_SolverSteps = 1000;
 
     static void CreateLineMaterial()
     {
@@ -49,12 +51,11 @@ public sealed class Main : MonoBehaviour
 
     void Awake()
     {
+        Application.runInBackground = true;
         const float constraintSpringConstant = 100f;
         const float constraintDampingConstant = 10f;
-        double solverEpsilon = Math.Pow(10, -3);// Having this too small causes issues, since the solver works by squaring.
-        Application.runInBackground = true;
-        const int solverSteps = 1000;
-        m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
+        m_SolverEpsilon = Math.Pow(10, -3);// Having this too small causes issues, since the solver works by squaring.
+        m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(m_SolverEpsilon, m_SolverSteps), constraintSpringConstant, constraintDampingConstant);
         m_Integrator = new RungeKutta4Integrator();
         m_Scenario = new TestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
@@ -401,15 +402,16 @@ public sealed class Main : MonoBehaviour
         switch (m_SolverDropdown.value)
         {
             case 0:
-                m_ParticleSystem.SetSolver(new ConjGradSolver());
+                m_ParticleSystem.SetSolver(new ConjGradSolver(m_SolverEpsilon, m_SolverSteps));
                 Debug.Log("Switched to original conjugate gradient solver");
                 break;
             case 1:
-                m_ParticleSystem.SetSolver(new ConjGradSolver2());
+                m_ParticleSystem.SetSolver(new ConjGradSolver2(m_SolverEpsilon, m_SolverSteps));
                 Debug.Log("Switched to conjugate gradient solver 2");
                 break;
             case 2:
-                m_ParticleSystem.SetSolver(new JacobiSolver());
+                // Jacobi solver ignores epsilon and just finishes the steps given, so pass in a lower value.
+                m_ParticleSystem.SetSolver(new JacobiSolver(m_SolverEpsilon, 100));
                 Debug.Log("Switched to Jacobi solver");
                 break;
         }

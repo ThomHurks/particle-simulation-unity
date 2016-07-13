@@ -11,6 +11,11 @@ public sealed class ConjGradSolver : LinearSolver
     private bool m_Initialized = false;
     private int m_Size;
 
+    public ConjGradSolver(double a_SolverEpsilon, int a_SolverSteps)
+        : base(a_SolverEpsilon, a_SolverSteps)
+    {
+    }
+
     // Solve Ax = b for a symmetric, positive definite matrix A
     // A is represented implicitly by the function "matVecMult"
     // which performs a matrix vector multiple Av and places result in x
@@ -18,9 +23,7 @@ public sealed class ConjGradSolver : LinearSolver
     // "epsilon" is the error tolerance
     // "steps", as passed, is the maximum number of steps, or 0 (implying MAX_STEPS)
     // Upon completion, "steps" contains the number of iterations taken
-    public override double Solve(ImplicitMatrix A, double[] x, double[] b,
-                                 double epsilon,    // how low should we go?
-                                 int steps, out int stepsPerformed)
+    public override double Solve(ImplicitMatrix A, double[] x, double[] b, out int out_StepsPerformed)
     {
         int n = A.GetN();
         int i, iMax;
@@ -51,20 +54,20 @@ public sealed class ConjGradSolver : LinearSolver
         vecAssign(n, d, r);//d := r = b-Ab
 
         i = 0;
-        if (steps > 0 && !float.IsInfinity(steps))
+        if (m_SolverSteps > 0 && !float.IsInfinity(m_SolverSteps))
         {
-            iMax = steps;
+            iMax = m_SolverSteps;
         }
         else
         {
             iMax = MAX_STEPS;
         }
 
-        if (rSqrLen > epsilon)
+        if (rSqrLen > m_SolverEpsilon)
         {
             if (logging)
             {
-                Debug.Log("start - eps = " + epsilon + ", iter = " + steps + " A = ");
+                Debug.Log("start - eps = " + m_SolverEpsilon + ", iter = " + m_SolverSteps + " A = ");
                 A.printX();
                 Debug.Log("b = " + VectorToString(b));
             }
@@ -118,7 +121,7 @@ public sealed class ConjGradSolver : LinearSolver
                 rSqrLen = vecSqrLen(n, r);
 
                 // Converged! Let's get out of here
-                if (rSqrLen <= epsilon)
+                if (rSqrLen <= m_SolverEpsilon)
                 {
                     
                     break;
@@ -135,7 +138,7 @@ public sealed class ConjGradSolver : LinearSolver
                 Debug.Log("Result: x =" + VectorToString(x) + " steps: " + i);
             }
         }
-        stepsPerformed = i;
+        out_StepsPerformed = i;
         return rSqrLen;
     }
 

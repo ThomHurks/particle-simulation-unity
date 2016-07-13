@@ -17,6 +17,11 @@ public sealed class ConjGradSolver2 : LinearSolver
     private bool m_Initialized = false;
     private int m_Size;
 
+    public ConjGradSolver2(double a_SolverEpsilon, int a_SolverSteps)
+        : base(a_SolverEpsilon, a_SolverSteps)
+    {
+    }
+
     private int cg_rc(int n, double[] b, double[] x, double[] r, double[] z, 
                       double[] p, double[] q, int job)
 
@@ -221,9 +226,7 @@ public sealed class ConjGradSolver2 : LinearSolver
         return job_next;
     }
 
-    public override double Solve(ImplicitMatrix A, double[] x, double[] b,
-                                 double epsilon,    // how low should we go?
-                                 int steps, out int stepsPerformed)
+    public override double Solve(ImplicitMatrix A, double[] x, double[] b, out int out_StepsPerformed)
     {
         // Reset previous state first.
         iter = 0;
@@ -268,9 +271,9 @@ public sealed class ConjGradSolver2 : LinearSolver
                     double rSqrLen = vecSqrLen(n, r);
 
                     // Converged! Let's get out of here
-                    if (rSqrLen <= epsilon || iterations >= steps)
+                    if (rSqrLen <= m_SolverEpsilon || iterations >= m_SolverSteps)
                     {
-                        stepsPerformed = iterations;
+                        out_StepsPerformed = iterations;
                         if (logging)
                         {
                             Debug.Log(VectorToString(x));

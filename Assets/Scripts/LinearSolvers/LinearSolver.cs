@@ -1,8 +1,15 @@
 ﻿public abstract class LinearSolver
 {
-    public abstract double Solve(ImplicitMatrix A, double[] x, double[] b,
-                                 double epsilon,    // how low should we go?
-                                 int steps, out int stepsPerformed);
+    protected double m_SolverEpsilon;
+    protected int m_SolverSteps;
+
+    protected LinearSolver(double a_SolverEpsilon, int a_SolverSteps)
+    {
+        m_SolverEpsilon = a_SolverEpsilon;
+        m_SolverSteps = a_SolverSteps;
+    }
+
+    public abstract double Solve(ImplicitMatrix A, double[] x, double[] b, out int out_StepsPerformed);
 
     protected static double vecDot(int n, double[] v1, double[] v2)
     {

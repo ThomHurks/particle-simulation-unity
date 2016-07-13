@@ -13,8 +13,6 @@ public class ParticleSystem
     private float m_ConstraintSpringConstant;
     private float m_ConstraintDampingConstant;
     private LinearSolver m_Solver;
-    private double m_SolverEpsilon;
-    private int m_SolverSteps;
     // Variables for equation 11:
     private double[] qdot;
     private double[] W;
@@ -63,7 +61,7 @@ public class ParticleSystem
         get { return m_JDot; }
     }
 
-    public ParticleSystem(LinearSolver a_Solver, double a_SolverEpsilon, int a_SolverSteps, float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
+    public ParticleSystem(LinearSolver a_Solver, float a_ConstraintSpringConstant, float a_ConstraintDampingConstant)
     {
         m_Solver = a_Solver;
         if (m_Solver == null)
@@ -75,8 +73,6 @@ public class ParticleSystem
         m_Constraints = new List<Constraint>();
         m_J = new BlockSparseMatrix();
         m_JDot = new BlockSparseMatrix();
-        m_SolverEpsilon = a_SolverEpsilon;
-        m_SolverSteps = a_SolverSteps;
         m_ConstraintSpringConstant = a_ConstraintSpringConstant;
         m_ConstraintDampingConstant = a_ConstraintDampingConstant;
     }
@@ -159,7 +155,7 @@ public class ParticleSystem
         {
             m_Constraints[i].UpdateJacobians(this);
         }
-        SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant, m_SolverEpsilon, m_SolverSteps);
+        SolveEquation11(m_ConstraintSpringConstant, m_ConstraintDampingConstant);
     }
 
     private static void ValidateVector(double[] a_Vector)
@@ -203,7 +199,7 @@ public class ParticleSystem
         LHS = new Eq11LHS(m_J, W);
     }
 
-    private void SolveEquation11(float a_SpringConstant, float a_DampingConstant, double a_SolverEpsilon, int a_SolverSteps)
+    private void SolveEquation11(float a_SpringConstant, float a_DampingConstant)
     {
         ParticlesGetVelocities(qdot);
         ValidateVector(qdot);
@@ -250,7 +246,7 @@ public class ParticleSystem
         }
         // Set up implicit matrix of LHS and solve.
         int stepsPerformed = 0;
-        m_Solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
+        m_Solver.Solve(LHS, lambda, RHS, out stepsPerformed);
         ValidateVector(lambda);
         //Debug.Log("Nr of iterations in conjgrad solver: " + stepsPerformed);
         for (int i = 0; i < QHat.Length; ++i)

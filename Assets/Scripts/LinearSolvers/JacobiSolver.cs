@@ -5,9 +5,12 @@
     private bool m_Initialized = false;
     private int m_Size;
 
-    public override double Solve(ImplicitMatrix A, double[] x, double[] b,
-                                 double epsilon,    // how low should we go?
-                                 int steps, out int stepsPerformed)
+    public JacobiSolver(double a_SolverEpsilon, int a_SolverSteps)
+        : base(a_SolverEpsilon, a_SolverSteps)
+    {
+    }
+
+    public override double Solve(ImplicitMatrix A, double[] x, double[] b, out int out_StepsPerformed)
     {
         ExplicitMatrix B = A.AsExplicitMatrix();
         int n = A.GetN();
@@ -16,7 +19,7 @@
 
         InitializeOrClear(n);
 
-        for (; steps2 < steps; steps2++)
+        for (; steps2 < m_SolverSteps; steps2++)
         {
             for (int i = 0; i < n; i++)
             {
@@ -38,13 +41,13 @@
                 x[i] = xnext[i];
                 d += (r[i] - b[i]) * (r[i] - b[i]);
             }
-            if (d < epsilon)
+            if (d < m_SolverEpsilon)
             {
                 break;
             }
         }
 
-        stepsPerformed = steps2;
+        out_StepsPerformed = steps2;
         return 0;
     }
 
