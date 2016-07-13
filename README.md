@@ -27,7 +27,7 @@ On touch-based devices (mobile, tablet) you can influence particles by touching 
 ## Building it yourself
 Download the Unity game engine and install it. Navigate to this project's folder and open it. There is only one scene called "Main.unity" in the Scenes folder which you need to open. You can then press the play button to test the project.
 We also created and tested standalone builds for:
-* Windows
+* Windows (see Links section for a link to the latest standalone Windows build)
 * MacOS (see Links section for a link to the latest standalone MacOS build)
 * iOS
 * WebGL (see online demo)
@@ -40,4 +40,5 @@ These can be built from within Unity if you have the necessary (optional) compon
 * http://www.win.tue.nl/~ajalba/edu/2IV15_Simulation/2ivm15_description.pdf
 * http://thomhurks.com/particles/
 * http://thomhurks.com/particles/builds/ParticleSimulationMac.zip
+* http://thomhurks.com/particles/builds/ParticleSimulationWindows.zip
 * http://unity3d.com
