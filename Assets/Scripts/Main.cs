@@ -55,8 +55,8 @@ public sealed class Main : MonoBehaviour
 
         const int solverSteps = 100;
         m_ParticleSystem = new ParticleSystem(new ConjGradSolver2(), solverEpsilon, solverSteps, constraintSpringConstant, constraintDampingConstant);
-        m_Integrator = new MidpointVerletIntegrator();
-        m_Scenario = new SpeedTestScenario();
+        m_Integrator = new RungeKutta4Integrator();
+        m_Scenario = new TestScenario();
         m_Scenario.CreateScenario(m_ParticleSystem);
         m_Speed = 1f;
         SetupDebugGameObjects();
@@ -453,7 +453,7 @@ public sealed class Main : MonoBehaviour
                 break;
             case 8:
                 m_Scenario = new SlicedEllipseScenario();
-                Debug.Log("Switched to elipse Engine scenario");
+                Debug.Log("Switched to sliced elipse scenario");
                 break;
             case 9: 
                 m_Scenario = new ReversibleScenario();
@@ -461,7 +461,7 @@ public sealed class Main : MonoBehaviour
                 break;
             case 10:
                 m_Scenario = new SpeedTestScenario();
-                Debug.Log("Switched to leapfrog test scenario");
+                Debug.Log("Switched to speedtest test scenario");
                 break;
         }
         ResetSimulation();
