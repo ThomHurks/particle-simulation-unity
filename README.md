@@ -14,6 +14,9 @@ This particlar project was created within the Unity game engine to make easy cro
 
 We do use Unity's built-in Vector2 class, but again that should be very straightforward to replace by any typical Vector class.
 
+## Math Explanation
+For mathematical details of the implemented forces and constraints, see report.pdf.
+
 ## Authors
 This project was created by Thom Hurks and Jeffrey Aben for the course "Simulation in Computer Graphics" taught by Dr. Andrei Jalba at the Eindhoven University of Technology.
 
