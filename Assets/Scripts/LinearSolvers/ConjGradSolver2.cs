@@ -230,9 +230,6 @@ public sealed class ConjGradSolver2 : LinearSolver
         int n = A.GetN();
         InitializeOrClear(n);
 
-        // Inital guess solution for x.
-        ClearVectorWithValue(x, 1);
-
         int job_next = cg_rc(n, b, x, r, z, p, q, 1);
         int iterations = 1;
         while (true)

@@ -195,6 +195,10 @@ public class ParticleSystem
         JWQ = new double[numConstraints];
         RHS = new double[numConstraints];
         lambda = new double[numConstraints];
+        for (int i = 0; i < numConstraints; ++i)
+        {
+            lambda[i] = 1;
+        }
 
         LHS = new Eq11LHS(m_J, W);
     }
@@ -245,10 +249,6 @@ public class ParticleSystem
             }
         }
         // Set up implicit matrix of LHS and solve.
-        for (int i = 0; i < lambda.Length; ++i)
-        {
-            lambda[i] = 0;
-        }
         int stepsPerformed = 0;
         m_Solver.Solve(LHS, lambda, RHS, a_SolverEpsilon, a_SolverSteps, out stepsPerformed);
         ValidateVector(lambda);
