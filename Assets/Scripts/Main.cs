@@ -305,7 +305,7 @@ public sealed class Main : MonoBehaviour
                 }
             }
         }
-        else
+        if (Input.mousePresent && Input.touchCount == 0)
         {
             Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
